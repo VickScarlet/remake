@@ -33,7 +33,7 @@ export default {
     UI_Thanks: '感谢',
     UI_Achievement: '成就',
     UI_Cyber_Theme_Art_Design: 'UI 设计 by 晰晰',
-    UI_Banner: '作者的新作《纸上谈亲》已上线小程序\n微信/抖音搜索“纸上谈亲”即可游玩～',
+    UI_Banner: ' ',
 
     UI_Title_Talent: '天赋抽卡',
     UI_Talent_Draw: '10连抽！',

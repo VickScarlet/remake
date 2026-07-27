@@ -1,7 +1,7 @@
 export default class CyberMain extends ui.view.CyberTheme.CyberMainUI {
     constructor() {
         super()
-        this.btnRemake.on(Laya.Event.CLICK, this, () => $ui.switchView(UI.pages.MODE))
+        this.btnRemake.on(Laya.Event.CLICK, this, () => this.remake())
         this.btnAchievement.on(Laya.Event.CLICK, this, () => $ui.switchView(UI.pages.ACHIEVEMENT))
         this.btnThanks.on(Laya.Event.CLICK, this, () => $ui.switchView(UI.pages.THANKS))
         this.btnGithub.on(Laya.Event.CLICK, this, goto, ['github'])
@@ -39,5 +39,9 @@ export default class CyberMain extends ui.view.CyberTheme.CyberMainUI {
         this.btnDiscord.visible = leastOnce && !disabled.discord
         this.btnGithub.visible = !disabled.github
         this.btnSaveLoad.visible = !disabled.saveload
+    }
+
+    remake() {
+        $ui.switchView(core.celebrityLimit ? UI.pages.TALENT : UI.pages.MODE)
     }
 }
