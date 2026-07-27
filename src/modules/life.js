@@ -35,6 +35,7 @@ class Life {
     #achievement
     #character
     #triggerTalents
+    #celebrityLimit
     #defaultPropertyPoints
     #talentSelectLimit
     #propertyAllocateLimit
@@ -63,6 +64,7 @@ class Life {
     }
 
     config({
+        celebrityLimit = 10, // limit of celebrity
         defaultPropertyPoints = 20, // default number of points for a property
         talentSelectLimit = 3, // max number of talents that can be selected
         propertyAllocateLimit = [0, 10], // scoop of properties that can be allocated
@@ -71,6 +73,7 @@ class Life {
         propertyConfig, // config for property
         characterConfig, // config for character
     } = {}) {
+        this.#celebrityLimit = celebrityLimit
         this.#defaultPropertyPoints = defaultPropertyPoints
         this.#talentSelectLimit = talentSelectLimit
         this.#propertyAllocateLimit = propertyAllocateLimit
@@ -347,6 +350,7 @@ class Life {
             )
     }
 
+    get celebrityLimit() { return this.times < this.#celebrityLimit }
     get PropertyTypes() { return this.#property.TYPES }
     get AchievementOpportunity() { return this.#achievement.Opportunity }
     get talentSelectLimit() { return this.#talentSelectLimit }

@@ -31,7 +31,7 @@ export default {
     UI_Thanks: 'Thx',
     UI_Achievement: 'Achv',
     UI_Cyber_Theme_Art_Design: 'UI Design by 晰晰',
-    UI_Banner: '作者的新作《纸上谈亲》已上线小程序\n微信/抖音搜索“纸上谈亲”即可游玩～',
+    UI_Banner: ' ',
 
     UI_Title_Talent: 'Talent Draw',
     UI_Talent_Draw: '!10 Pulls!',
