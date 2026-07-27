@@ -5,8 +5,13 @@ export default class Thanks extends ui.view.DefaultTheme.ThanksUI {
         this.listSupports.renderHandler = Laya.Handler.create(this, this.renderSupport, null, false);
         this.panelTopSupports.vScrollBar.elasticDistance = 150;
         this.listSupports.scrollBar.elasticDistance = 150;
-        this.btnAFD.on(Laya.Event.CLICK, this, goto, ['sponsor_afd']);
-        this.btnDDF.on(Laya.Event.CLICK, this, goto, ['sponsor_ddf']);
+        if (globalThis.$channel?.disabled?.sponsor) {
+            this.btnAFD.on(Laya.Event.CLICK, this, $$event, ['message', ['M_SponsorThanks']]);
+        } else {
+            this.btnAFD.on(Laya.Event.CLICK, this, goto, ['sponsor_afd']);
+            // this.btnDDF.on(Laya.Event.CLICK, this, goto, ['sponsor_ddf']);
+        }
+        this.btnDDF.on(Laya.Event.CLICK, this, $$event, ['message', ['M_SponsorThanks']]);
     }
 
     static #createComponent = Laya.plugin.extractComponents(Thanks.uiView, ['boxTopSupport']);

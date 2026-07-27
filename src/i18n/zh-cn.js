@@ -1,4 +1,4 @@
-export default ({
+export default {
     UI_Next: '下一步',
     UI_Back: '返回',
     UI_Skip: '跳过',
@@ -152,6 +152,7 @@ export default ({
     M_PleaseSelectOne: '请选择一个名人',
     M_UnGenerate: '独一无二的我还没有生成',
     M_DisableExtendTalent: '名人模式不能继承天赋',
+    M_SponsorThanks: '感谢支持',
 
     F_RemakeTimes: '已重开{0}次',
     F_AchievementCount: '成就达成{0}个',
@@ -161,5 +162,5 @@ export default ({
     F_TalentSelectNotComplect: '要选满{0}个天赋',
     F_PropertyPointLeft: '你还有 {0} 属性点没有分配完',
     F_TalentReplace: '天赋替换【{source.name}】->【{target.name}】',
-    F_PropertyStr: '颜值{CHR} 智力{INT} 体质{STR} 家境{MNY}'
-});
+    F_PropertyStr: '颜值{CHR} 智力{INT} 体质{STR} 家境{MNY}',
+}
