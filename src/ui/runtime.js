@@ -3,16 +3,12 @@ Laya.runtime = {};
 
 runtime.ColorFilterItem =
 class ColorFilterItem extends Laya.Image {
-    constructor() {
-        super();
-    }
-
     #hexToRgba = (hex) => {
         const rgba = [];
         hex = hex.replace('#', '');
-        hex = hex.match(new RegExp('(.{2})(.{2})(.{2})(.{2})', 'i'));
+        hex = hex.match(/(.{2})(.{2})(.{2})(.{2})/i);
         hex.forEach((item, index) => {
-            rgba[index] = parseInt(item, 16);
+            rgba[index] = Number.parseInt(item, 16);
         });
         rgba.shift();
         return rgba;
@@ -47,26 +43,9 @@ class ColorFilterItem extends Laya.Image {
         }
     }
 }
-runtime.UIBase =
-class UIBase extends Laya.View {
-    constructor() {
-        super();
-    }
-}
-
-runtime.ViewBase =
-class ViewBase extends runtime.UIBase {
-    constructor() {
-        super();
-    }
-}
-
-runtime.DialogBase =
-class DialogBase extends runtime.UIBase {
-    constructor() {
-        super();
-    }
-}
+runtime.UIBase = class UIBase extends Laya.View {}
+runtime.ViewBase = class ViewBase extends runtime.UIBase {}
+runtime.DialogBase = class DialogBase extends runtime.UIBase {}
 
 runtime.ScaleButton =
 class ScaleButton extends Laya.Button {
@@ -156,12 +135,12 @@ class RGBAItem {
     }
 
     #hex(v) {
-        v = parseInt(v).toString(16);
+        v = Number.parseInt(v).toString(16);
         return v.length == 1 ? '0' + v : v;
     }
 
     #dec(v) {
-        return parseInt(v, 16);
+        return Number.parseInt(v, 16);
     }
 
     get hex() {
@@ -303,7 +282,7 @@ class ColorfulBox extends Laya.Box {
         const tween = (colorItem, target, last) => {
             Laya.Tween.clearAll(colorItem);
             const distance = colorItem.distance(target, last);
-            if(!isFinite(distance)) {
+            if(!Number.isFinite(distance)) {
                 colorItem.hex = target;
                 return;
             }
@@ -544,10 +523,6 @@ class BlankBox extends Laya.Box {
 
 runtime.ColorAgentLabel =
 class ColorAgentLabel extends Laya.Label {
-    constructor(...args) {
-        super(...args);
-    }
-
     get #brothers() {
         const brothers = [];
         if(!this.parent) return brothers;

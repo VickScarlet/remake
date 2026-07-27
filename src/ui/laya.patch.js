@@ -1,8 +1,8 @@
 // 滚动条太灵敏
 const SCROLL_START_DISTANCE = 30;
 Laya.ScrollBar.prototype.loop=function(){
-    var mouseY=Laya.stage.mouseY;
-    var mouseX=Laya.stage.mouseX;
+    let mouseY=Laya.stage.mouseY;
+    let mouseX=Laya.stage.mouseX;
     this._lastOffset=this.isVertical ? (mouseY-this._lastPoint.y):(mouseX-this._lastPoint.x);
     if (this._clickOnly){
         if (Math.abs(this._lastOffset *(this.isVertical ? Laya.stage._canvasTransform.getScaleY():Laya.stage._canvasTransform.getScaleX()))> SCROLL_START_DISTANCE){

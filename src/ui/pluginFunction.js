@@ -12,7 +12,7 @@ plugin.extractComponents = function(uiView, componentNames) {
                 uiView.child.splice(i, 1);
                 continue;
             }
-            deepSearch(child, componentNames, components);
+            deepSearch(child, componentNames);
         }
     };
     deepSearch(uiView, componentNames);

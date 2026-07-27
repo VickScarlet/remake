@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Editor Browser",
+            "request": "launch",
+            "type": "editor-browser",
+            "url": "http://localhost:5173",
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "test",

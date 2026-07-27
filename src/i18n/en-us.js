@@ -1,4 +1,4 @@
-export default ({
+export default {
     UI_Next: 'Next',
     UI_Back: 'Back',
     UI_Skip: 'Skip',
@@ -26,7 +26,7 @@ export default ({
     UI_Property_Spirit: 'SPR',
 
     UI_Title_Remake: 'Remake Simulate',
-    UI_Title_Subsequent: 'The rubbish life doesn\'t want to stay for a second',
+    UI_Title_Subsequent: "The rubbish life doesn't want to stay for a second",
     UI_Remake: '↻Remake Now',
     UI_Thanks: 'Thx',
     UI_Achievement: 'Achv',
@@ -146,11 +146,11 @@ export default ({
     UI_UniqueWaTaShiContent: '\nUnique character card different from other 60 million player\nAll property, All talent, All random\nAll has only one chance',
     UI_GenerateNow: 'Generate Now',
 
-
     M_NoRank: 'There is no rank',
     M_PleaseSelectOne: 'Please Select One',
     M_UnGenerate: 'Unique Character no generate',
-    M_DisableExtendTalent: 'Celebrity mode can\'t extends talent',
+    M_DisableExtendTalent: "Celebrity mode can't extends talent",
+    M_SponsorThanks: 'Thanks for your support',
 
     F_RemakeTimes: 'Remake {0} Times',
     F_AchievementCount: 'Achievement {0}',
@@ -160,5 +160,5 @@ export default ({
     F_TalentSelectNotComplect: 'Please select {0} talent',
     F_PropertyPointLeft: 'You have left {0} property point',
     F_TalentReplace: 'Talent replace [{source.name}] -> [{target.name}]',
-    F_PropertyStr: 'CHR{CHR} INT{INT} STR{STR} MNY{MNY}'
-});
+    F_PropertyStr: 'CHR{CHR} INT{INT} STR{STR} MNY{MNY}',
+}

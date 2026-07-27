@@ -34,7 +34,7 @@ export default class UIManager {
         this.#dialogMask.graphics.drawRect(0, 0, 5000, 5000, '#000000')
         this.#dialogMask.alpha = 0.4
         this.#dialogMask.on(Laya.Event.CLICK, this, () => {
-            this.#dialogStack[this.#dialogStack.length - 1]?.close?.()
+            this.#dialogStack.at(-1)?.close?.()
         })
     }
 
@@ -86,7 +86,7 @@ export default class UIManager {
             args,
             actions?.load,
             viewName,
-            'pages'
+            'pages',
         )
 
         view.top = view.bottom = view.left = view.right = 0
@@ -115,7 +115,7 @@ export default class UIManager {
         if (this.#loading) {
             timeout = setTimeout(
                 () => this.#stage.addChild(this.#loading),
-                3000
+                3000,
             )
         }
         const onProgress = this.#loading?.onProgress
@@ -128,7 +128,7 @@ export default class UIManager {
                 ? this.scanResource(ViewClass.uiView)
                 : []
             if (preload) {
-                preload = [].concat(preload).concat(scanedResourceList)
+                preload = preload.concat(scanedResourceList)
             } else {
                 preload = scanedResourceList
             }
@@ -162,19 +162,19 @@ export default class UIManager {
 
     async loadRes(resourceList, preload, onProgress) {
         const cnt = (resourceList?.length || 0) + (preload?.length || 0)
-        if (resourceList && resourceList.length) {
+        if (resourceList?.length) {
             const s = resourceList.length / cnt
             await Laya.promises.loader.load(
                 resourceList,
-                Laya.Handler.create(null, prg => onProgress?.(prg * s))
+                Laya.Handler.create(null, prg => onProgress?.(prg * s)),
             )
         }
-        if (preload && preload.length) {
+        if (preload?.length) {
             const s = 1 - preload.length / cnt
             const l = preload.length / cnt
             await Laya.promises.loader.load(
                 preload,
-                Laya.Handler.create(null, prg => onProgress?.(prg * l + s))
+                Laya.Handler.create(null, prg => onProgress?.(prg * l + s)),
             )
         }
     }
@@ -202,7 +202,7 @@ export default class UIManager {
             args,
             actions?.load,
             dialogName,
-            'pages'
+            'pages',
         )
 
         const index = this.#dialogStack.indexOf(dialog)
@@ -223,7 +223,7 @@ export default class UIManager {
                     dialog,
                     { scaleX: 1, scaleY: 1 },
                     300,
-                    Laya.Ease.backOut
+                    Laya.Ease.backOut,
                 )
             })
         await open(dialog)
@@ -237,7 +237,7 @@ export default class UIManager {
                     dialog,
                     { scaleX: 0, scaleY: 0 },
                     300,
-                    Laya.Ease.strongIn
+                    Laya.Ease.strongIn,
                 )
             }
             const index = this.#dialogStack.indexOf(dialog)
@@ -255,7 +255,7 @@ export default class UIManager {
         const popup = await this.getView(className, args, null, type, 'popups')
         this.#popupLayer.addChild(popup)
         await popup.popup(args, this.#popupLayer)
-        this.#popupLayer.removeChild(popup)
+        popup.removeSelf()
     }
 
     clearAllDialog() {
@@ -266,7 +266,7 @@ export default class UIManager {
     #config(view, key, type) {
         const config = this.#configs?.[type]?.[key]
         if (!config) return
-        if (view.config && view.config(config)) return
+        if (view.config?.(config)) return
         const applyConfig = (target, config) => {
             if (!target) return
             if (typeof config == 'string') {
@@ -278,7 +278,7 @@ export default class UIManager {
         if (config.names)
             for (const name in config.names)
                 this.#deepGetChildsByName(view, name).forEach(child =>
-                    applyConfig(child, config.names[name])
+                    applyConfig(child, config.names[name]),
                 )
 
         if (config.vars)
@@ -288,7 +288,7 @@ export default class UIManager {
 
     #deepGetChildsByName(parent, name) {
         const list = []
-        if (!parent || !parent._childs) return list
+        if (!parent?._childs) return list
 
         for (const child of parent._childs) {
             if (child.name == name) list.push(child)
@@ -311,7 +311,7 @@ export default class UIManager {
     }
 
     #subSkin(skin, type) {
-        if (!skin || !skin.replace(/\s/g, '')) return []
+        if (!skin?.replace(/\s/g, '')) return []
         switch (type) {
             case 'ProgressBar':
                 return [skin, ...this.#progressBarSkin(skin)]
@@ -340,21 +340,14 @@ export default class UIManager {
 
     scanResource(uiView) {
         if (!uiView) return []
-        const resourceList = []
-
-        resourceList.push(...this.#subSkin(uiView.props?.skin, uiView.type))
-        resourceList.push(
-            ...this.#subSkin(uiView.props?.hScrollBarSkin, 'ScrollBar')
-        )
-        resourceList.push(
-            ...this.#subSkin(uiView.props?.vScrollBarSkin, 'ScrollBar')
-        )
-
-        uiView.child?.forEach(child => {
-            resourceList.push(...this.scanResource(child))
-        })
-
-        return resourceList
+        return [
+            this.#subSkin(uiView.props?.skin, uiView.type),
+            this.#subSkin(uiView.props?.hScrollBarSkin, 'ScrollBar'),
+            this.#subSkin(uiView.props?.vScrollBarSkin, 'ScrollBar'),
+            uiView.child?.flatMap(child => this.scanResource(child)),
+        ]
+            .flat()
+            .filter(item => !!item)
     }
 
     get currentView() {
@@ -362,7 +355,7 @@ export default class UIManager {
     }
 
     get currentDialog() {
-        return this.#dialogStack[this.#dialogStack.length - 1]
+        return this.#dialogStack.at(-1)
     }
 
     get theme() {
