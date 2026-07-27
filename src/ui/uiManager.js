@@ -364,6 +364,7 @@ export default class UIManager {
     set theme(value) {
         localStorage.setItem('theme', value)
         this.#stage.bgColor = this.#configs.bgColor
+        document.body.style.backgroundColor = this.#configs.bgColor
         document
             ?.querySelector?.('meta[name="theme-color"]')
             ?.setAttribute?.('content', this.#configs.bgColor)
