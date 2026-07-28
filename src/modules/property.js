@@ -396,7 +396,7 @@ class Property {
             localStorage.setItem(key, JSON.stringify(merged))
             return merged
         }
-        if (Number.isNumber(cloud)) {
+        if (typeof cloud === 'number') {
             const merged = Math.max(cloud, local)
             localStorage.setItem(key, JSON.stringify(merged))
             return merged
