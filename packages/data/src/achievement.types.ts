@@ -1,9 +1,14 @@
-export type Grade = 0 | 1 | 2 | 3
-export type Opportunity =
+/** 成就稀有度 */
+export type AchievementGrade = 0 | 1 | 2 | 3
+
+/** 成就触发时机 */
+export type AchievementOpportunity =
     | 'START' // 分配完成点数，点击开始新人生后
     | 'TRAJECTORY' // 每一年的人生经历中
     | 'SUMMARY' // 人生结束，点击人生总结后
     | 'END' // 游戏完成，点击重开 重开次数在这之后才会+1
+
+/** 成就 */
 export type Achievement = {
     /** 序号 */
     readonly id: number
@@ -12,11 +17,17 @@ export type Achievement = {
     /** 成就文案 */
     readonly description: string
     /** 稀有度 */
-    readonly grade: Grade
+    readonly grade: AchievementGrade
     /** 触发条件 */
     readonly condition: string
     /** 是否隐藏成就 */
     readonly hide: boolean
     /** 触发时机 */
-    readonly opportunity: Opportunity
+    readonly opportunity: AchievementOpportunity
+}
+// @vt-types-end
+
+export const transformers = {
+    id: Number,
+    grade: (val: any) => Number(val) || 0,
 }
