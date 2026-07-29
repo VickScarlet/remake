@@ -1,9 +1,8 @@
 # pnpm-workspace.yaml
 packages:
-  - '**'
+  - "apps/*"
+  - "packages/*"
+  - "thirdparty/*"
 
-minimumReleaseAgeExclude:
-  - v-transform@2.2.2 || 2.2.3
-
-overrides:
-  "v-transform>xlsx": "-"
+allowBuilds:
+  esbuild: true

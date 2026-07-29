@@ -1,0 +1,14 @@
+{
+    "name": "@remake/console",
+    "type": "module",
+    "version": "3.0.0",
+    "author": "Vick Scarlet <vick@syaro.io>",
+    "scripts": {
+        "start": "bun run src/index.ts",
+        "lint": "eslint .",
+        "test": "bun test"
+    },
+    "dependencies": {
+        "@remake/core": "workspace:*"
+    }
+}
