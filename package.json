@@ -1,20 +1,38 @@
 {
-    "name": "life_restart",
-    "type": "module",
-    "main": "repl/index.js",
-    "version": "2.1.0",
-    "author": "Vick Scarlet <vick@syaro.io>",
-    "scripts": {
-        "xlsx2json": "vt transform -d public \"data/**/*.xlsx\"",
-        "dev": "vite",
-        "build": "vite build",
-        "start": "vite preview",
-        "test": "vitest"
-    },
-    "devDependencies": {
-        "v-transform": "^2.2.3",
-        "vite": "^8.1.3",
-        "vitest": "^4.1.10",
-        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
-    }
+  "name": "remake",
+  "type": "module",
+  "version": "3.0.0",
+  "author": "Vick Scarlet <vick@syaro.io>",
+  "scripts": {
+    "dev": "bun --filter @remake/web dev",
+    "build:web": "bun --filter @remake/web build",
+    "build:data": "bun --filter @remake/data build",
+    "preview": "bun --filter @remake/web preview",
+    "start": "bun --filter @remake/console start",
+    "lint": "eslint",
+    "lint:console": "bun --filter @remake/console lint",
+    "lint:web": "bun --filter @remake/web lint",
+    "lint:core": "bun --filter @remake/core lint",
+    "lint:data": "bun --filter @remake/data lint",
+    "lint:condition": "bun --filter @remake/condition lint",
+    "test": "bun --filter @remake/web test",
+    "test:console": "bun --filter @remake/console test",
+    "test:web": "bun --filter @remake/web test",
+    "test:core": "bun --filter @remake/core test",
+    "test:data": "bun --filter @remake/data test",
+    "test:condition": "bun --filter @remake/condition test"
+  },
+  "devDependencies": {
+    "eslint": "^10.8.0",
+    "jiti": "^2.7.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.65.0",
+    "@typescript-eslint/parser": "^8.65.0",
+    "@types/bun": "1.3.14"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
 }

@@ -1,0 +1,13 @@
+{
+    "name": "@remake/condition",
+    "type": "module",
+    "version": "3.0.0",
+    "main": "./index.ts",
+    "author": "Vick Scarlet <vick@syaro.io>",
+    "scripts": {
+        "lint": "eslint ."
+    },
+    "eslintConfig": {
+        "extends": "../../package.json"
+    }
+}

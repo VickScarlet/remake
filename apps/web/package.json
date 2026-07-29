@@ -1,0 +1,26 @@
+{
+    "name": "@remake/web",
+    "type": "module",
+    "version": "3.0.0",
+    "author": "Vick Scarlet <vick@syaro.io>",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint",
+        "test": "vitest"
+    },
+    "dependencies": {
+        "preact": "^10.26.9",
+        "@remake/core": "workspace:*"
+    },
+    "devDependencies": {
+        "@preact/preset-vite": "^2.10.2",
+        "eslint-config-preact": "^2.0.0",
+        "vite": "^8.1.3",
+        "vitest": "^4.1.10"
+    },
+    "eslintConfig": {
+        "extends": "preact"
+    }
+}
