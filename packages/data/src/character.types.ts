@@ -1,15 +1,24 @@
-export type Property = {
+/** 人物属性 */
+export type CharacterProperty = {
+    /** 颜值 */
     readonly CHR: number
+    /** 智力 */
     readonly INT: number
+    /** 体质 */
     readonly STR: number
+    /** 家境 */
     readonly MNY: number
 }
+
+/** 人物 */
 export type Character = {
-    /** ID */
+    /** 序号 */
     readonly id: number
-    /** 事件列表 */
+    /** 人名 */
     readonly name: string
-    readonly property: Property
+    /** 属性 */
+    readonly property: CharacterProperty
+    /** 天赋 */
     readonly talent: number[]
 }
 // @vt-types-end
