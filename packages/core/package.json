@@ -7,9 +7,11 @@
         "lint": "eslint .",
         "test": "bun test"
     },
-    "devDependencies": {
+    "dependencies": {
         "@remake/condition": "workspace:*",
-        "@remake/data": "workspace:*"
+        "@remake/data": "workspace:*",
+        "@remake/vitex": "workspace:*",
+        "immer": "^11.1.15"
     },
     "eslintConfig": {
         "extends": "../../package.json"
