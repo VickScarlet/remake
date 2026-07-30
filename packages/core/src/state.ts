@@ -85,13 +85,15 @@ export interface FlatState {
     SUM: number
 }
 
-interface FlatPropertiesTarget {
+type FlatStateKey = keyof FlatState
+
+interface FlatTarget {
     game: GameState
     profile: ProfileState
 }
 
-type FlatMapper<Key extends keyof FlatState> = (
-    state: FlatPropertiesTarget,
+type FlatMapper<Key extends FlatStateKey> = (
+    state: FlatTarget,
 ) => FlatState[Key]
 
 const FlatMappers = {
@@ -125,20 +127,17 @@ const FlatMappers = {
         const s = sum(Object.values(others))
         return Math.floor(s * 2 + age / 2)
     },
-} as Record<keyof FlatState, FlatMapper<keyof FlatState>>
+} as { [Key in FlatStateKey]: FlatMapper<Key> }
 
-const flatPropertiesHandle = {
-    get(target: FlatPropertiesTarget, prop: keyof FlatState) {
+const flatStateHandle = {
+    get<Key extends FlatStateKey>(target: FlatTarget, prop: Key) {
         return FlatMappers[prop]?.(target)
     },
     set: () => true,
 }
 
 export function createFlatState(game: GameState, profile: ProfileState) {
-    return new Proxy(
-        { game, profile },
-        flatPropertiesHandle,
-    ) as unknown as FlatState
+    return new Proxy({ game, profile }, flatStateHandle) as unknown as FlatState
 }
 
 export interface Effect {

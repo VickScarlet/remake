@@ -42,8 +42,8 @@ function getPropertiesFromCondition(condition: string): Set<string> {
     return properties
 }
 
-describe('策划配置条件完整覆盖率测试', () => {
-    test('event [include, exclude, branch]', () => {
+describe('FlatState', () => {
+    test('[Cover] event(include, exclude, branch)', () => {
         const unmappedKeys = new Set<string>()
         for (const item of events.values()) {
             const conditionsToTrack: { label: string; text: string }[] = []
@@ -85,7 +85,7 @@ describe('策划配置条件完整覆盖率测试', () => {
         expect(unmappedKeys.size).toBe(0)
     })
 
-    test('talent [condition]', () => {
+    test('[Cover] talent(condition)', () => {
         const unmappedKeys = new Set<string>()
         const allTalentItems = talents.values()
 
@@ -111,7 +111,7 @@ describe('策划配置条件完整覆盖率测试', () => {
         expect(unmappedKeys.size).toBe(0)
     })
 
-    test('achievement [condition]', () => {
+    test('[Cover] achievement(condition)', () => {
         const unmappedKeys = new Set<string>()
         const allAchievementItems = achievements.values()
 
@@ -136,10 +136,8 @@ describe('策划配置条件完整覆盖率测试', () => {
 
         expect(unmappedKeys.size).toBe(0)
     })
-})
 
-describe('FlatProperties', () => {
-    test('check key', () => {
+    test('get', () => {
         const game = {
             lowest: {
                 age: 1,
