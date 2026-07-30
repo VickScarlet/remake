@@ -19,6 +19,14 @@ export type EventEffect = {
     readonly AGE?: number
 }
 
+/** 分支路线 */
+export type EventBranch = {
+    /** 分支条件 */
+    condition: string
+    /** 分支事件ID */
+    event: number
+}
+
 /** 事件 */
 export type Event = {
     /** ID */
@@ -38,7 +46,7 @@ export type Event = {
     /** 有某事件时一定随机不到 */
     readonly exclude?: string
     /** 分支路线 */
-    readonly branch?: string[]
+    readonly branch?: EventBranch[]
 }
 // @vt-types-end
 
@@ -52,6 +60,17 @@ export const transformers = {
             val[key] = Number(val[key])
             if (isNaN(val[key]))
                 throw new Error(`Invalid property value: ${key}=${val[key]}`)
+        }
+        return val
+    },
+    branch: (val?: any[]) => {
+        if (!val) return
+        for (const key in val) {
+            const [condition, eventId] = val[key]!.split(':')
+            const event = Number(eventId)
+            if (isNaN(event))
+                throw new Error(`Invalid event ID in branch: ${eventId}`)
+            val[key] = { condition, event }
         }
         return val
     },

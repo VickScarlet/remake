@@ -1,17 +1,9 @@
-// 条件节点可以是一个纯字符串表达式（如 'AGE>18'），或者是一个无限嵌套自身的数组
 export type ConditionNode = string | ConditionTree
 export interface ConditionTree extends Array<ConditionNode> {}
 
-// 🌟 核心类型定义 2：定义满足有 .get 提取器属性的游戏对象约束（如玩家属性管理类或原生 Map）
-export interface PropertyContainer {
-    get(key: string): any
-}
+export type PropertyContainer = Record<string, any>
 
-/**
- * 词法解析器：将条件字符串切分为多维嵌套的语法树树（AST）
- * @param condition 原始字符串表达式，例如 "AGE > 10 & (SEX = 1 | CHR >= 5)"
- */
-function parseCondition(condition: string): ConditionTree {
+export function parse(condition: string): ConditionTree {
     const conditions: ConditionTree = []
     const length = condition.length
     const stack: ConditionTree[] = []
@@ -60,16 +52,8 @@ function parseCondition(condition: string): ConditionTree {
     return conditions
 }
 
-/**
- * 外部核心接口：判定某个角色的属性是否完美符合该文本条件限制
- * @param property 玩家或局内属性提取器
- * @param condition 原始条件表达式
- */
-export function checkCondition(
-    property: PropertyContainer,
-    condition: string,
-): boolean {
-    const conditions = parseCondition(condition)
+export function check(property: PropertyContainer, condition: string): boolean {
+    const conditions = parse(condition)
     return checkParsedConditions(property, conditions)
 }
 
@@ -115,9 +99,6 @@ function checkParsedConditions(
     return ret
 }
 
-/**
- * 原子逻辑判定器：负责处理诸如 '>', '<', '=', '?', '!' 各种操作符的最终生死判定
- */
 function checkProp(property: PropertyContainer, condition: string): boolean {
     const length = condition.length
     let i = condition.search(/[><!?=]/)
@@ -131,7 +112,7 @@ function checkProp(property: PropertyContainer, condition: string): boolean {
     const symbol = condition.substring(i, (i += isDoubleSymbol ? 2 : 1))
     const d = condition.substring(i, length)
 
-    const propData = property.get(prop)
+    const propData = property[prop]
     const conditionData: number | any[] =
         d[0] === '[' ? JSON.parse(d) : Number(d)
 
@@ -145,17 +126,31 @@ function checkProp(property: PropertyContainer, condition: string): boolean {
         case '<=':
             return propData <= conditionData
         case '=':
+            if (propData instanceof Set) {
+                return propData.has(conditionData)
+            }
             if (Array.isArray(propData)) {
                 return propData.includes(conditionData)
             }
             return propData == conditionData
         case '!=':
+            if (propData instanceof Set) {
+                return !propData.has(conditionData)
+            }
             if (Array.isArray(propData)) {
                 return !propData.includes(conditionData)
             }
             return propData != conditionData
 
         case '?': // 🌟 包含判定符（如 属性值 是否在 [1,2,3] 数组范围内）
+            if (propData instanceof Set) {
+                if (Array.isArray(conditionData)) {
+                    for (const c of conditionData) {
+                        if (propData.has(c)) return true
+                    }
+                }
+                return false
+            }
             if (Array.isArray(propData)) {
                 if (Array.isArray(conditionData)) {
                     for (const p of propData) {
@@ -170,6 +165,14 @@ function checkProp(property: PropertyContainer, condition: string): boolean {
             return false
 
         case '!': // 🌟 排除判定符（如 属性值 是否不存在于 [1,2,3] 数组中）
+            if (propData instanceof Set) {
+                if (Array.isArray(conditionData)) {
+                    for (const c of conditionData) {
+                        if (propData.has(c)) return false
+                    }
+                }
+                return true
+            }
             if (Array.isArray(propData)) {
                 if (Array.isArray(conditionData)) {
                     for (const p of propData) {

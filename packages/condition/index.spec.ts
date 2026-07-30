@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'bun:test'
-import { checkCondition } from '.'
+import { check } from '.'
 
 // 定义属性 mock 字典的类型契约
 interface MockProperties {
@@ -10,12 +10,7 @@ interface MockProperties {
  * 属性注入高阶函数：模拟角色属性管理类
  */
 function withProp(prop: MockProperties) {
-    const p = {
-        get(key: string): any {
-            return prop[key]
-        },
-    }
-    return (condition: string): boolean => checkCondition(p, condition)
+    return (condition: string): boolean => check(prop, condition)
 }
 
 describe('condition', () => {
