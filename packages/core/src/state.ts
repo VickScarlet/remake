@@ -90,48 +90,48 @@ interface FlatPropertiesTarget {
     profile: ProfileState
 }
 
+type FlatMapper<Key extends keyof FlatState> = (
+    state: FlatPropertiesTarget,
+) => FlatState[Key]
+
 const FlatMappers = {
-    AGE: (state: FlatPropertiesTarget) => state.game.properties.age,
-    CHR: (state: FlatPropertiesTarget) => state.game.properties.charm,
-    INT: (state: FlatPropertiesTarget) => state.game.properties.intelligence,
-    STR: (state: FlatPropertiesTarget) => state.game.properties.strength,
-    MNY: (state: FlatPropertiesTarget) => state.game.properties.money,
-    SPR: (state: FlatPropertiesTarget) => state.game.properties.spirit,
-    LIF: (state: FlatPropertiesTarget) => state.game.life,
-    TLT: (state: FlatPropertiesTarget) => state.game.talents,
-    EVT: (state: FlatPropertiesTarget) => state.game.events,
-    LAGE: (state: FlatPropertiesTarget) => state.game.lowest.age,
-    HAGE: (state: FlatPropertiesTarget) => state.game.highest.age,
-    LCHR: (state: FlatPropertiesTarget) => state.game.lowest.charm,
-    HCHR: (state: FlatPropertiesTarget) => state.game.highest.charm,
-    LINT: (state: FlatPropertiesTarget) => state.game.lowest.intelligence,
-    HINT: (state: FlatPropertiesTarget) => state.game.highest.intelligence,
-    LSTR: (state: FlatPropertiesTarget) => state.game.lowest.strength,
-    HSTR: (state: FlatPropertiesTarget) => state.game.highest.strength,
-    LMNY: (state: FlatPropertiesTarget) => state.game.lowest.money,
-    HMNY: (state: FlatPropertiesTarget) => state.game.highest.money,
-    LSPR: (state: FlatPropertiesTarget) => state.game.lowest.spirit,
-    HSPR: (state: FlatPropertiesTarget) => state.game.highest.spirit,
-    TMS: (state: FlatPropertiesTarget) => state.profile.times,
-    AEVT: (state: FlatPropertiesTarget) => state.profile.events,
-    ATLT: (state: FlatPropertiesTarget) => state.profile.talents,
-    AACH: (state: FlatPropertiesTarget) => state.profile.achievements,
-    SUM: (state: FlatPropertiesTarget) => {
+    AGE: state => state.game.properties.age,
+    CHR: state => state.game.properties.charm,
+    INT: state => state.game.properties.intelligence,
+    STR: state => state.game.properties.strength,
+    MNY: state => state.game.properties.money,
+    SPR: state => state.game.properties.spirit,
+    LIF: state => state.game.life,
+    TLT: state => state.game.talents,
+    EVT: state => state.game.events,
+    LAGE: state => state.game.lowest.age,
+    HAGE: state => state.game.highest.age,
+    LCHR: state => state.game.lowest.charm,
+    HCHR: state => state.game.highest.charm,
+    LINT: state => state.game.lowest.intelligence,
+    HINT: state => state.game.highest.intelligence,
+    LSTR: state => state.game.lowest.strength,
+    HSTR: state => state.game.highest.strength,
+    LMNY: state => state.game.lowest.money,
+    HMNY: state => state.game.highest.money,
+    LSPR: state => state.game.lowest.spirit,
+    HSPR: state => state.game.highest.spirit,
+    TMS: state => state.profile.times,
+    AEVT: state => state.profile.events,
+    ATLT: state => state.profile.talents,
+    AACH: state => state.profile.achievements,
+    SUM: state => {
         const { age, ...others } = state.game.highest
         const s = sum(Object.values(others))
         return Math.floor(s * 2 + age / 2)
     },
-}
+} as Record<keyof FlatState, FlatMapper<keyof FlatState>>
 
 const flatPropertiesHandle = {
-    get(target: FlatPropertiesTarget, prop: string) {
-        if (prop in FlatMappers) {
-            return FlatMappers[prop as keyof typeof FlatMappers](target)
-        }
+    get(target: FlatPropertiesTarget, prop: keyof FlatState) {
+        return FlatMappers[prop]?.(target)
     },
-    set() {
-        return true
-    },
+    set: () => true,
 }
 
 export function createFlatState(game: GameState, profile: ProfileState) {
