@@ -21,13 +21,13 @@ export function check(
 }
 
 export function trigger(
-    event: number,
+    eventId: number,
     state: GameState,
     profile: ProfileState,
 ): TriggerResult<Event['id']> {
-    const { effect, branch } = events.get(event)!
+    const { effect, branch } = events.get(eventId)!
     const newState = produce(state, draft => {
-        draft.events.add(event)
+        draft.events.add(eventId)
         if (!effect) return
         if (effect.LIF) draft.life += effect.LIF
         const pe = {} as Partial<Properties>
@@ -45,10 +45,10 @@ export function trigger(
                 const result = trigger(event, newState, profile)
                 return {
                     state: result.state,
-                    triggers: [event, ...result.triggers],
+                    triggers: [eventId, ...result.triggers],
                 }
             }
         }
     }
-    return { state: newState, triggers: [event] }
+    return { state: newState, triggers: [eventId] }
 }

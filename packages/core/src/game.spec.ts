@@ -43,7 +43,6 @@ describe('Achievement', () => {
             },
         )
         const result = next(state, profile)
-        console.debug(result)
         expect(result.state.props.current.age).toBe(10) // 十岁
         expect(result.state.events).toContain(10588) // 无事发生
     })
