@@ -3,22 +3,31 @@ import events from '@remake/data/event'
 import type { Properties } from '@/state'
 import type { GameState, ProfileState } from '@/state'
 import { propsEffect, createFlatState } from '@/state'
-import { check } from '@remake/condition'
+import { check as checkCondition } from '@remake/condition'
 import { produce } from 'immer'
+import type { TriggerResult } from '@/game'
 
-export interface TriggerResult {
-    state: GameState
-    events: Event['id'][]
+export function check(
+    event: Event['id'],
+    state: GameState,
+    profile: ProfileState,
+) {
+    const { include, exclude, NoRandom } = events.get(event)!
+    if (NoRandom) return false
+    const flatState = createFlatState(state, profile)
+    if (exclude && checkCondition(flatState, exclude)) return false
+    if (include) return checkCondition(flatState, include)
+    return true
 }
 
 export function trigger(
-    eventId: number,
+    event: number,
     state: GameState,
     profile: ProfileState,
-): TriggerResult {
-    const { effect, branch } = events.get(eventId)!
+): TriggerResult<Event['id']> {
+    const { effect, branch } = events.get(event)!
     const newState = produce(state, draft => {
-        draft.events.add(eventId)
+        draft.events.add(event)
         if (!effect) return
         if (effect.LIF) draft.life += effect.LIF
         const pe = {} as Partial<Properties>
@@ -32,14 +41,14 @@ export function trigger(
     const flatState = createFlatState(newState, profile)
     if (branch) {
         for (const { condition, event } of branch) {
-            if (check(flatState, condition)) {
+            if (checkCondition(flatState, condition)) {
                 const result = trigger(event, newState, profile)
                 return {
                     state: result.state,
-                    events: [eventId, ...result.events],
+                    triggers: [event, ...result.triggers],
                 }
             }
         }
     }
-    return { state: newState, events: [eventId] }
+    return { state: newState, triggers: [event] }
 }

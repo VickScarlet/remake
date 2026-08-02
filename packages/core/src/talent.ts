@@ -6,6 +6,7 @@ import { propsEffect, createFlatState } from './state'
 import { check } from '@remake/condition'
 import { pick, pickWeight } from '@remake/vitex'
 import { produce } from 'immer'
+import type { TriggerResult } from '@/game'
 
 const Grades: TalentGrade[] = [0, 1, 2, 3] as const
 const GradeMap = Map.groupBy(
@@ -19,23 +20,23 @@ export function get(talent: number) {
     return talents.get(talent)
 }
 
-export type TalentPullRate = Map<TalentGrade, number>
-export type TalentPullRateAddition = {
+export type PullRate = Map<TalentGrade, number>
+export type PullRateAddition = {
     mode: 'add' | 'multiply'
     value: number
 }
-export type TalentPullRateAdditions = {
+export type PullRateAdditions = {
     [key in keyof ProfileState]?: (
         value: ProfileState[key],
-    ) => Map<TalentGrade, TalentPullRateAddition>
+    ) => Map<TalentGrade, PullRateAddition>
 }
-export interface TalentRateOptions {
-    base: TalentPullRate
-    additions: TalentPullRateAdditions
+export interface RateOptions {
+    base: PullRate
+    additions: PullRateAdditions
 }
 const AddidtionInit = Grades.map(g => [g, 1]) as [TalentGrade, number][]
 function talentRateWithAddition(
-    { base, additions }: TalentRateOptions,
+    { base, additions }: RateOptions,
     profile: ProfileState,
 ) {
     const rate = new Map(AddidtionInit)
@@ -58,12 +59,12 @@ function talentRateWithAddition(
     return rate
 }
 
-export interface TalentPullOptions {
+export interface PullOptions {
     count: number
-    rate: TalentRateOptions
+    rate: RateOptions
 }
 
-export function pull(options: TalentPullOptions, profile: ProfileState) {
+export function pull(options: PullOptions, profile: ProfileState) {
     const rate = Array.from(
         talentRateWithAddition(options.rate, profile).entries(),
     )
@@ -99,12 +100,6 @@ export function exclude(talent: Talent['id'], list: Iterable<Talent['id']>) {
     return null
 }
 
-export interface TalentReplacementResult {
-    state: GameState
-    chains: Map<Talent['id'], Talent['id'][]>
-    changed: boolean
-}
-
 function chainReplace(t: Talent['id'], ts: Set<Talent['id']>) {
     const { replacement: r } = talents.get(t)!
     if (!r) return null
@@ -126,22 +121,21 @@ function chainReplace(t: Talent['id'], ts: Set<Talent['id']>) {
     return [picked]
 }
 
-export function replacement(state: GameState): TalentReplacementResult {
-    const chains = new Map() as TalentReplacementResult['chains']
-    const newTalents = new Set(state.talents)
-    let changed = false
-    for (const talent of state.talents) {
-        const chain = chainReplace(talent, newTalents)
+export interface ReplacementResult {
+    talents: Set<Talent['id']>
+    chains: Map<Talent['id'], Talent['id'][]>
+}
+
+export function replacement(list: Iterable<Talent['id']>): ReplacementResult {
+    const set = new Set(list)
+    const chains = new Map() as ReplacementResult['chains']
+    for (const talent of list) {
+        const chain = chainReplace(talent, set)
         if (!chain) continue
-        changed = true
         chains.set(talent, chain)
-        chain.forEach(t => newTalents.add(t))
+        chain.forEach(t => set.add(t))
     }
-    if (!changed) return { state, chains, changed }
-    const newState = produce(state, draft => {
-        draft.talents = newTalents
-    })
-    return { state: newState, chains, changed }
+    return { talents: set, chains }
 }
 
 export interface AdditionalPoint {
@@ -154,7 +148,9 @@ export interface AdditionalPoints {
     points: number
 }
 
-export function additionalPoints(list: Talent['id'][]) {
+export function additionalPoints(
+    list: Iterable<Talent['id']>,
+): AdditionalPoints {
     const source: AdditionalPoint[] = []
     let total = 0
     for (const id of list) {
@@ -166,23 +162,18 @@ export function additionalPoints(list: Talent['id'][]) {
     return { source, points: total }
 }
 
-const TalentEffectRandomProperties = [
+const EffectRandomProperties = [
     'money',
     'strength',
     'intelligence',
     'charm',
     'spirit',
 ] as (keyof Properties)[]
-export interface TalentTriggerResult {
-    state: GameState
-    triggers: Talent['id'][]
-    changed: boolean
-}
 
 export function trigger(
     state: GameState,
     profile: ProfileState,
-): TalentTriggerResult {
+): TriggerResult<Talent['id']> {
     const flatState = createFlatState(state, profile)
     const triggers: Talent['id'][] = []
     for (const talent of state.talents) {
@@ -191,7 +182,7 @@ export function trigger(
         if (condition && !check(flatState, condition)) continue
         triggers.push(talent)
     }
-    if (triggers.length === 0) return { state, triggers, changed: false }
+    if (triggers.length === 0) return { state, triggers }
     const newState = produce(state, draft => {
         for (const talent of triggers) {
             const times = draft.talentTriggers.get(talent) ?? 0
@@ -205,11 +196,11 @@ export function trigger(
             if (effect.MNY) pe.money = effect.MNY
             if (effect.SPR) pe.spirit = effect.SPR
             if (effect.RND) {
-                const key = pick(TalentEffectRandomProperties)!
+                const key = pick(EffectRandomProperties)!
                 pe[key] = (pe[key] ?? 0) || effect.RND
             }
             draft.props = propsEffect(draft.props, pe)
         }
     })
-    return { state: newState, triggers, changed: true }
+    return { state: newState, triggers }
 }

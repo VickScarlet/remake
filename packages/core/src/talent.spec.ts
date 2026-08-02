@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'bun:test'
 import type { ProfileState } from './state'
-import type { TalentPullOptions } from './talent'
+import type { PullOptions } from './talent'
 import { pull, exclude, additionalPoints, replacement } from './talent'
 import { createState } from './state'
 import talents from '@remake/data/talent'
@@ -27,7 +27,7 @@ describe('Talent', () => {
             ]),
             additions: {},
         },
-    } as TalentPullOptions
+    } as PullOptions
 
     test('pull external', () => {
         const p = produce(profile, draft => {
@@ -71,13 +71,10 @@ describe('Talent', () => {
         })
     })
 
-    const allo = { charm: 5, intelligence: 5, strength: 5, money: 5 }
     test('replacement talent [阴间福袋]', () => {
         const talent = 1145
-        const state = createState(allo, [talent])
-        const result = replacement(state)
-        expect(result.changed).toBe(true)
-        expect(result.state.talents.size).toBeGreaterThan(1)
+        const result = replacement([talent])
+        expect(result.talents.size).toBeGreaterThan(1)
         expect(result.chains.get(talent)).toBeDefined()
         const source = talents.get(talent)!.replacement!.talent!
         const replaced = result.chains.get(talent)!.at(0)!
@@ -86,10 +83,8 @@ describe('Talent', () => {
 
     test('replacement grade [橙色转盘]', () => {
         const talent = 1144
-        const state = createState(allo, [talent])
-        const result = replacement(state)
-        expect(result.changed).toBe(true)
-        expect(result.state.talents.size).toBeGreaterThan(1)
+        const result = replacement([talent])
+        expect(result.talents.size).toBeGreaterThan(1)
         expect(result.chains.get(talent)).toBeDefined()
         const source = talents.get(talent)!.replacement!.grade!
         const replaced = result.chains.get(talent)!.at(0)!

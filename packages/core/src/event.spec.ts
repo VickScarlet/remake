@@ -26,13 +26,13 @@ describe('Event', () => {
         )
         expect(result.state.life).toBe(1)
         expect(result.state.events).toEqual(new Set([10003, 10004]))
-        expect(result.events).toEqual([10003, 10004])
+        expect(result.triggers).toEqual([10003, 10004])
     })
 
     test('branch 10003:1 [死了]', () => {
         const result = trigger(10003, createState(allocation, []), profile)
         expect(result.state.life).toBe(0)
         expect(result.state.events).toEqual(new Set([10003, 10000]))
-        expect(result.events).toEqual([10003, 10000])
+        expect(result.triggers).toEqual([10003, 10000])
     })
 })
