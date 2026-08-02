@@ -5,7 +5,7 @@ export function random(max: number, min: number = 0, rng?: RNG): number {
 }
 export function pick<T>(items: T[], rng?: RNG) {
     if (items.length === 0) return null
-    return items[random(items.length - 1, 0, rng)]
+    return items[random(items.length - 1, 0, rng)] ?? null
 }
 export type WeightItem<T> = [T, number]
 export function pickWeight<T>(items: WeightItem<T>[], rng?: RNG) {

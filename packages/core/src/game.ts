@@ -1,4 +1,5 @@
-export interface GameEffects {
-    save: (profile: any) => Promise<boolean>
-    load: () => Promise<any>
-}
+import type { GameState, ProfileState } from '@/state'
+import { enableMapSet } from 'immer'
+enableMapSet()
+
+export type { GameState, ProfileState }

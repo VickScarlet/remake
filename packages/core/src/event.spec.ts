@@ -1,6 +1,8 @@
 import { expect, test, describe } from 'bun:test'
 import { createState } from './state'
 import { trigger } from './event'
+import { enableMapSet } from 'immer'
+enableMapSet()
 
 describe('Event', () => {
     const profile = {
@@ -16,7 +18,7 @@ describe('Event', () => {
         money: 0,
     }
 
-    test('10003 branch 0 玉佩', () => {
+    test('branch 10003:0 [玉佩]', () => {
         const result = trigger(
             10003,
             createState(allocation, [1001, 1002, 1003]),
@@ -27,7 +29,7 @@ describe('Event', () => {
         expect(result.events).toEqual([10003, 10004])
     })
 
-    test('10003 branch 1 死了', () => {
+    test('branch 10003:1 [死了]', () => {
         const result = trigger(10003, createState(allocation, []), profile)
         expect(result.state.life).toBe(0)
         expect(result.state.events).toEqual(new Set([10003, 10000]))
