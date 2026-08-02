@@ -63,6 +63,13 @@ export function createState(
         talentTriggers: new Map(),
     }
 }
+
+export function summary({ props }: GameState) {
+    const { age, ...others } = props.highest
+    const s = sum(Object.values(others))
+    return Math.floor(s * 2 + age / 2)
+}
+
 export interface FlatState {
     AGE: GameState['props']['current']['age']
     CHR: GameState['props']['current']['charm']
@@ -131,11 +138,7 @@ const FlatMappers = {
     AEVT: state => state.profile.events,
     ATLT: state => state.profile.talents,
     AACH: state => state.profile.achievements,
-    SUM: ({ game: { props } }) => {
-        const { age, ...others } = props.highest
-        const s = sum(Object.values(others))
-        return Math.floor(s * 2 + age / 2)
-    },
+    SUM: ({ game }) => summary(game),
 } as { [Key in FlatStateKey]: FlatMapper<Key> }
 
 export const SupportedFlatStateKeys = new Set(Object.keys(FlatMappers))

@@ -234,7 +234,7 @@ describe('State', () => {
             const k = key as keyof Properties
             const c = props.current[k]
             const be = c + effect[k]
-            expect(c).toBe(be)
+            expect(effected.current[k]).toBe(be)
             expect(effected.highest[k]).toBe(Math.max(c, be))
             expect(effected.lowest[k]).toBe(Math.min(c, be))
         }
