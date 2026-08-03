@@ -9,6 +9,7 @@
         "test": "bun test"
     },
     "dependencies": {
-        "@remake/core": "workspace:*"
+        "@remake/core": "workspace:*",
+        "@remake/data": "workspace:*"
     }
 }
