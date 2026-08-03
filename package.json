@@ -23,13 +23,12 @@
     "test:condition": "bun --filter @remake/condition test"
   },
   "devDependencies": {
-    "eslint": "^10.8.0",
-    "jiti": "^2.7.0",
-    "@typescript/native": "npm:typescript@^7.0.2",
-    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "@types/bun": "1.3.14",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
     "@typescript-eslint/parser": "^8.65.0",
-    "@types/bun": "1.3.14"
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "eslint": "^10.8.0",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
   },
   "workspaces": [
     "packages/*",

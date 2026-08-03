@@ -11,8 +11,9 @@
         "test": "vitest"
     },
     "dependencies": {
-        "preact": "^10.26.9",
-        "@remake/core": "workspace:*"
+        "@remake/core": "workspace:*",
+        "@remake/data": "workspace:*",
+        "preact": "^10.26.9"
     },
     "devDependencies": {
         "@preact/preset-vite": "^2.10.2",
