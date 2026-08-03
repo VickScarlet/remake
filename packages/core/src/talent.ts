@@ -4,7 +4,7 @@ import type { Properties } from '@/state'
 import type { GameState, ProfileState } from '@/state'
 import { propsEffect, createFlatState } from './state'
 import { check } from '@remake/condition'
-import { pick, pickWeight } from '@remake/vitex'
+import { pick, pickWeight, type RNG } from '@remake/vitex'
 import { produce } from 'immer'
 import type { TriggerResult } from '@/game'
 
@@ -64,7 +64,7 @@ export interface PullOptions {
     rate: RateOptions
 }
 
-export function pull(options: PullOptions, profile: ProfileState) {
+export function pull(options: PullOptions, profile: ProfileState, rng?: RNG) {
     const rate = Array.from(
         talentRateWithAddition(options.rate, profile).entries(),
     )
@@ -72,10 +72,10 @@ export function pull(options: PullOptions, profile: ProfileState) {
     if (profile.lockedTalent) result.push(profile.lockedTalent)
     const map = new Map(Grades.map(g => [g, new Set(GradeMap.get(g))]))
     for (let i = options.count - result.length; i > 0; i--) {
-        const grade = pickWeight(rate)! ?? 0
+        const grade = pickWeight(rate, rng)! ?? 0
         const set = map.get(grade)!
         if (set.size === 0) continue
-        const id = pick(Array.from(set))!
+        const id = pick(Array.from(set), rng)!
         result.push(id)
         set.delete(id)
     }
@@ -100,23 +100,23 @@ export function exclude(talent: Talent['id'], list: Iterable<Talent['id']>) {
     return null
 }
 
-function chainReplace(t: Talent['id'], ts: Set<Talent['id']>) {
+function chainReplace(t: Talent['id'], ts: Set<Talent['id']>, rng?: RNG) {
     const { replacement: r } = talents.get(t)!
     if (!r) return null
     let picked: Talent['id'] | null = null
     if (r.talent) {
         const filtered = r.talent.filter(([id]) => exclude(id, ts) == null)
-        picked = pickWeight(filtered)
+        picked = pickWeight(filtered, rng)
     } else if (r.grade) {
         const filtered = GradeMap.get(r.grade)!.filter(
             id => exclude(id, ts) == null,
         )
-        picked = pick(filtered)
+        picked = pick(filtered, rng)
     }
     if (!picked) return null
     const nts = new Set(ts)
     nts.add(picked)
-    const next = chainReplace(picked, nts) as Talent['id'][] | null
+    const next = chainReplace(picked, nts, rng) as Talent['id'][] | null
     if (next) return [picked, ...next]
     return [picked]
 }
@@ -126,11 +126,14 @@ export interface ReplacementResult {
     chains: Map<Talent['id'], Talent['id'][]>
 }
 
-export function replacement(list: Iterable<Talent['id']>): ReplacementResult {
+export function replacement(
+    list: Iterable<Talent['id']>,
+    rng?: RNG,
+): ReplacementResult {
     const set = new Set(list)
     const chains = new Map() as ReplacementResult['chains']
     for (const talent of list) {
-        const chain = chainReplace(talent, set)
+        const chain = chainReplace(talent, set, rng)
         if (!chain) continue
         chains.set(talent, chain)
         chain.forEach(t => set.add(t))
@@ -173,6 +176,7 @@ const EffectRandomProperties = [
 export function trigger(
     state: GameState,
     profile: ProfileState,
+    rng?: RNG,
 ): TriggerResult<Talent['id']> {
     const flatState = createFlatState(state, profile)
     const triggers: Talent['id'][] = []
@@ -196,7 +200,7 @@ export function trigger(
             if (effect.MNY) pe.money = effect.MNY
             if (effect.SPR) pe.spirit = effect.SPR
             if (effect.RND) {
-                const key = pick(EffectRandomProperties)!
+                const key = pick(EffectRandomProperties, rng)!
                 pe[key] = (pe[key] ?? 0) || effect.RND
             }
             draft.props = propsEffect(draft.props, pe)
