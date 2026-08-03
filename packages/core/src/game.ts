@@ -19,13 +19,17 @@ export { pull } from '@/talent'
 
 import { replacement, additionalPoints } from '@/talent'
 import type { ReplacementResult, AdditionalPoints } from '@/talent'
+import type { RNG } from '@remake/vitex'
 
 export interface TalentsPickedResult {
     talents: ReplacementResult
     additionalPoints: AdditionalPoints
 }
-export function talentsPicked(talents: Iterable<Talent['id']>) {
-    const r = replacement(talents)
+export function talentsPicked(
+    talents: Iterable<Talent['id']>,
+    rng?: RNG,
+): TalentsPickedResult {
+    const r = replacement(talents, rng)
     const ap = additionalPoints(r.talents)
     return { talents: r, additionalPoints: ap }
 }
@@ -63,16 +67,20 @@ export interface NextResult {
     end: boolean
 }
 
-export function next(state: GameState, profile: ProfileState): NextResult {
+export function next(
+    state: GameState,
+    profile: ProfileState,
+    rng?: RNG,
+): NextResult {
     let s = produce(state, draft => {
         draft.props = propsEffect(state.props, { age: 1 })
     })
     const age = s.props.current.age
-    const tr = talentTrigger(s, profile)
+    const tr = talentTrigger(s, profile, rng)
     const events = ages
         .get(age)!
         .event.filter(([e]) => eventCheck(e, tr.state, profile))
-    const event = pickWeight(events)!
+    const event = pickWeight(events, rng)!
     const er = eventTrigger(event, tr.state, profile)
     const ar = achievementTrigger('TRAJECTORY', er.state, profile)
     const end = ar.state.life < 1
