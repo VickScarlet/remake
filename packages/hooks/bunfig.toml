@@ -1,0 +1,2 @@
+[test]
+preload = ["./setup-tests.ts"] # 在运行测试前加载环境

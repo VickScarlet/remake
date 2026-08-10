@@ -13,9 +13,7 @@ export function parse(condition: string): ConditionTree {
     const catchString = (i: number): void => {
         const str = condition.substring(cursor, i).trim()
         cursor = i
-        if (str) {
-            stack[0]?.push(str)
-        }
+        if (str) stack[0]?.push(str)
     }
 
     for (let i = 0; i < length; i++) {
@@ -118,13 +116,13 @@ function checkProp(property: PropertyContainer, condition: string): boolean {
 
     switch (symbol) {
         case '>':
-            return propData > conditionData
+            return (propData ?? 0) > conditionData
         case '<':
-            return propData < conditionData
+            return (propData ?? 0) < conditionData
         case '>=':
-            return propData >= conditionData
+            return (propData ?? 0) >= conditionData
         case '<=':
-            return propData <= conditionData
+            return (propData ?? 0) <= conditionData
         case '=':
             if (propData instanceof Set) {
                 return propData.has(conditionData)
@@ -132,7 +130,7 @@ function checkProp(property: PropertyContainer, condition: string): boolean {
             if (Array.isArray(propData)) {
                 return propData.includes(conditionData)
             }
-            return propData == conditionData
+            return (propData ?? 0) == conditionData
         case '!=':
             if (propData instanceof Set) {
                 return !propData.has(conditionData)
@@ -140,7 +138,7 @@ function checkProp(property: PropertyContainer, condition: string): boolean {
             if (Array.isArray(propData)) {
                 return !propData.includes(conditionData)
             }
-            return propData != conditionData
+            return (propData ?? 0) != conditionData
 
         case '?': // 🌟 包含判定符（如 属性值 是否在 [1,2,3] 数组范围内）
             if (propData instanceof Set) {

@@ -1,13 +1,10 @@
-import type {
-    Achievement,
-    AchievementOpportunity,
-} from '@remake/data/achievement'
-import achievements from '@remake/data/achievement'
-import type { GameState, ProfileState } from '@/state'
+import type { Achievement, AchievementOpportunity } from '@remake/data'
+import { achievements } from '@remake/data'
+import type { GameState, ProfileState } from './state'
 import { createFlatState } from './state'
 import { check } from '@remake/condition'
 import { produce } from 'immer'
-import type { TriggerResult } from '@/game'
+import type { TriggerResult } from './game'
 
 const OpportunityMap = Map.groupBy(
     achievements.keys(),

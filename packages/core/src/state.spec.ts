@@ -1,10 +1,7 @@
 import { expect, test, describe } from 'bun:test'
 import { parse, type ConditionNode } from '@remake/condition'
 
-import achievements from '@remake/data/achievement'
-import events from '@remake/data/event'
-import talents from '@remake/data/talent'
-
+import { achievements, events, talents } from '@remake/data'
 import type { GameState, ProfileState, Properties } from './state'
 import { createFlatState, createHLProperties, propsEffect } from './state'
 import { SupportedFlatStateKeys } from './state'

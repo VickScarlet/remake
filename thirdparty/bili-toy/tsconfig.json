@@ -1,29 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    // Environment setup & latest features
     "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "module": "Preserve",
-    "moduleDetection": "force",
-    "types": [],
-
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-
-    // Best practices
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noPropertyAccessFromIndexSignature": false,
-    "noImplicitAny": true
   },
   "include": ["**/*"]
 }

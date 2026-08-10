@@ -1,8 +1,6 @@
-import type { Talent } from '@remake/data/talent'
-import type { Event } from '@remake/data/event'
-import type { Achievement } from '@remake/data/achievement'
+import type { Achievement, Event, Talent } from '@remake/data'
 import { produce } from 'immer'
-import { sum } from '@remake/vitex'
+import { sum, keys } from '@remake/vitex'
 
 /** 基础的属性 */
 export interface Properties {
@@ -112,7 +110,7 @@ type FlatMapper<Key extends FlatStateKey> = (
     state: FlatTarget,
 ) => FlatState[Key]
 
-const FlatMappers = {
+const FlatMappers: { [Key in FlatStateKey]: FlatMapper<Key> } = {
     AGE: state => state.game.props.current.age,
     CHR: state => state.game.props.current.charm,
     INT: state => state.game.props.current.intelligence,
@@ -139,9 +137,9 @@ const FlatMappers = {
     ATLT: state => state.profile.talents,
     AACH: state => state.profile.achievements,
     SUM: ({ game }) => summary(game),
-} as { [Key in FlatStateKey]: FlatMapper<Key> }
+}
 
-export const SupportedFlatStateKeys = new Set(Object.keys(FlatMappers))
+export const SupportedFlatStateKeys = new Set(keys(FlatMappers))
 
 const flatStateHandle = {
     get<Key extends FlatStateKey>(target: FlatTarget, prop: Key) {
@@ -175,7 +173,7 @@ export function propsEffect(hlp: HLProperties, effect: Partial<Properties>) {
 export function highestProperties(a: Properties, b?: Properties): Properties {
     if (!b) return { ...a }
     const result = {} as Properties
-    for (const key of Object.keys(a) as (keyof Properties)[]) {
+    for (const key of keys(a)) {
         result[key] = Math.max(a[key], b[key])
     }
     return result
@@ -184,7 +182,7 @@ export function highestProperties(a: Properties, b?: Properties): Properties {
 export function lowestProperties(a: Properties, b?: Properties): Properties {
     if (!b) return { ...a }
     const result = {} as Properties
-    for (const key of Object.keys(a) as (keyof Properties)[]) {
+    for (const key of keys(a)) {
         result[key] = Math.min(a[key], b[key])
     }
     return result

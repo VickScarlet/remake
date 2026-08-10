@@ -6,24 +6,32 @@ permissions:
   contents: write
 jobs:
   build-and-deploy:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: 🛎️ Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
+      - name: 🛠️ Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 🛠️ Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: latest
 
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-        run: |
-          pnpm install
-          pnpm xlsx2json
-          pnpm build
+      - name: 📦 Install Dependencies
+        run: pnpm install
 
-      - name: Deploy 🚀
+      - name: 🏗️ Build data
+        run: bun build:data
+      
+      - name: 🏗️ Build web
+        run: bun build:web
+
+      - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: template # The folder the action should deploy.
+          folder: apps/web/dist # The folder the action should deploy.

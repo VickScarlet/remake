@@ -1,0 +1,89 @@
+html { transition: all 0.2s ease-in-out; }
+html[data-theme='light'] { color-scheme: light; }
+html[data-theme='dark'] { color-scheme: dark; }
+:root { color: var(--base-text-color); }
+html {
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar { display: none; }
+}
+body {
+    min-height: calc(100dvh - 2rem);
+    width: calc(100dvw - 2rem);
+    display: grid;
+    place-items: center;
+    margin: 1rem;
+    padding: 0;
+    background: var(--base-background-color);
+    font-family:
+        -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", 
+        "Noto Sans SC", "Noto Sans CJK SC", "Noto Sans", 
+        "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono {
+    font-family: 
+        "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, 
+        "Noto Sans Mono CJK SC", "Noto Sans Mono", "Noto Code",
+        ui-monospace, monospace;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+    --style-color: var(--base-text-color);
+    --style-background: var(--base-background-color);
+    --border-color: var(--style-color);
+    --background-color: var(--style-background);
+    --text-color: var(--style-color);
+    color: var(--text-color);
+    cursor: pointer;
+    box-sizing: border-box;
+    border: var(--border-color) 0.0625rem solid;
+    background: var(--background-color);
+    font-size: 1.2rem;
+    padding: 0 1rem;
+    line-height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        --background-color: var(--style-color);
+        --text-color: var(--style-background);
+    }
+    &.primary { --style-color: var(--color-primary); }
+    &.info { --style-color: var(--color-info); }
+    &.error { --style-color: var(--color-error); }
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+input {
+    font-size: 1rem;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: var(--base-background-color);
+    text-align: center;
+    -moz-appearance: textfield;
+    appearance: none;
+    color: var(--base-text-color);
+    transition: all 0.2s ease-in-out;
+    &:focus { outline: none; }
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+}
+
+@media (max-width: 32rem) { :root { font-size: 2.8vw; } }

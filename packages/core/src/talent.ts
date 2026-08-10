@@ -1,12 +1,12 @@
-import type { Talent, TalentGrade } from '@remake/data/talent'
-import talents from '@remake/data/talent'
-import type { Properties } from '@/state'
-import type { GameState, ProfileState } from '@/state'
+import type { Talent, TalentGrade } from '@remake/data'
+import { talents } from '@remake/data'
+import type { Properties } from './state'
+import type { GameState, ProfileState } from './state'
 import { propsEffect, createFlatState } from './state'
 import { check } from '@remake/condition'
 import { pick, pickWeight, type RNG } from '@remake/vitex'
 import { produce } from 'immer'
-import type { TriggerResult } from '@/game'
+import type { TriggerResult } from './game'
 
 const Grades: TalentGrade[] = [0, 1, 2, 3] as const
 const GradeMap = Map.groupBy(
@@ -15,10 +15,6 @@ const GradeMap = Map.groupBy(
 )
 
 export const count = talents.size
-
-export function get(talent: number) {
-    return talents.get(talent)
-}
 
 export type PullRate = Map<TalentGrade, number>
 export type PullRateAddition = {
@@ -64,7 +60,11 @@ export interface PullOptions {
     rate: RateOptions
 }
 
-export function pull(options: PullOptions, profile: ProfileState, rng?: RNG) {
+export function pull(
+    options: PullOptions,
+    profile: ProfileState,
+    rng?: RNG,
+): Talent['id'][] {
     const rate = Array.from(
         talentRateWithAddition(options.rate, profile).entries(),
     )
