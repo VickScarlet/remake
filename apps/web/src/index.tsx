@@ -1,6 +1,17 @@
-import { render } from 'preact'
-export function App() {
-    return <div>Hello</div>
-}
+import { createRoot } from 'react-dom/client'
+import { StrictMode } from 'react'
+import { Game } from './Game'
+import { ThemeToggle } from './components/ThemeToggle'
+import { Jotai } from './jotai'
+import './styles/colors.css'
+import './styles/common.css'
 
-render(<App />, document.getElementById('app')!)
+const container = document.getElementById('remake')!
+const root = createRoot(container)
+root.render(
+    <StrictMode>
+        <Jotai />
+        <ThemeToggle />
+        <Game />
+    </StrictMode>,
+)

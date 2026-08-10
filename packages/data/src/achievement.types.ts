@@ -1,12 +1,18 @@
 /** 成就稀有度 */
-export type AchievementGrade = 0 | 1 | 2 | 3
+export enum AchievementGrade {
+    White = 0,
+    Blue = 1,
+    Purple = 2,
+    Orange = 3,
+}
 
 /** 成就触发时机 */
-export type AchievementOpportunity =
-    | 'START' // 分配完成点数，点击开始新人生后
-    | 'TRAJECTORY' // 每一年的人生经历中
-    | 'SUMMARY' // 人生结束，点击人生总结后
-    | 'END' // 游戏完成，点击重开 重开次数在这之后才会+1
+export enum AchievementOpportunity {
+    Start = 'START', // 分配完成点数，点击开始新人生后
+    Trajectory = 'TRAJECTORY', // 每一年的人生经历中
+    Summary = 'SUMMARY', // 人生结束，点击人生总结后
+    End = 'END', // 游戏完成，点击重开 重开次数在这之后才会+1
+}
 
 /** 成就 */
 export type Achievement = {

@@ -1,0 +1,14 @@
+:root {
+    color-scheme: light dark;
+    --base-text-color: light-dark(#121314, #f9fafb);
+    --base-background-color: light-dark(#f7f7f7, #121314);
+
+    --color-grade-0: light-dark(#4e5052, #f9fafb);
+    --color-grade-1: light-dark(#4aa8da, #afe3ff);
+    --color-grade-2: light-dark(#b03fe4, #e09eff);
+    --color-grade-3: light-dark(#ffaf2d, #ffe48d);
+
+    --color-primary: light-dark(#61b700, #b9ff69);
+    --color-info: light-dark(#454ad3, #b5b7ff);
+    --color-error: light-dark(#e42b2b, #ff6969);
+}

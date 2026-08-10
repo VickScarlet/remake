@@ -1,11 +1,11 @@
 import type { Event } from '@remake/data/event'
 import events from '@remake/data/event'
-import type { Properties } from '@/state'
-import type { GameState, ProfileState } from '@/state'
-import { propsEffect, createFlatState } from '@/state'
+import type { Properties } from './state'
+import type { GameState, ProfileState } from './state'
+import { propsEffect, createFlatState } from './state'
 import { check as checkCondition } from '@remake/condition'
 import { produce } from 'immer'
-import type { TriggerResult } from '@/game'
+import type { TriggerResult } from './game'
 
 export function check(
     event: Event['id'],
@@ -30,7 +30,7 @@ export function trigger(
         draft.events.add(eventId)
         if (!effect) return
         if (effect.LIF) draft.life += effect.LIF
-        const pe = {} as Partial<Properties>
+        const pe: Partial<Properties> = {}
         if (effect.CHR) pe.charm = effect.CHR
         if (effect.INT) pe.intelligence = effect.INT
         if (effect.STR) pe.strength = effect.STR

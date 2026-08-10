@@ -1,5 +1,10 @@
 /** 天赋稀有度 */
-export type TalentGrade = 0 | 1 | 2 | 3
+export enum TalentGrade {
+    White = 0,
+    Blue = 1,
+    Purple = 2,
+    Orange = 3,
+}
 
 /** 天赋效果 */
 export type TalentEffect = {

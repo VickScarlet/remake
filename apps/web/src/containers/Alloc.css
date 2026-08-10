@@ -1,0 +1,112 @@
+.screen.point-allocation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    .allocation-input {
+        display: flex;
+        gap: 0;
+        border: 0.0625rem solid var(--base-text-color);
+        box-sizing: border-box;
+        width: 100%;
+        button {
+            padding: 0;
+            margin: 0;
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            text-align: center;
+        }
+        input {
+            flex: 1;
+            height: 2rem;
+            width: 2rem;
+        }
+    }
+    .points-detail {
+        min-width: 100%;
+        color: var(--color-primary);
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        white-space: nowrap;
+        background: var(--base-background-color);
+        border: 0.0625rem solid var(--color-primary);
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        transform: translateY(-100%);
+        margin: 0;
+        li {
+            display: flex;
+            justify-content: space-between;
+            line-height: 2rem;
+            padding: 0 0.5rem;
+            gap: 0.5rem;
+        }
+        li:not(:first-child) {
+            border-top: 0.0625rem solid var(--color-primary);
+        }
+    }
+    > ul.alloc {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        width: 100%;
+        > li {
+            flex: 1 0;
+            display: flex;
+            position: relative;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            > span {
+                width: 100%;
+                height: 2rem;
+                border: 0.0625rem solid var(--base-text-color);
+                border-bottom: none;
+                text-align: center;
+                line-height: 2rem;
+                box-sizing: border-box;
+            }
+        }
+        > li.left {
+            > span {
+                background: var(--color-primary);
+                color: var(--base-background-color);
+                border: 0.0625rem solid var(--color-primary);
+                border-bottom: none;
+            }
+            > button {
+                flex: 1;
+                font-size: 1rem;
+                line-height: 2rem;
+                width: 6rem;
+                padding: 0;
+                box-sizing: border-box;
+            }
+        }
+    }
+    > div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        gap: 0.5rem;
+        button { flex: 1 0; }
+    }
+    > ul.talent-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+        li { width: 100%; }
+    }
+}

@@ -1,0 +1,22 @@
+.screen.talent-pick {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    ul.talent-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0;
+            .talent {
+                width: 100%;
+            }
+        }
+    }
+}

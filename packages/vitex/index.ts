@@ -22,3 +22,18 @@ export function pickWeight<T>(items: WeightItem<T>[], rng?: RNG) {
 export function sum(arr: number[]) {
     return arr.reduce((sum, v) => sum + v, 0)
 }
+
+export function shuffle<T>(array: T[], rng?: RNG): T[] {
+    const result = [...array]
+    for (let i = result.length - 1; i > 0; i--) {
+        const j = random(i, 0, rng)
+        const temp = result[i]
+        result[i] = result[j]!
+        result[j] = temp!
+    }
+    return result
+}
+
+export function keys<T extends object>(obj: T): (keyof T)[] {
+    return Object.keys(obj) as (keyof T)[]
+}

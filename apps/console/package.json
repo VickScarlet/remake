@@ -5,7 +5,7 @@
     "author": "Vick Scarlet <vick@syaro.io>",
     "scripts": {
         "start": "bun run src/index.ts",
-        "lint": "eslint .",
+        "lint": "bunx --bun eslint .",
         "test": "bun test"
     },
     "dependencies": {
