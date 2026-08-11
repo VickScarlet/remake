@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAllocator, usePointRandomizer, useLeftPoints } from '@remake/hooks'
-import { usePicked, useReplaced } from '@remake/hooks'
+import { usePicked, useReplaced, useStart } from '@remake/hooks'
 import type { AdditionalPoint } from '@remake/hooks'
 import { properties } from '@/display'
 import { keys } from '@remake/vitex'
@@ -59,9 +59,12 @@ export function Alloc() {
     const left = useLeftPoints()
     const [allocation, allocator] = useAllocator()
     const random = usePointRandomizer()
+    const start = useStart()
     const [showDetail, setShowDetail] = useState(false)
     const handleNext = () => {
-        // navigate('/life')
+        const achievements = start()
+        // TODO: Show achievements
+        console.log('Achievements', achievements)
     }
     return (
         <div className="screen point-allocation">
@@ -97,7 +100,7 @@ export function Alloc() {
                 <button className="info" onClick={() => random()}>
                     随机分配
                 </button>
-                <button className="primary" onClick={() => {}}>
+                <button className="primary" onClick={handleNext}>
                     开始新人生
                 </button>
             </div>

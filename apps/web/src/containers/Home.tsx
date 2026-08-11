@@ -1,4 +1,5 @@
 import { useRemake } from '@remake/hooks'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import './Home.css'
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
             <button className="primary" onClick={remake}>
                 立即重开
             </button>
+            <ThemeToggle />
         </div>
     )
 }

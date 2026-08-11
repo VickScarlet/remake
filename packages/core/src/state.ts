@@ -1,4 +1,4 @@
-import type { Achievement, Event, Talent } from '@remake/data'
+import type { Achievement, Event, Talent, Character } from '@remake/data'
 import { produce } from 'immer'
 import { sum, keys } from '@remake/vitex'
 
@@ -37,6 +37,9 @@ export interface GameState {
     talentTriggers: Map<Talent['id'], number> // 本局天赋触发次数
 }
 
+/** 唯一角色 */
+export type UniqueCharacter = Omit<Character, 'id' | 'name'>
+
 /** 持久化存储的数据 */
 export interface ProfileState {
     times: number // 游戏次数
@@ -46,6 +49,7 @@ export interface ProfileState {
     achievements: Set<Achievement['id']> // 达成的成就
     highest?: Properties // 历史最高属性
     lowest?: Properties // 历史最低属性
+    unique?: UniqueCharacter // 唯一角色属性
 }
 
 export function createState(

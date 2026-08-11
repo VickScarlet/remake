@@ -10,6 +10,15 @@ import type { Talent } from '@remake/data/talent'
 const pickedAtom = atom(new Set<Talent['id']>())
 const replacedAtom = atom<TalentsPickedResult | null>(null)
 
+export const useTalentReset = () => {
+    const setPicked = useSetAtom(pickedAtom)
+    const setReplaced = useSetAtom(replacedAtom)
+    return useCallback(() => {
+        setPicked(new Set())
+        setReplaced(null)
+    }, [setPicked, setReplaced])
+}
+
 export const usePicked = () => {
     const picked = useAtomValue(pickedAtom)
     if (!picked) throw new Error('No talents picked')
@@ -26,11 +35,12 @@ export const useTalentPuller = () => {
     const [profile] = useProfile()
     const [pulled, setPulled] = useState<Talent['id'][] | null>(null)
     const puller = useCallback(
-        (rng?: RNG) => setPulled(pull(p, profile, rng)),
-        // (rng?: RNG) =>
-        //     setPulled([
-        //         1142, 1143, 1144, 1145, 1146, 1086, 1122, 1111, 1130, 1048,
-        //     ]),
+        // (rng?: RNG) => setPulled(pull(p, profile, rng)),
+        (rng?: RNG) =>
+            setPulled([
+                1142, 1143, 1144, 1145, 1146, 1086, 1122, 1111, 1130, 1048,
+                1033,
+            ]),
         [p, profile, setPulled],
     )
     return [pulled, puller] as const

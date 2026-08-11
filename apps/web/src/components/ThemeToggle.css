@@ -1,24 +1,5 @@
-.theme-toggle-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 50%;
-    position: fixed;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-    transition: background-color 0.3s;
-    --hover-color: rgba(0, 0, 0, 0.05);
-    &:hover { background-color: var(--hover-color);}
-}
-
 .theme-svg {
+    --svg-color: oklch(from var(--text-color, var(--base-text-color)) calc(l + 0.2) c h);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: center;
     .sun-center, .sun-beams, .mask-cutter-group {
@@ -26,21 +7,19 @@
         transform-origin: center;
     }
     .mask-cutter-group { transform: translate(0.75rem, -0.75rem); }
-    .sun-center { fill: oklch(from var(--base-text-color) calc(l + 0.2) c h); }
-    .sun-beams { stroke: oklch(from var(--base-text-color) calc(l + 0.2) c h); }
+    .sun-center { 
+        transition: fill 0.2s ease-in-out;
+        fill: var(--svg-color); 
+    }
+    .sun-beams { 
+        transition: stroke 0.2s ease-in-out;
+        stroke: var(--svg-color); 
+    }
 }
 
 html[data-theme='dark'] {
-    .theme-toggle-btn { --hover-color: rgba(255, 255, 255, 0.1); }
     .mask-cutter-group { transform: translate(0, 0); }
     .theme-svg { transform: rotate(375deg); }
-    .sun-center {
-        transform: scale(1.5);
-        fill: #fbbf24;
-    }
-    .sun-beams {
-        opacity: 0;
-        transform: scale(0.6);
-        stroke: #fbbf24;
-    }
+    .sun-center { transform: scale(1.5); }
+    .sun-beams { opacity: 0; transform: scale(0.6); }
 }

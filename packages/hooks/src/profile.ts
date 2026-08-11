@@ -4,6 +4,8 @@ import type { ProfileState } from '@remake/core'
 
 const profileAtom = atom<ProfileState | null>(null)
 
+export const useRawProfile = () => useAtom(profileAtom)
+
 export const useProfile = () => {
     const [profile, setProfile] = useAtom(profileAtom)
     if (!profile) throw new Error('Profile is not loaded')

@@ -1,0 +1,43 @@
+.screen.summary {
+    gap: 1rem;
+    ul.judge-list {
+        display: flex;
+        flex-direction: row;
+        gap: 0.125rem;
+        width: 100%;
+        > li {
+            display: flex;
+            flex-direction: column;
+            flex: 1 0;
+            justify-content: space-between;
+            text-align: center;
+            min-width: 4rem;
+            user-select: none;
+            span {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                border: 0.0625rem solid var(--grade-color);
+                box-sizing: border-box;
+                height: 2rem;
+                color: var(--grade-color);
+                &:not(:first-child) {
+                    border-top: none;
+                }
+            }
+            .level { 
+                font-size: 0.95rem;
+                background-color: var(--grade-color);
+                color: var(--base-background-color);
+            }
+        }
+    }
+    ul.talent-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+}

@@ -8,21 +8,23 @@
     .allocation-input {
         display: flex;
         gap: 0;
+        height: 2rem;
         border: 0.0625rem solid var(--base-text-color);
         box-sizing: border-box;
         width: 100%;
         button {
+            flex: 1 0;
             padding: 0;
             margin: 0;
-            width: 2rem;
-            height: 2rem;
+            height: 100%;
             border: none;
             text-align: center;
         }
         input {
-            flex: 1;
-            height: 2rem;
+            flex: 1 0;
+            height: 100%;
             width: 2rem;
+            font-weight: bold;
         }
     }
     .points-detail {
@@ -42,7 +44,8 @@
         li {
             display: flex;
             justify-content: space-between;
-            line-height: 2rem;
+            align-items: center;
+            height: 2rem;
             padding: 0 0.5rem;
             gap: 0.5rem;
         }
@@ -72,9 +75,11 @@
                 height: 2rem;
                 border: 0.0625rem solid var(--base-text-color);
                 border-bottom: none;
-                text-align: center;
-                line-height: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 box-sizing: border-box;
+                font-weight: bold;
             }
         }
         > li.left {
@@ -87,10 +92,9 @@
             > button {
                 flex: 1;
                 font-size: 1rem;
-                line-height: 2rem;
+                height: 2rem;
                 width: 6rem;
                 padding: 0;
-                box-sizing: border-box;
             }
         }
     }

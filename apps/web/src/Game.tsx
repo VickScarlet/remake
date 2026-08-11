@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useInit } from '@/hooks/storage'
+import { useEffect } from 'react'
+import { useInit, useSaver } from '@/hooks/storage'
 import { useStep, Step } from '@remake/hooks'
 import Home from '@/containers/Home'
 import Pick from '@/containers/TalentPick'
@@ -11,10 +11,14 @@ import './Game.css'
 
 export function Game() {
     const [inited, init] = useInit()
+    const saver = useSaver()
     const step = useStep()
     useEffect(() => {
         if (!inited) init()
     }, [inited])
+    useEffect(() => {
+        saver()
+    }, [saver])
     if (!inited) return <Loading />
     switch (step) {
         case Step.Idle:

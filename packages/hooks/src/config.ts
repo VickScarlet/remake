@@ -7,6 +7,7 @@ export interface Config {
     pull: PullOptions
     points: number
     allocate: number
+    spirit: number
     mode: number
 }
 

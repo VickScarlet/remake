@@ -1,6 +1,7 @@
 import type { Achievement, Event, Talent } from '@remake/data'
 import { ages, AchievementOpportunity as Ao } from '@remake/data'
 import type { Allocation, GameState, ProfileState } from './state'
+import type { Properties } from './state'
 import { createState, nextProfile, propsEffect } from './state'
 import { summary as stateSummary } from './state'
 import type { PullOptions, ReplacementResult } from './talent'
@@ -109,6 +110,6 @@ export function end(
 }
 
 export { pull, exclude }
-export type { GameState, ProfileState, Allocation, RNG }
-export type { PullOptions, ReplacementResult }
+export type { GameState, ProfileState, Properties, RNG }
+export type { PullOptions, ReplacementResult, Allocation }
 export type { AdditionalPoint, AdditionalPoints }
