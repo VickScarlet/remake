@@ -69,8 +69,12 @@ export function pull(
         talentRateWithAddition(options.rate, profile).entries(),
     )
     const result = []
-    if (profile.lockedTalent) result.push(profile.lockedTalent)
     const map = new Map(Grades.map(g => [g, new Set(GradeMap.get(g))]))
+    if (profile.lockedTalent) {
+        result.push(profile.lockedTalent)
+        const { grade } = talents.get(profile.lockedTalent)!
+        map.get(grade)!.delete(profile.lockedTalent)
+    }
     for (let i = options.count - result.length; i > 0; i--) {
         const grade = pickWeight(rate, rng)! ?? 0
         const set = map.get(grade)!
@@ -105,12 +109,16 @@ function chainReplace(t: Talent['id'], ts: Set<Talent['id']>, rng?: RNG) {
     if (!r) return null
     let picked: Talent['id'] | null = null
     if (r.talent) {
-        const filtered = r.talent.filter(([id]) => exclude(id, ts) == null)
+        const filtered = r.talent.filter(([id]) => {
+            if (ts.has(id)) return false
+            return exclude(id, ts) == null
+        })
         picked = pickWeight(filtered, rng)
     } else if (r.grade) {
-        const filtered = GradeMap.get(r.grade)!.filter(
-            id => exclude(id, ts) == null,
-        )
+        const filtered = GradeMap.get(r.grade)!.filter(id => {
+            if (ts.has(id)) return false
+            return exclude(id, ts) == null
+        })
         picked = pick(filtered, rng)
     }
     if (!picked) return null
