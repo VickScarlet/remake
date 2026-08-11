@@ -6,12 +6,23 @@ import type { Allocation } from '@remake/core'
 import type { RNG } from '@remake/vitex'
 import { keys, shuffle, random as frandom } from '@remake/vitex'
 
-const init: Allocation = { charm: 0, intelligence: 0, strength: 0, money: 0 }
-const allocAtom = atom<Allocation>(init)
+export type UserAllocation = Omit<Allocation, 'spirit'>
+const init: UserAllocation = {
+    charm: 0,
+    intelligence: 0,
+    strength: 0,
+    money: 0,
+}
+const allocAtom = atom<UserAllocation>({ ...init })
 
-const alloced = (alloc: Allocation) =>
+const alloced = (alloc: UserAllocation) =>
     Object.values(alloc).reduce((a, b) => a + b, 0)
 
+export const useAllocReset = () => {
+    const setAlloc = useSetAtom(allocAtom)
+    return useCallback(() => setAlloc({ ...init }), [setAlloc])
+}
+export const useAlloc = () => useAtomValue(allocAtom)
 export const usePoints = () => {
     const { points } = useConfig()
     const { additionalPoints } = useReplaced()
@@ -29,7 +40,7 @@ export const useAllocator = () => {
     const total = usePoints()
     const [alloc, setAlloc] = useAtom(allocAtom)
     const allocator = useCallback(
-        (key: keyof Allocation, value: number) => {
+        (key: keyof UserAllocation, value: number) => {
             setAlloc(prev => {
                 const left = total - alloced(prev) + prev[key]
                 const max = Math.min(left, allocate)
