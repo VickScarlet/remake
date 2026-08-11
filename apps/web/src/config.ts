@@ -31,6 +31,7 @@ export const config: Config = {
     pick: 3,
     points: BasePoints,
     allocate: 10,
+    spirit: 5,
     pull: {
         count: 10,
         rate: {

@@ -18,9 +18,9 @@ export interface HLProperties {
     lowest: Properties // 历史最低属性
 }
 
-export type Allocation = Omit<Properties, 'age' | 'spirit'>
+export type Allocation = Omit<Properties, 'age'>
 export function createProperties(allocation: Allocation) {
-    return { ...allocation, age: -1, spirit: 0 }
+    return { ...allocation, age: -1 }
 }
 
 export function createHLProperties(allocation: Allocation) {
