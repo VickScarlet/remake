@@ -1,13 +1,31 @@
 import { useState, useEffect } from 'react'
 import './ThemeToggle.css'
 
+export const updateThemeColor = () => {
+    let metas = document.querySelectorAll('meta[name="theme-color"]')
+    if (!metas.length) return
+    const element = document.body
+    const end = Date.now() + 300
+    const update = () => {
+        const { backgroundColor } = getComputedStyle(element)
+        metas.forEach(meta => meta.setAttribute('content', backgroundColor))
+        if (Date.now() < end) requestAnimationFrame(update)
+    }
+    requestAnimationFrame(update)
+}
+
 export function ThemeToggle() {
-    const [isDark, setIsDark] = useState(
-        () => matchMedia('(prefers-color-scheme: dark)').matches,
-    )
+    const [isDark, setIsDark] = useState(() => {
+        const storedTheme = localStorage.getItem('theme')
+        if (storedTheme === 'dark') return true
+        if (storedTheme === 'light') return false
+        return matchMedia('(prefers-color-scheme: dark)').matches
+    })
 
     useEffect(() => {
         document.documentElement.dataset.theme = isDark ? 'dark' : 'light'
+        updateThemeColor()
+        localStorage.setItem('theme', isDark ? 'dark' : 'light')
     }, [isDark])
 
     return (

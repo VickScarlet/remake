@@ -8,10 +8,22 @@
         h1 {
             font-size: 4rem;
             margin: 0;
+            font-weight: bold;
         }
         h2 {
             font-size: 2rem;
             margin: 0;
         }
+    }
+    .theme-toggle-btn {
+        display: flex;
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0.25rem;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        -webkit-tap-highlight-color: transparent;
+        transition: background-color 0.3s;
     }
 }

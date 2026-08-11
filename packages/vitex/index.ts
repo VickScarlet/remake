@@ -34,6 +34,12 @@ export function shuffle<T>(array: T[], rng?: RNG): T[] {
     return result
 }
 
-export function keys<T extends object>(obj: T): (keyof T)[] {
-    return Object.keys(obj) as (keyof T)[]
+export function keys<T extends object, K extends keyof T = never>(
+    obj: T,
+    filter?: K[],
+): Exclude<keyof T, K>[] {
+    const allKeys = Object.keys(obj) as (keyof T)[]
+    if (!filter || filter.length === 0) return allKeys as Exclude<keyof T, K>[]
+    const filterSet = new Set<keyof T>(filter)
+    return allKeys.filter(key => !filterSet.has(key)) as Exclude<keyof T, K>[]
 }

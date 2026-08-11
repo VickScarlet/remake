@@ -4,28 +4,26 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
-    line-height: 2rem;
+    height: 2rem;
+    font-size: 1rem;
     gap: 1rem;
     color: var(--color);
     background: var(--background, var(--base-background-color));
     cursor: pointer;
     user-select: none;
     border: 0.0625rem solid var(--grade-color);
+    box-sizing: border-box;
     transition: all 0.2s ease-in-out;
-    &.talent-grade-0 { --grade-color: var(--color-grade-0); }
-    &.talent-grade-1 { --grade-color: var(--color-grade-1); }
-    &.talent-grade-2 { --grade-color: var(--color-grade-2); }
-    &.talent-grade-3 { --grade-color: var(--color-grade-3); }
     &.selected {
         --color: var(--base-background-color);
         --background: var(--grade-color);
         &:hover { --background: oklch(from var(--grade-color) calc(l + 0.1) c h); }
     }
     &:hover { --background: oklch(from var(--grade-color) calc(l + 0.5) c h); }
+    .talent-name { font-weight: bold; }
     .talent-description {
         color: oklch(from var(--color) calc(l + 0.1) c h);
-        font-size: 0.6rem;
-        align-self: flex-end;
+        font-size: 0.85rem;
         user-select: none;
         &::before { content: '['; margin-right: 0.125rem; }
         &::after { content: ']'; margin-left: 0.125rem; }

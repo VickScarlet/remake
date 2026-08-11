@@ -1,6 +1,5 @@
 import type { Talent } from '@remake/data/talent'
 import talents from '@remake/data/talent'
-import cx from 'classnames'
 import './Talent.css'
 
 export interface TalentProps {
@@ -12,7 +11,7 @@ export function TalentComponent({ id, selected }: TalentProps) {
     if (!talent) return null
     const grade = talent?.grade ?? 0
     return (
-        <div className={cx('talent', `talent-grade-${grade}`, { selected })}>
+        <div className={`talent grade-${grade} ${selected ? 'selected' : ''}`}>
             <span className="talent-name">{talent.name}</span>
             <span className="talent-description">{talent.description}</span>
         </div>

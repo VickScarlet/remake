@@ -12,3 +12,8 @@
     --color-info: light-dark(#454ad3, #b5b7ff);
     --color-error: light-dark(#e42b2b, #ff6969);
 }
+
+.grade-0 { --grade-color: var(--color-grade-0); }
+.grade-1 { --grade-color: var(--color-grade-1); }
+.grade-2 { --grade-color: var(--color-grade-2); }
+.grade-3 { --grade-color: var(--color-grade-3); }
