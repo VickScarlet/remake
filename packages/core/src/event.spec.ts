@@ -16,6 +16,7 @@ describe('Event', () => {
         intelligence: 10,
         strength: 0,
         money: 0,
+        spirit: 5,
     }
 
     test('branch 10003:0 [玉佩]', () => {

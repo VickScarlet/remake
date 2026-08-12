@@ -2,7 +2,7 @@ import { expect, test, describe } from 'bun:test'
 import { parse, type ConditionNode } from '@remake/condition'
 
 import { achievements, events, talents } from '@remake/data'
-import type { GameState, ProfileState, Properties } from './state'
+import type { FlatState, GameState, ProfileState, Properties } from './state'
 import { createFlatState, createHLProperties, propsEffect } from './state'
 import { SupportedFlatStateKeys } from './state'
 import { enableMapSet } from 'immer'
@@ -11,7 +11,10 @@ enableMapSet()
 /**
  * 核心递归辅助函数：从多维语法树节点中提取所有属性名
  */
-function extractKeysFromNode(node: ConditionNode, properties: Set<string>) {
+function extractKeysFromNode(
+    node: ConditionNode,
+    properties: Set<keyof FlatState>,
+) {
     if (Array.isArray(node)) {
         for (const subNode of node) {
             extractKeysFromNode(subNode, properties)
@@ -22,7 +25,7 @@ function extractKeysFromNode(node: ConditionNode, properties: Set<string>) {
         // 匹配操作符（><!?=）前面的属性名部分
         const match = node.match(/^([^><!?=]+)/)
         if (match && match) {
-            properties.add(match[1]!.trim())
+            properties.add(match[1]!.trim() as keyof FlatState)
         }
     }
 }
@@ -30,9 +33,9 @@ function extractKeysFromNode(node: ConditionNode, properties: Set<string>) {
 /**
  * 从条件字符串中提取所有使用到的属性键名
  */
-function getPropertiesFromCondition(condition: string): Set<string> {
+function getPropertiesFromCondition(condition: string): Set<keyof FlatState> {
     const parsedConditions = parse(condition)
-    const properties = new Set<string>()
+    const properties = new Set<keyof FlatState>()
     extractKeysFromNode(parsedConditions, properties)
     return properties
 }
@@ -205,7 +208,13 @@ describe('State', () => {
         )
     })
 
-    const allocation = { charm: 5, intelligence: 5, strength: 5, money: 5 }
+    const allocation = {
+        charm: 5,
+        intelligence: 5,
+        strength: 5,
+        money: 5,
+        spirit: 5,
+    }
     test('createHLProperties', () => {
         const props = createHLProperties(allocation)
         expect(props.current.charm).toBe(allocation.charm)
@@ -213,7 +222,7 @@ describe('State', () => {
         expect(props.current.strength).toBe(allocation.strength)
         expect(props.current.money).toBe(allocation.money)
         expect(props.current.age).toBe(-1)
-        expect(props.current.spirit).toBe(0)
+        expect(props.current.spirit).toBe(5)
     })
 
     test('propsEffect', () => {

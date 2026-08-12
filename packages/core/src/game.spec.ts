@@ -17,6 +17,7 @@ describe('Achievement', () => {
         intelligence: 5,
         strength: 5,
         money: 5,
+        spirit: 5,
     }
 
     test('talentsPicked', () => {

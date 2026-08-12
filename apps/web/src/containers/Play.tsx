@@ -6,6 +6,7 @@ import type { Log } from '@remake/hooks'
 import { properties } from '@/display'
 import { achievements, events, talents } from '@remake/data'
 import { AutoInterval } from '@/config'
+import { format } from '@remake/vitex'
 import './Play.css'
 
 function LogTalent({ id }: { id: number }) {
@@ -25,12 +26,19 @@ function LogTalents({ items }: { items: number[] }) {
     return <ul className="log-inner log-talents">{els}</ul>
 }
 
+const year = new Date().getFullYear()
 interface LogEventProps {
     id: number
     post: boolean
+    index: number
 }
-function LogEvent({ id, post }: LogEventProps) {
-    const { event, postEvent, grade } = events.get(id)!
+function LogEvent({ id, post, index }: LogEventProps) {
+    let { event, postEvent, grade, format: f } = events.get(id)!
+    if (f) {
+        const g = (key: string) => ({ CurrentYear: year + index })[key]
+        event = format(event, g)
+        if (post && postEvent) postEvent = format(postEvent, g)
+    }
     return (
         <>
             <li className={`grade-${grade}`}>{event}</li>
@@ -41,10 +49,10 @@ function LogEvent({ id, post }: LogEventProps) {
     )
 }
 
-function LogEvents({ items }: { items: number[] }) {
+function LogEvents({ items, index }: { items: number[]; index: number }) {
     const last = items.length - 1
     const els = items.map((id, i) => (
-        <LogEvent key={id} id={id} post={i == last} />
+        <LogEvent key={id} id={id} post={i == last} index={index} />
     ))
     return <ul className="log-inner log-events">{els}</ul>
 }
@@ -66,13 +74,13 @@ function LogAchievements({ items }: { items: number[] }) {
     return <ul className="log-inner log-achievements">{els}</ul>
 }
 
-function Log({ log }: { log: Log }) {
+function Log({ log, index }: { log: Log; index: number }) {
     return (
         <li className="log">
             <span className="age font-mono">{log.age}岁</span>
             <div className="content">
                 <LogTalents items={log.talents} />
-                <LogEvents items={log.events} />
+                <LogEvents items={log.events} index={index} />
                 <LogAchievements items={log.achievements} />
             </div>
         </li>
@@ -88,25 +96,40 @@ interface PropProps {
 function Prop({ prop, value, grade }: PropProps) {
     const prevRef = useRef<number>(value)
     const [trend, setTrend] = useState<'up' | 'down' | 'normal'>('normal')
-    const [animCount, setAnimCount] = useState<number>(0)
+    const [flip, setFlip] = useState(0)
+    const [displayValue, setDisplayValue] = useState<number>(value)
     useEffect(() => {
         const prev = prevRef.current
         if (value === prev) return
         prevRef.current = value
         setTrend(value > prev ? 'up' : 'down')
-        setAnimCount(c => c + 1)
-        const timer = setTimeout(() => {
-            setTrend('normal')
-        }, 2000)
-        return () => clearTimeout(timer)
+        setFlip(f => (f + 1) % 2)
+        let startTimestamp: number | null = null
+        const duration = 400
+        const startValue = displayValue
+        let end = false
+        const step = (timestamp: number) => {
+            if (!startTimestamp) startTimestamp = timestamp
+            const progress = timestamp - startTimestamp
+            const progressRatio = Math.min(progress / duration, 1)
+            const easeOutQuad = progressRatio * (2 - progressRatio)
+            const currentDec = startValue + (value - startValue) * easeOutQuad
+            setDisplayValue(Math.round(currentDec))
+            if (!end && progress < duration) requestAnimationFrame(step)
+        }
+        requestAnimationFrame(step)
+        const timer = setTimeout(() => setTrend('normal'), 2000)
+        return () => {
+            clearTimeout(timer)
+            setDisplayValue(value)
+            end = true
+        }
     }, [value])
 
     return (
-        <li
-            className={`${prop} grade-${grade} trend-${trend}-${animCount % 2}`}
-        >
+        <li className={`${prop} grade-${grade} trend-${trend}-${flip}`}>
             <span className="name">{properties[prop]}</span>
-            <span className="value font-mono">{value}</span>
+            <span className="value font-mono">{displayValue}</span>
         </li>
     )
 }
@@ -160,7 +183,7 @@ export function Play() {
                 ref={logRef}
             >
                 {logs.map((log, index) => (
-                    <Log key={index} log={log} />
+                    <Log key={index} log={log} index={index} />
                 ))}
             </ul>
             <div className="controls">

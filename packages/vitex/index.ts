@@ -43,3 +43,18 @@ export function keys<T extends object, K extends keyof T = never>(
     const filterSet = new Set<keyof T>(filter)
     return allKeys.filter(key => !filterSet.has(key)) as Exclude<keyof T, K>[]
 }
+// 定义获取字段值的方法签名
+export type GetValueFn = (
+    fieldName: string,
+) => string | number | boolean | null | undefined
+export function format(str: string, getValueFn: GetValueFn): string {
+    if (!str) return ''
+    return str.replace(
+        /\{([^}]+)\}/g,
+        (match: string, fieldName: string): string => {
+            const value = getValueFn(fieldName)
+            if (value === undefined || value === null) return match
+            return String(value)
+        },
+    )
+}
