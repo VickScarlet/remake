@@ -16,6 +16,9 @@
         }
     }
     .theme-toggle-btn {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
         display: flex;
         width: 2.5rem;
         height: 2.5rem;
