@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { usePicked, useEnd, useProfile } from '@remake/hooks'
 import { useEndJudge } from '@/hooks/judge'
 import { properties, judgeDisplay } from '@/display'
@@ -27,26 +27,24 @@ interface TalentListProps {
 }
 function TalentList({ picked, picker }: TalentListProps) {
     const [profile] = useProfile()
-    const [talents, setTalents] = useState(usePicked())
+    const items = usePicked()
+    const talents = useMemo(() => {
+        if (!isDev || !profile.locked) return items
+        return new Set([...items, ...profile.locked])
+    }, [])
     const hasInitialized = useRef(false)
-
     useEffect(() => {
         if (!profile.locked) return
-        let currentTalents = talents
-        if (isDev) {
-            currentTalents = new Set([...talents, ...profile.locked])
-            setTalents(currentTalents)
-        }
-
         if (!hasInitialized.current) {
             for (const id of profile.locked) {
-                if (currentTalents.has(id) && !picked.has(id)) {
+                if (talents.has(id) && !picked.has(id)) {
                     picker(id)
                 }
             }
             hasInitialized.current = true
         }
-    }, [profile, talents, picked, picker])
+    }, [picked, picker])
+
     return (
         <ul className="talent-list">
             {Array.from(talents, id => (

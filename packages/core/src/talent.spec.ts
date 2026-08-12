@@ -30,11 +30,11 @@ describe('Talent', () => {
 
     test('pull external', () => {
         const p = produce(profile, draft => {
-            draft.lockedTalent = 1001
+            draft.locked = [1001]
         })
         const result = pull(options, p)
         expect(result.length).toBe(options.count)
-        expect(result).toContain(p.lockedTalent!)
+        expect(result).toContain(p.locked![0]!)
     })
 
     test('pull rate', () => {

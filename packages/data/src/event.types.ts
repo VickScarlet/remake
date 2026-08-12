@@ -47,6 +47,8 @@ export type Event = {
     readonly exclude?: string
     /** 分支路线 */
     readonly branch?: EventBranch[]
+    /** 是否需要格式化 */
+    readonly format?: boolean
 }
 // @vt-types-end
 
