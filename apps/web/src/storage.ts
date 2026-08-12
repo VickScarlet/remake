@@ -15,7 +15,7 @@ if (localStorage.getItem('version') !== '3.0.0') {
         const lockedTalents = JSON.parse(
             localStorage.getItem('extendTalent') || 'null',
         )
-        if (lockedTalents) profile.lockedTalent = lockedTalents
+        if (lockedTalents) profile.locked = [lockedTalents]
         const unique = JSON.parse(
             localStorage.getItem('uniqueWaTaShi') || 'null',
         )

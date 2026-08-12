@@ -102,10 +102,10 @@ export interface EndResult {
 export function end(
     state: GameState,
     profile: ProfileState,
-    lockedTalent?: Talent['id'],
+    locked?: Talent['id'][],
 ) {
     const ar = atr(Ao.End, state, profile)
-    const p = nextProfile(profile, ar.state, lockedTalent)
+    const p = nextProfile(profile, ar.state, locked)
     return { profile: p, achievements: ar.triggers }
 }
 

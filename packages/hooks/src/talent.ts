@@ -35,12 +35,7 @@ export const useTalentPuller = () => {
     const [profile] = useProfile()
     const [pulled, setPulled] = useState<Talent['id'][] | null>(null)
     const puller = useCallback(
-        // (rng?: RNG) => setPulled(pull(p, profile, rng)),
-        (rng?: RNG) =>
-            setPulled([
-                1142, 1143, 1144, 1145, 1146, 1086, 1122, 1111, 1130, 1048,
-                1033,
-            ]),
+        (rng?: RNG) => setPulled(pull(p, profile, rng)),
         [p, profile, setPulled],
     )
     return [pulled, puller] as const
@@ -61,7 +56,7 @@ export type TalentPickerResult =
       }
 
 export const useTalentPicker = () => {
-    const { pick } = useConfig()
+    const { max } = useConfig()
     const [picked, setPicked] = useAtom(pickedAtom)
     const picker = useCallback(
         (talent: Talent['id']): TalentPickerResult => {
@@ -75,29 +70,29 @@ export const useTalentPicker = () => {
                 setPicked(next)
                 return { type: 'ok' }
             }
-            if (picked.size >= pick) return { type: 'not-enough' }
+            if (picked.size >= max) return { type: 'not-enough' }
             const e = exclude(talent, picked)
             if (e) return { type: 'exclude', talent: e }
             const next = new Set([...picked, talent])
             setPicked(next)
             return { type: 'ok' }
         },
-        [pick, picked, setPicked],
+        [max, picked, setPicked],
     )
     return [picked, picker] as const
 }
 
 export const useSubmitIsEnable = () => {
-    const { pick } = useConfig()
+    const { max, min } = useConfig()
     const picked = useAtomValue(pickedAtom)
-    const enabled = picked.size >= pick
-    return [enabled, pick] as const
+    const enabled = picked.size >= min && picked.size <= max
+    return { min, max, enabled } as const
 }
 
 export const useTalentSubmit = () => {
     const picked = useAtomValue(pickedAtom)
     const setReplaced = useSetAtom(replacedAtom)
-    const [enabled] = useSubmitIsEnable()
+    const { enabled } = useSubmitIsEnable()
     const next = useSetStep()
     return useCallback(
         (rng?: RNG) => {

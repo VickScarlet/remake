@@ -4,7 +4,7 @@ import { usePicked, useReplaced, useStart } from '@remake/hooks'
 import type { AdditionalPoint } from '@remake/hooks'
 import { properties } from '@/display'
 import { keys } from '@remake/vitex'
-import { BasePoints } from '@/config'
+import { BasePoints, judgeGradeByValue } from '@/config'
 import { talents } from '@remake/data'
 import Replaced from '@/components/Replaced'
 import './Alloc.css'
@@ -62,6 +62,10 @@ export function Alloc() {
     const start = useStart()
     const [showDetail, setShowDetail] = useState(false)
     const handleNext = () => {
+        if (left) {
+            // TODO: Show a warning that there are still points left
+            return
+        }
         const achievements = start()
         // TODO: Show achievements
         console.log('Achievements', achievements)
@@ -76,10 +80,10 @@ export function Alloc() {
                 ))}
             </ul>
             <ul className="alloc">
-                <li className="left">
+                <li className={`left left-${left}`}>
                     <span>剩余点数</span>
                     <button
-                        className="primary font-mono"
+                        className="font-mono"
                         onClick={() => setShowDetail(!showDetail)}
                     >
                         {left}
@@ -87,7 +91,10 @@ export function Alloc() {
                     {showDetail && <PointsDetail source={source} />}
                 </li>
                 {keys(allocation).map(key => (
-                    <li key={key}>
+                    <li
+                        key={key}
+                        className={`property grade-${judgeGradeByValue(key, allocation[key])}`}
+                    >
                         <span>{properties[key]}</span>
                         <AllocInput
                             point={allocation[key]}
@@ -100,7 +107,10 @@ export function Alloc() {
                 <button className="info" onClick={() => random()}>
                     随机分配
                 </button>
-                <button className="primary" onClick={handleNext}>
+                <button
+                    className={left ? 'error' : 'primary'}
+                    onClick={handleNext}
+                >
                     开始新人生
                 </button>
             </div>

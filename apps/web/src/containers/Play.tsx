@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react'
 import { useLayoutEffect, useEffect } from 'react'
 import { useNext, useGotoSummary } from '@remake/hooks'
+import { useJudge } from '@/hooks/judge'
 import type { Log } from '@remake/hooks'
 import { properties } from '@/display'
-import { keys } from '@remake/vitex'
 import { achievements, events, talents } from '@remake/data'
 import { AutoInterval } from '@/config'
 import './Play.css'
@@ -66,10 +66,7 @@ function LogAchievements({ items }: { items: number[] }) {
     return <ul className="log-inner log-achievements">{els}</ul>
 }
 
-interface LogProps {
-    log: Log
-}
-function Log({ log }: LogProps) {
+function Log({ log }: { log: Log }) {
     return (
         <li className="log">
             <span className="age font-mono">{log.age}岁</span>
@@ -82,8 +79,51 @@ function Log({ log }: LogProps) {
     )
 }
 
+interface PropProps {
+    prop: keyof typeof properties
+    value: number
+    grade: number
+}
+
+function Prop({ prop, value, grade }: PropProps) {
+    const prevRef = useRef<number>(value)
+    const [trend, setTrend] = useState<'up' | 'down' | 'normal'>('normal')
+    const [animCount, setAnimCount] = useState<number>(0)
+    useEffect(() => {
+        const prev = prevRef.current
+        if (value === prev) return
+        prevRef.current = value
+        setTrend(value > prev ? 'up' : 'down')
+        setAnimCount(c => c + 1)
+        const timer = setTimeout(() => {
+            setTrend('normal')
+        }, 2000)
+        return () => clearTimeout(timer)
+    }, [value])
+
+    return (
+        <li
+            className={`${prop} grade-${grade} trend-${trend}-${animCount % 2}`}
+        >
+            <span className="name">{properties[prop]}</span>
+            <span className="value font-mono">{value}</span>
+        </li>
+    )
+}
+
+function Properties() {
+    const judges = useJudge()
+    return (
+        <ul className="properties">
+            {judges.map(([key, { value, grade }]) => (
+                <Prop key={key} prop={key} value={value} grade={grade} />
+            ))}
+        </ul>
+    )
+}
+
 export function Play() {
-    const [{ state, logs, ended }, next] = useNext()
+    const [{ logs, ended }, next] = useNext()
     const [auto, setAuto] = useState(false)
     const logRef = useRef<HTMLUListElement>(null)
     const autoRef = useRef(0)
@@ -113,16 +153,7 @@ export function Play() {
     }, [auto, handleNext])
     return (
         <div className="screen play">
-            <ul className="properties">
-                {keys(state.props.current, ['age']).map(key => (
-                    <li className={key} key={key}>
-                        <span>{properties[key]}</span>
-                        <span className="font-mono">
-                            {state.props.current[key]}
-                        </span>
-                    </li>
-                ))}
-            </ul>
+            <Properties />
             <ul
                 className="logs hide-scrollbar"
                 onClick={handleNext}
@@ -135,7 +166,7 @@ export function Play() {
             <div className="controls">
                 {!ended && (
                     <button className="primary" onClick={() => setAuto(!auto)}>
-                        {auto ? '手动' : '自动'}
+                        {auto ? '关闭自动' : '开启自动'}
                     </button>
                 )}
                 {ended && (

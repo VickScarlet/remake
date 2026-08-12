@@ -5,6 +5,7 @@
     "author": "Vick Scarlet <vick@syaro.io>",
     "scripts": {
         "dev": "bunx --bun vite",
+        "dev:prod": "bunx --bun vite --mode production",
         "build": "bunx --bun vite build",
         "preview": "bunx --bun vite preview",
         "lint": "bunx --bun eslint",
@@ -14,7 +15,6 @@
         "@remake/data": "workspace:*",
         "@remake/hooks": "workspace:*",
         "@remake/vitex": "workspace:*",
-        "classnames": "^2.5.1",
         "jotai": "^2.20.2",
         "react": "^19.2.8",
         "react-dom": "^19.2.8"
