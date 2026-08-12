@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import type { ProfileState } from '@remake/core'
 
-const profileAtom = atom<ProfileState | null>(null)
+export const profileAtom = atom<ProfileState | null>(null)
 
 export const useRawProfile = () => useAtom(profileAtom)
 

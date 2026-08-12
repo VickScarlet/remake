@@ -7,8 +7,8 @@ import { pull, exclude, talentsPicked } from '@remake/core'
 import type { TalentsPickedResult, RNG } from '@remake/core'
 import type { Talent } from '@remake/data/talent'
 
-const pickedAtom = atom(new Set<Talent['id']>())
-const replacedAtom = atom<TalentsPickedResult | null>(null)
+export const pickedAtom = atom(new Set<Talent['id']>())
+export const replacedAtom = atom<TalentsPickedResult | null>(null)
 
 export const useTalentReset = () => {
     const setPicked = useSetAtom(pickedAtom)
