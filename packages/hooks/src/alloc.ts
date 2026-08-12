@@ -13,7 +13,7 @@ const init: UserAllocation = {
     strength: 0,
     money: 0,
 }
-const allocAtom = atom<UserAllocation>({ ...init })
+export const allocAtom = atom<UserAllocation>({ ...init })
 
 const alloced = (alloc: UserAllocation) =>
     Object.values(alloc).reduce((a, b) => a + b, 0)

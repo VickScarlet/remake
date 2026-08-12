@@ -21,10 +21,10 @@ export type Log = Omit<NextResult, 'state'> & {
     props: Omit<Properties, 'age'>
 }
 
-const stepAtom = atom<Step>(Step.Idle)
-const gameStateAtom = atom<GameState | null>(null)
-const logsAtom = atom<Log[]>([])
-const summaryAtom = atom(0)
+export const stepAtom = atom<Step>(Step.Idle)
+export const gameStateAtom = atom<GameState | null>(null)
+export const logsAtom = atom<Log[]>([])
+export const summaryAtom = atom(0)
 
 export const useStateReset = () => {
     const setGameState = useSetAtom(gameStateAtom)
@@ -129,11 +129,13 @@ export const useEnd = () => {
     const picker = useCallback(
         (talent: Talent['id']) => {
             setLocked(prev => {
-                const next = new Set(prev)
-                if (next.has(talent)) {
+                if (prev.has(talent)) {
+                    const next = new Set(prev)
                     next.delete(talent)
                     return next
                 }
+                if (lock == 1) return new Set([talent])
+                const next = new Set(prev)
                 if (next.size >= lock) return prev
                 next.add(talent)
                 return next
