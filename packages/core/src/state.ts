@@ -43,7 +43,7 @@ export type UniqueCharacter = Omit<Character, 'id' | 'name'>
 /** 持久化存储的数据 */
 export interface ProfileState {
     times: number // 游戏次数
-    lockedTalent?: Talent['id'] // 继承的天赋
+    locked?: Talent['id'][] // 锁定的天赋
     talents: Set<Talent['id']> // 拥有过的天赋
     events: Set<Event['id']> // 触发过的事件
     achievements: Set<Achievement['id']> // 达成的成就
@@ -195,7 +195,7 @@ export function lowestProperties(a: Properties, b?: Properties): Properties {
 export function nextProfile(
     profile: ProfileState,
     state: GameState,
-    lockedTalent?: Talent['id'],
+    locked?: Talent['id'][],
 ) {
     return {
         times: profile.times + 1,
@@ -204,6 +204,6 @@ export function nextProfile(
         achievements: profile.achievements.union(state.achievements),
         highest: highestProperties(state.props.highest, profile.highest),
         lowest: lowestProperties(state.props.lowest, profile.lowest),
-        lockedTalent: lockedTalent ?? profile.lockedTalent,
+        locked,
     }
 }

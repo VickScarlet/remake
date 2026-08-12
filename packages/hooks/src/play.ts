@@ -101,7 +101,7 @@ export const useNext = () => {
         }
         return result.achievements
     }, [state, profile, setState])
-    return [{ state, logs, ended }, nexter] as const
+    return [{ logs, ended }, nexter] as const
 }
 
 export const useGotoSummary = () => {
@@ -120,20 +120,36 @@ export const useGotoSummary = () => {
 }
 
 export const useEnd = () => {
+    const { lock } = useConfig()
     const [profile, setProfile] = useProfile()
     const [step, setStep] = useAtom(stepAtom)
     const state = useAtomValue(gameStateAtom)
     const reset = useGameReset()
-    return useCallback(
-        (talent?: Talent['id']) => {
-            if (!state)
-                throw new Error('Game state is not available or already ended.')
-            const result = end(state, profile, talent)
-            setStep(Step.Idle)
-            setProfile(result.profile)
-            reset()
-            return result.achievements
+    const [locked, setLocked] = useState<Set<Talent['id']>>(new Set())
+    const picker = useCallback(
+        (talent: Talent['id']) => {
+            setLocked(prev => {
+                const next = new Set(prev)
+                if (next.has(talent)) {
+                    next.delete(talent)
+                    return next
+                }
+                if (next.size >= lock) return prev
+                next.add(talent)
+                return next
+            })
         },
-        [state, step, profile, setStep, setProfile, reset],
+        [setLocked],
     )
+    const ender = useCallback(() => {
+        if (!state)
+            throw new Error('Game state is not available or already ended.')
+        const l = locked.size > 0 ? Array.from(locked) : undefined
+        const result = end(state, profile, l)
+        setStep(Step.Idle)
+        setProfile(result.profile)
+        reset()
+        return result.achievements
+    }, [state, step, profile, locked, setStep, setProfile, reset])
+    return [locked, picker, ender] as const
 }

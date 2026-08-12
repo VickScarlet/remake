@@ -3,11 +3,21 @@ import { atom, useSetAtom, useAtomValue } from 'jotai'
 import type { PullOptions } from '@remake/core'
 
 export interface Config {
-    pick: number
+    /** 游戏锁定天赋数量 */
+    lock: number
+    /** 游戏可选天赋数量 */
+    max: number
+    /** 游戏最少选择天赋数量 */
+    min: number
+    /** 天赋抽取个数 */
     pull: PullOptions
+    /** 初始属性点 */
     points: number
+    /** 单项属性点最大限制 */
     allocate: number
+    /** 初始快乐 */
     spirit: number
+    /** 模式选择限制 */
     mode: number
 }
 

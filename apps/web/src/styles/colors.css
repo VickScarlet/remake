@@ -8,9 +8,10 @@
     --color-grade-2: light-dark(#b03fe4, #e09eff);
     --color-grade-3: light-dark(#ffaf2d, #ffe48d);
 
-    --color-primary: light-dark(#61b700, #b9ff69);
+    --color-success: light-dark(#61b700, #b9ff69);
     --color-info: light-dark(#454ad3, #b5b7ff);
     --color-error: light-dark(#e42b2b, #ff6969);
+    --color-primary: var(--color-success);
 }
 
 .grade-0 { --grade-color: var(--color-grade-0); }

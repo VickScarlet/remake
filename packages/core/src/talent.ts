@@ -70,10 +70,13 @@ export function pull(
     )
     const result = []
     const map = new Map(Grades.map(g => [g, new Set(GradeMap.get(g))]))
-    if (profile.lockedTalent) {
-        result.push(profile.lockedTalent)
-        const { grade } = talents.get(profile.lockedTalent)!
-        map.get(grade)!.delete(profile.lockedTalent)
+    if (profile.locked) {
+        result.push(...profile.locked)
+        if (result.length >= options.count) return result
+        for (const talent of result) {
+            const { grade } = talents.get(talent)!
+            map.get(grade)!.delete(talent)
+        }
     }
     for (let i = options.count - result.length; i > 0; i--) {
         const grade = pickWeight(rate, rng)! ?? 0

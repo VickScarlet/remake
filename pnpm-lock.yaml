@@ -47,9 +47,6 @@ importers:
       '@remake/vitex':
         specifier: workspace:*
         version: link:../../packages/vitex
-      classnames:
-        specifier: ^2.5.1
-        version: 2.5.1
       jotai:
         specifier: ^2.20.2
         version: 2.20.2(@types/react@19.2.18)(react@19.2.8)
@@ -671,9 +668,6 @@ packages:
   chai@6.2.2:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
     engines: {node: '>=18'}
-
-  classnames@2.5.1:
-    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -1734,8 +1728,6 @@ snapshots:
       '@types/node': 26.1.2
 
   chai@6.2.2: {}
-
-  classnames@2.5.1: {}
 
   convert-source-map@2.0.0: {}
 

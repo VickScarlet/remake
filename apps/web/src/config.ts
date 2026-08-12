@@ -1,20 +1,33 @@
 import type { Config } from '@remake/hooks'
 
+export const isDev = import.meta.env.MODE === 'development'
+// 自动模式自动点击间隔
 export const AutoInterval = 500
+// 可锁定的天赋数量
+export const LockLimit = isDev ? 10 : 1
+// 名人模式重开次数限制
 export const ModeLimit = 10
-export const PickLimit = 3
+// 天赋选择数量限制
+export const PickMax = isDev ? 10 : 3
+// 天赋选择最少数量限制
+export const PickMin = 3
+// 基础属性点
 export const BasePoints = 20
+// 单项属性点最大限制
 export const AllocLimit = 10
+// 默认初始快乐
 export const DefaultSpirit = 5
-export const PullCount = 10
+// 天赋抽取个数
+export const PullCount = isDev ? 20 : 10
+// 天赋抽取基础概率
 export const PullRateBase: Config['pull']['rate']['base'] = new Map([
     [0, 889],
     [1, 100],
     [2, 10],
     [3, 1],
 ])
-
-export const JudgeMap = {
+// 属性评级线
+export const JudgeLineMap = {
     age: [0, 1, 10, 18, 40, 60, 70, 80, 90, 95, 100, 500],
     summary: [0, 41, 50, 60, 80, 100, 110, 120],
     times: [0, 10, 30, 50, 70, 100],
@@ -27,15 +40,17 @@ export const JudgeMap = {
     talent: [0, 0.3, 0.6, 0.9],
     event: [0, 0.2, 0.4, 0.6],
 }
-export type Judges = keyof typeof JudgeMap
+// 可评级属性
+export type Judges = keyof typeof JudgeLineMap
+// 获取属性评级
 export function judge(key: Judges, value: number) {
-    const arr = JudgeMap[key]
+    const arr = JudgeLineMap[key]
     for (let i = arr.length - 1; i >= 0; i--) {
         if (value >= arr[i]!) return i
     }
     return 0
 }
-
+// 属性稀有度等级线
 export const JudgeGradeMap = {
     age: [0, 5, 7, 9],
     summary: [0, 4, 5, 6],
@@ -49,6 +64,7 @@ export const JudgeGradeMap = {
     talent: [0, 1, 2, 3],
     event: [0, 1, 2, 3],
 }
+// 获取属性稀有度
 export function judgeGrade(key: Judges, level: number) {
     const arr = JudgeGradeMap[key]
     for (let i = arr.length - 1; i >= 0; i--) {
@@ -56,7 +72,13 @@ export function judgeGrade(key: Judges, level: number) {
     }
     return 0
 }
+// 根据属性值获取属性稀有度
+export function judgeGradeByValue(key: Judges, value: number) {
+    const level = judge(key, value)
+    return judgeGrade(key, level)
+}
 
+// 天赋抽取概率加成
 export const PullRateAdditions: Config['pull']['rate']['additions'] = {
     times: value => {
         const level = judge('times', value)
@@ -69,8 +91,10 @@ export const PullRateAdditions: Config['pull']['rate']['additions'] = {
 }
 
 export const config: Config = {
+    lock: LockLimit,
     mode: ModeLimit,
-    pick: PickLimit,
+    max: PickMax,
+    min: PickMin,
     points: BasePoints,
     allocate: AllocLimit,
     spirit: DefaultSpirit,

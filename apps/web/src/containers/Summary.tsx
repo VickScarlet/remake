@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import { usePicked, useEnd } from '@remake/hooks'
-import { useJudge } from '@/hooks/judge'
-import type { JudgeKeys, Judge } from '@/hooks/judge'
+import { useEffect, useState, useRef } from 'react'
+import { usePicked, useEnd, useProfile } from '@remake/hooks'
+import { useEndJudge } from '@/hooks/judge'
 import { properties, judgeDisplay } from '@/display'
+import { isDev } from '@/config'
 import TalentComponent from '@/components/Talent'
 import './Summary.css'
 
-interface JudgeItemProps {
-    prop: JudgeKeys
-    judge: Judge
-}
-function JudgeItem({ prop, judge }: JudgeItemProps) {
-    const { value, grade, level } = judge
+function Judges() {
+    const judges = useEndJudge()
     return (
-        <li className={`${prop} grade-${grade}`}>
-            <span className="property">{properties[prop]}</span>
-            <span className="value font-mono">{value}</span>
-            <span className="level">{judgeDisplay(prop, level)}</span>
-        </li>
+        <ul className="judge-list">
+            {judges.map(([key, { value, grade, level }]) => (
+                <li className={`${key} grade-${grade}`} key={key}>
+                    <span className="property">{properties[key]}</span>
+                    <span className="value font-mono">{value}</span>
+                    <span className="level">{judgeDisplay(key, level)}</span>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
+interface TalentListProps {
+    picked: Set<number>
+    picker: (id: number) => void
+}
+function TalentList({ picked, picker }: TalentListProps) {
+    const [profile] = useProfile()
+    const [talents, setTalents] = useState(usePicked())
+    const hasInitialized = useRef(false)
+
+    useEffect(() => {
+        if (!profile.locked) return
+        let currentTalents = talents
+        if (isDev) {
+            currentTalents = new Set([...talents, ...profile.locked])
+            setTalents(currentTalents)
+        }
+
+        if (!hasInitialized.current) {
+            for (const id of profile.locked) {
+                if (currentTalents.has(id) && !picked.has(id)) {
+                    picker(id)
+                }
+            }
+            hasInitialized.current = true
+        }
+    }, [profile, talents, picked, picker])
+    return (
+        <ul className="talent-list">
+            {Array.from(talents, id => (
+                <li key={id} onClick={() => picker(id)}>
+                    <TalentComponent id={id} selected={picked.has(id)} />
+                </li>
+            ))}
+        </ul>
     )
 }
 
 export default function Summary() {
-    const picked = usePicked()
-    const judges = useJudge()
-    const end = useEnd()
-    const [locked, setLocked] = useState<number | null>(null)
-    const handleSelect = (id: number) => {
-        if (locked === id) setLocked(null)
-        else setLocked(id)
-    }
+    const [locked, picker, end] = useEnd()
     const handleEnd = () => {
         const achievements = end()
         // TODO: Show achievements
@@ -37,24 +67,10 @@ export default function Summary() {
     }
     return (
         <div className="screen summary">
-            <ul className="judge-list">
-                {judges.map(([key, { value, grade, level }]) => (
-                    <JudgeItem
-                        key={key}
-                        prop={key}
-                        judge={{ value, grade, level }}
-                    />
-                ))}
-            </ul>
+            <Judges />
             <div className="section">
                 <div className="title">你可以锁定一个天赋，下辈子还能抽到</div>
-                <ul className="talent-list">
-                    {Array.from(picked, id => (
-                        <li key={id} onClick={() => handleSelect(id)}>
-                            <TalentComponent id={id} selected={locked === id} />
-                        </li>
-                    ))}
-                </ul>
+                <TalentList picked={locked} picker={picker} />
             </div>
             <button className="primary" onClick={handleEnd}>
                 再次重开
