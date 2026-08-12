@@ -1,7 +1,7 @@
 // import { useEffect } from 'react'
 import { useTalentPuller, useTalentPicker } from '@remake/hooks'
 import { useTalentSubmit, useSubmitIsEnable } from '@remake/hooks'
-import { PullCount } from '@/config'
+import { PullCount, dev } from '@/config'
 import TalentComponent from '@/components/Talent'
 import './TalentPick.css'
 
@@ -19,10 +19,13 @@ export default function TalentPick() {
                 </button>
             </div>
         )
+    const ps = dev.locked
+        ? Array.from(new Set([...dev.locked, ...pulled]))
+        : pulled
     return (
         <div className="screen talent-pick">
             <ul className="talent-list">
-                {pulled.map(id => (
+                {ps.map(id => (
                     <li key={id} onClick={() => picker(id)}>
                         <TalentComponent id={id} selected={talents.has(id)} />
                     </li>

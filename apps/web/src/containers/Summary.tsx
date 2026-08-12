@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef, useMemo } from 'react'
+import { useEffect, useRef } from 'react'
 import { usePicked, useEnd, useProfile } from '@remake/hooks'
 import { useEndJudge } from '@/hooks/judge'
 import { properties, judgeDisplay } from '@/display'
-import { isDev } from '@/config'
 import TalentComponent from '@/components/Talent'
 import './Summary.css'
 
@@ -27,11 +26,7 @@ interface TalentListProps {
 }
 function TalentList({ picked, picker }: TalentListProps) {
     const [profile] = useProfile()
-    const items = usePicked()
-    const talents = useMemo(() => {
-        if (!isDev || !profile.locked) return items
-        return new Set([...items, ...profile.locked])
-    }, [])
+    const talents = usePicked()
     const hasInitialized = useRef(false)
     useEffect(() => {
         if (!profile.locked) return

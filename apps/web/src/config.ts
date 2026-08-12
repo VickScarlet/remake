@@ -1,24 +1,32 @@
 import type { Config } from '@remake/hooks'
+export const dev = {} as Record<string, any>
+if (import.meta.env.MODE === 'development') {
+    new URLSearchParams(window.location.search)
+        .entries()
+        .forEach(([key, value]) => {
+            if (key !== 'locked') return (dev[key] = Number(value))
+            dev[key] = value.split(',').map(v => Number(v))
+        })
+}
 
-export const isDev = import.meta.env.MODE === 'development'
 // 自动模式自动点击间隔
-export const AutoInterval = 500
+export const AutoInterval = dev.interval ?? 500
 // 可锁定的天赋数量
-export const LockLimit = isDev ? 10 : 1
+export const LockLimit = dev.lock ?? 1
 // 名人模式重开次数限制
-export const ModeLimit = 10
+export const ModeLimit = dev.mode ?? 10
 // 天赋选择数量限制
-export const PickMax = isDev ? 10 : 3
+export const PickMax = dev.max ?? 3
 // 天赋选择最少数量限制
-export const PickMin = 3
+export const PickMin = dev.min ?? 3
 // 基础属性点
-export const BasePoints = 20
+export const BasePoints = dev.points ?? 20
 // 单项属性点最大限制
-export const AllocLimit = 10
+export const AllocLimit = dev.allocate ?? 10
 // 默认初始快乐
-export const DefaultSpirit = 5
+export const DefaultSpirit = dev.spirit ?? 5
 // 天赋抽取个数
-export const PullCount = isDev ? 20 : 10
+export const PullCount = dev.pull ?? 10
 // 天赋抽取基础概率
 export const PullRateBase: Config['pull']['rate']['base'] = new Map([
     [0, 889],
