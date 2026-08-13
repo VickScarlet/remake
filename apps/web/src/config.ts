@@ -27,6 +27,11 @@ export const AllocLimit = dev.allocate ?? 10
 export const DefaultSpirit = dev.spirit ?? 5
 // 天赋抽取个数
 export const PullCount = dev.pull ?? 10
+// 名人模式抽取个数
+export const CharacterPullCount = dev.chara ?? 3
+// 名人模式抽取权重切线
+export const CharacterWeightKnife = dev.knife ?? 10
+
 // 天赋抽取基础概率
 export const PullRateBase: Config['pull']['rate']['base'] = new Map([
     [0, 889],
@@ -112,6 +117,10 @@ export const config: Config = {
             base: PullRateBase,
             additions: PullRateAdditions,
         },
+    },
+    chara: {
+        count: CharacterPullCount,
+        knife: CharacterWeightKnife,
     },
 }
 

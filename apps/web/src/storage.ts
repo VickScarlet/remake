@@ -16,16 +16,14 @@ if (localStorage.getItem('version') !== '3.0.0') {
             localStorage.getItem('extendTalent') || 'null',
         )
         if (lockedTalents) profile.locked = [lockedTalents]
-        const unique = JSON.parse(
-            localStorage.getItem('uniqueWaTaShi') || 'null',
-        )
-        if (unique) profile.unique = unique
         localStorage.setItem('profile', JSON.stringify(profile))
         localStorage.removeItem('times')
         localStorage.removeItem('ACHV')
         localStorage.removeItem('AEVT')
         localStorage.removeItem('ATLT')
         localStorage.removeItem('extendTalent')
+        const unique = localStorage.getItem('uniqueWaTaShi')
+        if (unique) localStorage.setItem('unique', unique)
         localStorage.removeItem('uniqueWaTaShi')
     }
     localStorage.setItem('version', '3.0.0')

@@ -1,12 +1,10 @@
 import { useCallback, useRef, useState } from 'react'
 import { atom, useSetAtom, useAtomValue, useAtom } from 'jotai'
-import { useConfig } from './config'
-import { useProfile } from './profile'
-import { useReplaced, useTalentReset } from './talent'
-import { useAlloc, useAllocReset } from './alloc'
+import { useConfig, useProfile, useReplaced, useAlloc } from '.'
+import { useTalentReset, useAllocReset } from '.'
 import { start, next, summary, end } from '@remake/core'
 import type { GameState, Properties, NextResult } from '@remake/core'
-import type { Talent } from '@remake/data/talent'
+import type { Talent } from '@remake/data'
 
 export enum Step {
     Idle = 'idle',

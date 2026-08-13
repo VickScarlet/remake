@@ -1,11 +1,9 @@
 import type { Achievement, Event, Talent } from '@remake/data'
 import { ages, AchievementOpportunity as Ao } from '@remake/data'
-import type { Allocation, GameState, ProfileState } from './state'
-import type { Properties } from './state'
+import type { GameState, ProfileState } from './state'
 import { createState, nextProfile, propsEffect } from './state'
 import { summary as stateSummary } from './state'
-import type { PullOptions, ReplacementResult } from './talent'
-import type { AdditionalPoint, AdditionalPoints } from './talent'
+import type { ReplacementResult, AdditionalPoints } from './talent'
 import { pull, exclude, replacement, additionalPoints } from './talent'
 import { trigger as ttr } from './talent'
 import { trigger as atr } from './achievement'
@@ -19,14 +17,11 @@ export interface TriggerResult<T> {
     state: GameState
     triggers: T[]
 }
-export interface TalentsPickedResult {
+export interface PickResult {
     talents: ReplacementResult
     additionalPoints: AdditionalPoints
 }
-export function talentsPicked(
-    talents: Iterable<Talent['id']>,
-    rng?: RNG,
-): TalentsPickedResult {
+export function pick(talents: Iterable<Talent['id']>, rng?: RNG): PickResult {
     const r = replacement(talents, rng)
     const ap = additionalPoints(r.talents)
     return { talents: r, additionalPoints: ap }
@@ -110,6 +105,3 @@ export function end(
 }
 
 export { pull, exclude }
-export type { GameState, ProfileState, Properties, RNG }
-export type { PullOptions, ReplacementResult, Allocation }
-export type { AdditionalPoint, AdditionalPoints }

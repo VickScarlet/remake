@@ -1,10 +1,8 @@
 import { useCallback } from 'react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useConfig } from './config'
-import { useReplaced } from './talent'
+import { useConfig, useReplaced } from '.'
 import type { Allocation } from '@remake/core'
-import type { RNG } from '@remake/vitex'
-import { keys, shuffle, random as frandom } from '@remake/vitex'
+import { keys, shuffle, random as frandom, type RNG } from '@remake/vitex'
 
 export type UserAllocation = Omit<Allocation, 'spirit'>
 const init: UserAllocation = {

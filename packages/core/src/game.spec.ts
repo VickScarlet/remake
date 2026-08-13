@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'bun:test'
 import { createState, propsEffect, summary as stateSummary } from './state'
-import { talentsPicked, start, next, summary, end } from './game'
+import { pick, start, next, summary, end } from './game'
 import { produce } from 'immer'
 import { enableMapSet } from 'immer'
 enableMapSet()
@@ -22,7 +22,7 @@ describe('Achievement', () => {
 
     test('talentsPicked', () => {
         // 挑战者、阴间福袋、轮盘赌
-        const result = talentsPicked([1122, 1145, 1146])
+        const result = pick([1122, 1145, 1146])
         expect(result.talents.chains.size).toBeGreaterThan(1)
         expect(result.additionalPoints.source).toContainEqual({
             talent: 1122,

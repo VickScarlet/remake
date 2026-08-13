@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import { atom, useSetAtom, useAtomValue } from 'jotai'
-import type { PullOptions } from '@remake/core'
-
+import type { PullOptions, PullCharaOpt } from '@remake/core'
 export interface Config {
     /** 游戏锁定天赋数量 */
     lock: number
@@ -9,8 +8,6 @@ export interface Config {
     max: number
     /** 游戏最少选择天赋数量 */
     min: number
-    /** 天赋抽取个数 */
-    pull: PullOptions
     /** 初始属性点 */
     points: number
     /** 单项属性点最大限制 */
@@ -19,6 +16,10 @@ export interface Config {
     spirit: number
     /** 模式选择限制 */
     mode: number
+    /** 天赋抽取个数 */
+    pull: PullOptions
+    /** 名人模式配置 */
+    chara: PullCharaOpt
 }
 
 export const configAtom = atom<Config | null>(null)
