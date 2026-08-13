@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { useInit, useSaver } from '@/hooks/storage'
-import { useStep, Step } from '@remake/hooks'
+import { useStep } from '@remake/hooks'
 import Home from '@/containers/Home'
+import Mode from '@/containers/Mode'
+import Chara from '@/containers/Chara'
 import Pick from '@/containers/TalentPick'
 import Alloc from '@/containers/Alloc'
 import Play from '@/containers/Play'
@@ -12,7 +14,7 @@ import './Game.css'
 export function Game() {
     const [inited, init] = useInit()
     const saver = useSaver()
-    const step = useStep()
+    const [step, Step] = useStep()
     useEffect(() => {
         if (!inited) init()
     }, [inited])
@@ -24,6 +26,9 @@ export function Game() {
         case Step.Idle:
             return <Home />
         case Step.Mode:
+            return <Mode />
+        case Step.Chara:
+            return <Chara />
         case Step.Pick:
             return <Pick />
         case Step.Alloc:
