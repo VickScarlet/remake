@@ -5,15 +5,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        h1 {
-            font-size: 4rem;
-            margin: 0;
-            font-weight: bold;
-        }
-        h2 {
-            font-size: 2rem;
-            margin: 0;
-        }
+        .main { font-weight: bold; }
     }
     .theme-toggle-btn {
         position: fixed;

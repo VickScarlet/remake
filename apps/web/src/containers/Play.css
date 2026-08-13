@@ -107,8 +107,8 @@
         > button {
             flex: 1 0;
             min-width: 6rem;
-            font-size: 1.25rem;
-            height: 2.5rem;
+            font-size: calc(1.25rem * var(--ratio-font));
+            height: calc(2.5rem * var(--ratio));
         }
     }
 }

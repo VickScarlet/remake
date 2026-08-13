@@ -1,7 +1,12 @@
+:root {
+    --ratio: 1;
+    --ratio-font: 1;
+    color: var(--base-text-color); 
+}
+
 html { transition: all 0.2s ease-in-out; }
 html[data-theme='light'] { color-scheme: light; }
 html[data-theme='dark'] { color-scheme: dark; }
-:root { color: var(--base-text-color); }
 .hide-scrollbar,
 html {
     overflow-y: auto;
@@ -51,22 +56,42 @@ button {
     box-sizing: border-box;
     border: var(--border-color) 0.0625rem solid;
     background: var(--background-color);
-    font-size: 1.2rem;
+    font-size: calc(1.2rem * var(--ratio-font));
     font-weight: bold;
     padding: 0 1rem;
-    height: 2.5rem;
+    height: calc(2.5rem * var(--ratio));
     display: inline-flex;
     align-items: center;
     justify-content: center;
     user-select: none;
     transition: all 0.2s ease-in-out;
-    &:hover {
-        --background-color: var(--style-color);
-        --text-color: var(--style-background);
+    outline: none;
+    @media (hover: hover) {
+        &:hover {
+            border: var(--style-background) 0.0625rem solid;
+            background: var(--style-color);
+            color: var(--style-background);
+        }
     }
+
+    &:active {
+        border: var(--style-background) 0.0625rem solid;
+        background: var(--style-color);
+        color: var(--style-background);
+        transition: none;
+    }
+
     &.primary { --style-color: var(--color-primary); }
     &.info { --style-color: var(--color-info); }
     &.error { --style-color: var(--color-error); }
+    &.focus {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: calc(3.5rem * var(--ratio));
+        font-size: calc(1.6rem * var(--ratio-font));
+        font-weight: bold;
+    }
 }
 
 ul {
@@ -76,7 +101,7 @@ ul {
 }
 
 input {
-    font-size: 1rem;
+    font-size: calc(1rem * var(--ratio-font));
     padding: 0;
     margin: 0;
     border: none;
@@ -92,3 +117,9 @@ input {
 }
 
 @media (max-width: 32rem) { :root { font-size: 2.88vw; } }
+@media screen and (orientation: portrait) and (pointer: coarse) {
+    :root {
+        --ratio: 1.5;
+        --ratio-font: 1.2;
+    }
+}
