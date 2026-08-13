@@ -1,14 +1,12 @@
 import { useState, useCallback } from 'react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useConfig } from './config'
-import { useProfile } from './profile'
-import { useSetStep } from './play'
-import { pull, exclude, talentsPicked } from '@remake/core'
-import type { TalentsPickedResult, RNG } from '@remake/core'
-import type { Talent } from '@remake/data/talent'
+import { useConfig, useProfile, useSetStep } from '.'
+import { pull, exclude, pick, type PickResult } from '@remake/core'
+import type { Talent } from '@remake/data'
+import type { RNG } from '@remake/vitex'
 
 export const pickedAtom = atom(new Set<Talent['id']>())
-export const replacedAtom = atom<TalentsPickedResult | null>(null)
+export const replacedAtom = atom<PickResult | null>(null)
 
 export const useTalentReset = () => {
     const setPicked = useSetAtom(pickedAtom)
@@ -41,25 +39,16 @@ export const useTalentPuller = () => {
     return [pulled, puller] as const
 }
 
-export type TalentPickerResult =
-    | {
-          type: 'ok'
-          talent?: never
-      }
-    | {
-          type: 'not-enough'
-          talent?: never
-      }
-    | {
-          type: 'exclude'
-          talent: Talent['id']
-      }
+export type PickOk = { type: 'ok'; talent?: never }
+export type PickNe = { type: 'ne'; talent?: never }
+export type PickEx = { type: 'ex'; talent: Talent['id'] }
+export type PickerResult = PickOk | PickNe | PickEx
 
 export const useTalentPicker = () => {
     const { max } = useConfig()
     const [picked, setPicked] = useAtom(pickedAtom)
     const picker = useCallback(
-        (talent: Talent['id']): TalentPickerResult => {
+        (talent: Talent['id']): PickerResult => {
             if (!picked) {
                 setPicked(new Set([talent]))
                 return { type: 'ok' }
@@ -70,9 +59,9 @@ export const useTalentPicker = () => {
                 setPicked(next)
                 return { type: 'ok' }
             }
-            if (picked.size >= max) return { type: 'not-enough' }
+            if (picked.size >= max) return { type: 'ne' }
             const e = exclude(talent, picked)
-            if (e) return { type: 'exclude', talent: e }
+            if (e) return { type: 'ex', talent: e }
             const next = new Set([...picked, talent])
             setPicked(next)
             return { type: 'ok' }
@@ -97,7 +86,7 @@ export const useTalentSubmit = () => {
     return useCallback(
         (rng?: RNG) => {
             if (!enabled) throw new Error('Not enough talents picked')
-            setReplaced(talentsPicked(picked, rng))
+            setReplaced(pick(picked, rng))
             setStep(Step.Alloc)
         },
         [enabled, picked, setReplaced, setStep],

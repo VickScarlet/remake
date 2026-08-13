@@ -1,11 +1,9 @@
-import type { Event } from '@remake/data/event'
-import events from '@remake/data/event'
-import type { Properties } from './state'
-import type { GameState, ProfileState } from './state'
+import { type Event, events } from '@remake/data'
+import type { Properties, GameState, ProfileState } from './state'
 import { propsEffect, createFlatState } from './state'
 import { check as checkCondition } from '@remake/condition'
-import { produce } from 'immer'
 import type { TriggerResult } from './game'
+import { produce } from 'immer'
 
 export function check(
     event: Event['id'],

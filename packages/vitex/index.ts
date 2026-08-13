@@ -1,5 +1,5 @@
 export type RNG = (max?: number, min?: number) => number
-export function random(max: number, min: number = 0, rng?: RNG): number {
+export function random(max: number = 1, min: number = 0, rng?: RNG): number {
     if (rng) return rng(max, min)
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -7,7 +7,7 @@ export function pick<T>(items: T[], rng?: RNG) {
     if (items.length === 0) return null
     return items[random(items.length - 1, 0, rng)] ?? null
 }
-export type WeightItem<T> = [T, number]
+export type WeightItem<T> = readonly [T, number]
 export function pickWeight<T>(items: WeightItem<T>[], rng?: RNG) {
     if (items.length === 0) return null
     const totalWeight = items.reduce((sum, [, weight]) => sum + weight, 0)

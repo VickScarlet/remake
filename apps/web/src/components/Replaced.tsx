@@ -1,6 +1,5 @@
-import type { Talent } from '@remake/data/talent'
+import { type Talent, talents } from '@remake/data'
 import TalentComponent from './Talent'
-import talents from '@remake/data/talent'
 import './Replaced.css'
 
 export interface TalentProps {
