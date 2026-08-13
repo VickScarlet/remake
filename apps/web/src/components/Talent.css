@@ -4,8 +4,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
-    height: 2rem;
-    font-size: 1rem;
+    height: calc(2rem * var(--ratio));
+    font-size: calc(1rem * var(--ratio-font));
     gap: 1rem;
     color: var(--color);
     background: var(--background, var(--base-background-color));
@@ -17,13 +17,26 @@
     &.selected {
         --color: var(--base-background-color);
         --background: var(--grade-color);
-        &:hover { --background: oklch(from var(--grade-color) calc(l + 0.1) c h); }
+        
+        @media (hover: hover) {
+            &:hover { background: oklch(from var(--grade-color) calc(l + 0.1) c h); }
+        }
+        &:active { 
+            background: oklch(from var(--grade-color) calc(l + 0.1) c h);
+            transition: none;
+        }
     }
-    &:hover { --background: oklch(from var(--grade-color) calc(l + 0.5) c h); }
+    @media (hover: hover) {
+        &:hover { background: oklch(from var(--grade-color) calc(l + 0.5) c h); }
+    }
+    &:active { 
+        background: oklch(from var(--grade-color) calc(l + 0.5) c h);
+        transition: none;
+    }
     .talent-name { font-weight: bold; }
     .talent-description {
         color: oklch(from var(--color) calc(l + 0.1) c h);
-        font-size: 0.85rem;
+        font-size: calc(0.85rem * var(--ratio-font));
         user-select: none;
         &::before { content: '['; margin-right: 0.125rem; }
         &::after { content: ']'; margin-left: 0.125rem; }
@@ -32,8 +45,18 @@
 }
 html[data-theme='dark'] {
     .talent{ 
-        &:hover {--background: oklch(from var(--grade-color) calc(l - 0.5) c h);}
-        &.selected:hover { --background: oklch(from var(--grade-color) calc(l - 0.1) c h);}
+        @media (hover: hover) {
+            &:hover { background: oklch(from var(--grade-color) calc(l - 0.5) c h); }
+            &.selected:hover { background: oklch(from var(--grade-color) calc(l - 0.1) c h); }
+        }
+        &:active { 
+            background: oklch(from var(--grade-color) calc(l - 0.5) c h); 
+            transition: none;
+        }
+        &.selected:active { 
+            background: oklch(from var(--grade-color) calc(l - 0.1) c h);
+            transition: none;
+        }
         .talent-description { color: oklch(from var(--color) calc(l - 0.2) c h); }
     }
 }

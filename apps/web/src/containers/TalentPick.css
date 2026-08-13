@@ -7,7 +7,7 @@
     ul.talent-list {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: calc(0.5rem * var(--ratio));
         li {
             display: flex;
             align-items: center;

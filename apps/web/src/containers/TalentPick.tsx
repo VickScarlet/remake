@@ -14,8 +14,11 @@ export default function TalentPick() {
     if (!pulled)
         return (
             <div className="screen talent-pick">
-                <button className="primary font-mono" onClick={() => puller()}>
-                    {PullCount}连抽!
+                <button
+                    className="primary font-mono focus"
+                    onClick={() => puller()}
+                >
+                    {PullCount} 连抽!
                 </button>
             </div>
         )
