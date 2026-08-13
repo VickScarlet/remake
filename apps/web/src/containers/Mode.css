@@ -1,0 +1,23 @@
+.screen.mode {
+    gap: 1rem;
+    button {
+        display: flex;
+        flex-direction: column;
+        height: 10rem;
+        gap: 0.5rem;
+        .name {
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+        .description {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            span {
+                font-size: 1rem;
+                &::before { content: '['; }
+                &::after { content: ']'; }
+            }
+        }
+    }
+}

@@ -11,10 +11,16 @@ import type { Talent } from '@remake/data/talent'
 export enum Step {
     Idle = 'idle',
     Mode = 'mode',
+    Chara = 'chara',
     Pick = 'pick',
     Alloc = 'alloc',
     Play = 'play',
     Summary = 'summary',
+}
+
+export enum Mode {
+    Classic = 'classic',
+    Celebrity = 'celebrity',
 }
 
 export type Log = Omit<NextResult, 'state'> & {
@@ -47,8 +53,8 @@ export const useGameReset = () => {
     }, [resetTalent, resetAlloc, resetState, resetLogs])
 }
 
-export const useStep = () => useAtomValue(stepAtom)
-export const useSetStep = () => useSetAtom(stepAtom)
+export const useStep = () => [useAtomValue(stepAtom), Step] as const
+export const useSetStep = () => [useSetAtom(stepAtom), Step] as const
 export const useGameState = () => useAtomValue(gameStateAtom)
 export const useSummary = () => useAtomValue(summaryAtom)
 export const useLogs = () => useAtomValue(logsAtom)
@@ -62,6 +68,24 @@ export const useRemake = () => {
         reset()
         setStep(times < mode ? Step.Pick : Step.Mode)
     }, [mode, times, setStep, reset])
+}
+
+export const useModeChoose = () => {
+    const setStep = useSetAtom(stepAtom)
+    const choose = useCallback(
+        (mode: Mode) => {
+            switch (mode) {
+                case Mode.Classic:
+                    setStep(Step.Pick)
+                    break
+                case Mode.Celebrity:
+                    setStep(Step.Chara)
+                    break
+            }
+        },
+        [setStep],
+    )
+    return [Mode, choose] as const
 }
 
 export const useStart = () => {
