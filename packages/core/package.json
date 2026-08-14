@@ -5,7 +5,7 @@
     "author": "Vick Scarlet <vick@syaro.io>",
     "main": "src/index.ts",
     "scripts": {
-        "lint": "eslint .",
+        "lint": "bunx --bun eslint .",
         "test": "bun test"
     },
     "dependencies": {
@@ -13,9 +13,6 @@
         "@remake/data": "workspace:*",
         "@remake/vitex": "workspace:*",
         "immer": "^11.1.15"
-    },
-    "eslintConfig": {
-        "extends": "../../package.json"
     },
     "exports": {
         ".": {

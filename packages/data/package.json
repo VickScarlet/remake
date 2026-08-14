@@ -6,7 +6,7 @@
     "author": "Vick Scarlet <vick@syaro.io>",
     "scripts": {
         "build": "bunx --bun v-transform transform -t ts -w src -d dist \"**/[!~$]*.xlsx\" --map",
-        "lint": "eslint .",
+        "lint": "bunx --bun eslint .",
         "test": "bun test"
     },
     "exports": {
