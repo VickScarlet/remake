@@ -109,14 +109,6 @@
             }
         }
     }
-    > div {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
-        gap: 0.5rem;
-        button { flex: 1 0; }
-    }
     > ul.talent-list {
         display: flex;
         flex-direction: column;

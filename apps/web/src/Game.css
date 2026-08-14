@@ -32,4 +32,24 @@
             user-select: none;
         }
     }
+    > .controls {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        > button { flex: 1 0; }
+    }
+}
+.saving {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    user-select: none;
+    transition: opacity 0.3s;
+    &.active {
+        opacity: 1;
+        transition: opacity 0.1s;
+    }
 }

@@ -103,7 +103,7 @@ export function Alloc() {
                     </li>
                 ))}
             </ul>
-            <div>
+            <div className="controls">
                 <button className="info" onClick={() => random()}>
                     随机分配
                 </button>

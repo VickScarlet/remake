@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { atom, useSetAtom, useAtomValue } from 'jotai'
-import type { PullOptions, PullCharaOpt } from '@remake/core'
+import type { PullOptions, PullCharaOpt, UniqueGenCfg } from '@remake/core'
 export interface Config {
     /** 游戏锁定天赋数量 */
     lock: number
@@ -20,6 +20,11 @@ export interface Config {
     pull: PullOptions
     /** 名人模式配置 */
     chara: PullCharaOpt
+    /** 唯一角色限制 */
+    unique: {
+        limit: number
+        config: UniqueGenCfg
+    }
 }
 
 export const configAtom = atom<Config | null>(null)

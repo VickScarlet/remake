@@ -3,7 +3,7 @@ import './Talent.css'
 
 export interface TalentProps {
     id: Talent['id']
-    selected: boolean
+    selected?: boolean
 }
 export function TalentComponent({ id, selected }: TalentProps) {
     const talent = talents.get(id)

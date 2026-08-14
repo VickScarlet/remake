@@ -31,6 +31,8 @@ export const PullCount = dev.pull ?? 10
 export const CharacterPullCount = dev.chara ?? 3
 // 名人模式抽取权重切线
 export const CharacterWeightKnife = dev.knife ?? 10
+// 唯一角色生成抽卡次数限制
+export const UniqueLimit = dev.unique ?? 10
 
 // 天赋抽取基础概率
 export const PullRateBase: Config['pull']['rate']['base'] = new Map([
@@ -103,6 +105,19 @@ export const PullRateAdditions: Config['pull']['rate']['additions'] = {
     },
 }
 
+// 权重生成器
+function wg(s: number, e: number) {
+    const length = e - s + 1
+    return Array.from(
+        { length },
+        (_, i) => [s + i, Math.min(i + 1, length - i)] as const,
+    )
+}
+// 唯一角色属性分配权重
+export const UniquePropWeight = wg(0, 10)
+// 唯一角色天赋个数权重
+export const UniqueTalentWeight = wg(1, 5)
+
 export const config: Config = {
     lock: LockLimit,
     mode: ModeLimit,
@@ -121,6 +136,13 @@ export const config: Config = {
     chara: {
         count: CharacterPullCount,
         knife: CharacterWeightKnife,
+    },
+    unique: {
+        limit: UniqueLimit,
+        config: {
+            prop: UniquePropWeight,
+            talent: UniqueTalentWeight,
+        },
     },
 }
 

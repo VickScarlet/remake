@@ -26,19 +26,21 @@ function judges<T extends Judges, K extends keyof Record<T, number> = never>(
 export const useJudge = () => {
     const state = useGameState()
     if (!state) throw new Error('Game state is not set')
+    const current = state.props.current
     return useMemo(() => {
-        const result = judges(state.props.current, ['age'])
+        const result = judges(current, ['age'])
         return result
-    }, [state.props.current])
+    }, [current])
 }
 
 export const useEndJudge = () => {
     const summary = useSummary()
     const state = useGameState()
     if (!state) throw new Error('Game state is not set')
+    const highest = state.props.highest
     return useMemo(() => {
-        const props = { ...state.props.highest, summary }
+        const props = { ...highest, summary }
         const result = judges(props)
         return result
-    }, [state.props.highest, summary])
+    }, [highest, summary])
 }

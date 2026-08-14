@@ -47,7 +47,7 @@ export const useAllocator = () => {
                 return { ...prev, [key]: final }
             })
         },
-        [allocate, total],
+        [allocate, total, setAlloc],
     )
     return [alloc, allocator] as const
 }
@@ -71,7 +71,7 @@ export const usePointRandomizer = () => {
             }
             setAlloc(alloc)
         },
-        [allocate, total],
+        [allocate, total, setAlloc],
     )
 }
 

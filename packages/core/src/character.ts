@@ -1,7 +1,10 @@
-import { type Character, type Talent, characters, talents } from '@remake/data'
+import type { Character, CharacterProperty, Talent } from '@remake/data'
+import { characters, talents } from '@remake/data'
 import { type RNG, type WeightItem, pick, pickWeight } from '@remake/vitex'
+import type { Allocation } from './state'
 
-export type UniqueChara = Omit<Character, 'id' | 'name'>
+export type BaseChara = Omit<Character, 'id' | 'name'>
+export type BaseAlloc = Omit<Allocation, 'spirit'>
 export interface UniqueGenCfg {
     prop: WeightItem<number>[]
     talent: WeightItem<number>[]
@@ -22,7 +25,7 @@ export function uniqueGenerate(config: UniqueGenCfg, rng?: RNG) {
         picked.add(t)
         count--
     }
-    return { property, talent: Array.from(picked) } satisfies UniqueChara
+    return { property, talent: Array.from(picked) } satisfies BaseChara
 }
 
 export interface PullCharaOpt {
@@ -37,9 +40,9 @@ export interface PullCharaRet {
     characters: Character['id'][]
     times: PullCharaTms
 }
-export function pullCharacter(
+export function pullChara(
     opt: PullCharaOpt,
-    tms: PullCharaTms,
+    tms: PullCharaTms = { times: 0, drawns: new Map() },
     rng?: RNG,
 ): PullCharaRet {
     const { count, knife } = opt
@@ -68,4 +71,35 @@ function deriveWeightMap(
     return new Map(
         Array.from(characters.keys(), id => [id, base - (drawns.get(id) ?? 0)]),
     )
+}
+
+export function charaPropToBaseAlloc(props: CharacterProperty): BaseAlloc {
+    return {
+        charm: props.CHR,
+        intelligence: props.INT,
+        strength: props.STR,
+        money: props.MNY,
+    }
+}
+
+function charaPropToAlloc(
+    props: CharacterProperty,
+    spirit: number,
+): Allocation {
+    return { ...charaPropToBaseAlloc(props), spirit }
+}
+
+function convert(chara: BaseChara, spirit: number) {
+    return {
+        allocation: charaPropToAlloc(chara.property, spirit),
+        talents: chara.talent,
+    }
+}
+
+export function startChara(id: Character['id'], spirit: number) {
+    return convert(characters.get(id)!, spirit)
+}
+
+export function startUnique(chara: BaseChara, spirit: number) {
+    return convert(chara, spirit)
 }
