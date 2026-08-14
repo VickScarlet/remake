@@ -22,10 +22,8 @@
         "@testing-library/jest-dom": "^7.0.0",
         "@testing-library/react": "^16.3.2",
         "@types/react": "^19.2.18",
-        "eslint-config-react": "^1.1.7"
-    },
-    "eslintConfig": {
-        "extends": "react"
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.1.1"
     },
     "exports": {
         ".": {
