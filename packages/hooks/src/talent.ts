@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useConfig, useProfile, useSetStep } from '.'
+import { useConfig, useProfile, useSetStep, Step } from '.'
 import { pull, exclude, pick, type PickResult } from '@remake/core'
 import type { Talent } from '@remake/data'
 import type { RNG } from '@remake/vitex'
@@ -82,7 +82,7 @@ export const useTalentSubmit = () => {
     const picked = useAtomValue(pickedAtom)
     const setReplaced = useSetAtom(replacedAtom)
     const { enabled } = useSubmitIsEnable()
-    const [setStep, Step] = useSetStep()
+    const setStep = useSetStep()
     return useCallback(
         (rng?: RNG) => {
             if (!enabled) throw new Error('Not enough talents picked')

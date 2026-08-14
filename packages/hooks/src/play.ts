@@ -25,6 +25,7 @@ export type Log = Omit<NextResult, 'state'> & {
     props: Omit<Properties, 'age'>
 }
 
+export const modeAtom = atom<Mode>(Mode.Classic)
 export const stepAtom = atom<Step>(Step.Idle)
 export const gameStateAtom = atom<GameState | null>(null)
 export const logsAtom = atom<Log[]>([])
@@ -51,9 +52,10 @@ export const useGameReset = () => {
     }, [resetTalent, resetAlloc, resetState, resetLogs])
 }
 
-export const useStep = () => [useAtomValue(stepAtom), Step] as const
-export const useSetStep = () => [useSetAtom(stepAtom), Step] as const
+export const useStep = () => useAtomValue(stepAtom)
+export const useSetStep = () => useSetAtom(stepAtom)
 export const useGameState = () => useAtomValue(gameStateAtom)
+export const useSetGameState = () => useSetAtom(gameStateAtom)
 export const useSummary = () => useAtomValue(summaryAtom)
 export const useLogs = () => useAtomValue(logsAtom)
 
@@ -69,16 +71,15 @@ export const useRemake = () => {
 }
 
 export const useModeChoose = () => {
+    const setMode = useSetAtom(modeAtom)
     const setStep = useSetAtom(stepAtom)
     const choose = useCallback(
         (mode: Mode) => {
+            setMode(mode)
+            /* prettier-ignore */
             switch (mode) {
-                case Mode.Classic:
-                    setStep(Step.Pick)
-                    break
-                case Mode.Celebrity:
-                    setStep(Step.Chara)
-                    break
+                case Mode.Classic: return setStep(Step.Pick)
+                case Mode.Celebrity: return setStep(Step.Chara)
             }
         },
         [setStep],
@@ -122,7 +123,7 @@ export const useNext = () => {
             setEnded(true)
         }
         return result.achievements
-    }, [state, profile, setState])
+    }, [state, profile, setState, setLogs])
     return [{ logs, ended }, nexter] as const
 }
 
@@ -144,7 +145,7 @@ export const useGotoSummary = () => {
 export const useEnd = () => {
     const { lock } = useConfig()
     const [profile, setProfile] = useProfile()
-    const [step, setStep] = useAtom(stepAtom)
+    const setStep = useSetAtom(stepAtom)
     const state = useAtomValue(gameStateAtom)
     const reset = useGameReset()
     const [locked, setLocked] = useState<Set<Talent['id']>>(new Set())
@@ -163,7 +164,7 @@ export const useEnd = () => {
                 return next
             })
         },
-        [setLocked],
+        [lock, setLocked],
     )
     const ender = useCallback(() => {
         if (!state)
@@ -174,6 +175,6 @@ export const useEnd = () => {
         setProfile(result.profile)
         reset()
         return result.achievements
-    }, [state, step, profile, locked, setStep, setProfile, reset])
+    }, [state, profile, locked, setStep, setProfile, reset])
     return [locked, picker, ender] as const
 }

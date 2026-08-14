@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'bun:test'
-import { pullCharacter, uniqueGenerate } from './character'
+import { pullChara, uniqueGenerate } from './character'
 import { enableMapSet } from 'immer'
 enableMapSet()
 
@@ -7,7 +7,7 @@ describe('Character', () => {
     const sum = (map: Map<any, number>) =>
         Array.from(map.values()).reduce((acc, val) => acc + val, 0)
     test('pull', () => {
-        let result = pullCharacter(
+        let result = pullChara(
             { count: 10, knife: 10 },
             { times: 0, drawns: new Map() },
         )
@@ -15,17 +15,17 @@ describe('Character', () => {
         expect(result.characters.length).toBe(10)
         expect(result.times.times).toBe(10)
         expect(result.times.drawns.size).toBe(10)
-        result = pullCharacter({ count: 3, knife: 10 }, result.times)
+        result = pullChara({ count: 3, knife: 10 }, result.times)
         expect(result.characters).not.toContainValue(null)
         expect(result.characters.length).toBe(3)
         expect(result.times.times).toBe(13)
         expect(sum(result.times.drawns)).toBe(13)
-        result = pullCharacter({ count: 3, knife: 10 }, result.times)
+        result = pullChara({ count: 3, knife: 10 }, result.times)
         expect(result.characters).not.toContainValue(null)
         expect(result.characters.length).toBe(3)
         expect(result.times.times).toBe(16)
         expect(sum(result.times.drawns)).toBe(16)
-        result = pullCharacter({ count: 20, knife: 1 }, result.times)
+        result = pullChara({ count: 20, knife: 1 }, result.times)
         expect(result.characters).not.toContainValue(null)
         expect(result.characters.length).toBe(20)
         expect(result.times.times).toBe(36)
@@ -56,6 +56,5 @@ describe('Character', () => {
         expect(unique.property.STR).toBeLessThanOrEqual(10)
         expect(unique.property.MNY).toBeLessThanOrEqual(10)
         expect(unique.talent.length).toBeLessThanOrEqual(5)
-        console.debug(unique)
     })
 })

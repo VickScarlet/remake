@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useLayoutEffect, useEffect } from 'react'
 import { useNext, useGotoSummary, type Log } from '@remake/hooks'
 import { useJudge } from '@/hooks/judge'
@@ -100,12 +100,12 @@ function Prop({ prop, value, grade }: PropProps) {
     useEffect(() => {
         const prev = prevRef.current
         if (value === prev) return
+        const startValue = prevRef.current
         prevRef.current = value
         setTrend(value > prev ? 'up' : 'down')
         setFlip(f => (f + 1) % 2)
         let startTimestamp: number | null = null
         const duration = 400
-        const startValue = displayValue
         let end = false
         const step = (timestamp: number) => {
             if (!startTimestamp) startTimestamp = timestamp
@@ -150,18 +150,18 @@ export function Play() {
     const logRef = useRef<HTMLUListElement>(null)
     const autoRef = useRef(0)
     const gotoSummary = useGotoSummary()
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (ended) return
         const achievements = next()
         // TODO: Show achievements
         console.debug('Achievements:', achievements)
-    }
-    const handleGotoSummary = () => {
+    }, [ended, next])
+    const handleGotoSummary = useCallback(() => {
         if (!ended) return
         const achievements = gotoSummary()
         // TODO: Show achievements
         console.debug('Achievements:', achievements)
-    }
+    }, [ended, gotoSummary])
     useLayoutEffect(() => {
         requestAnimationFrame(() => {
             if (!logRef.current) return

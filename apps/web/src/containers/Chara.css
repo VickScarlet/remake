@@ -1,1 +1,90 @@
-.screen.chara {}
+.screen.chara {
+    gap: 1rem;
+    > .chara-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        > .character {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 0.0625rem solid var(--base-text-color);
+            box-sizing: border-box;
+            cursor: pointer;
+            > .generator > ul > li { text-align: center; }
+            > .name {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 2rem;
+            }
+            &.selected {
+                border: 0.0625rem solid var(--color-primary);
+                > .name {
+                    background-color: var(--color-primary);
+                    color: var(--base-background-color);
+                }
+                > .chara-details {
+                    height: auto;
+                    padding: 0.5rem;
+                }
+            }
+        }
+    }
+    .chara-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+        border-top: 0.0625rem solid var(--base-text-color);
+        box-sizing: border-box;
+        height: 0;
+        padding: 0 0.5rem;
+        overflow-y: hidden;
+        transition: all 0.3s ease-in-out;
+        interpolate-size: allow-keywords;
+        > ul.talent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        > ul.properties {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            width: 100%;
+            font-weight: bold;
+            > li {
+                display: flex;
+                flex-direction: column;
+                flex: 1 0;
+                justify-content: space-between;
+                text-align: center;
+                min-width: 6rem;
+                user-select: none;
+                color: var(--grade-color);
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: 0.0625rem solid var(--grade-color);
+                    box-sizing: border-box;
+                    height: 2rem;
+                    &:first-child {
+                        border-bottom: none;
+                    }
+                }
+                .name {
+                    color: var(--base-background-color);
+                    background-color: var(--grade-color);
+                }
+                &.charm { order: 1 }
+                &.intelligence { order: 2 }
+                &.strength { order: 3 }
+                &.money { order: 4 }
+            }
+        }
+    }
+}

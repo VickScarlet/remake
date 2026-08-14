@@ -38,7 +38,7 @@ function TalentList({ picked, picker }: TalentListProps) {
             }
             hasInitialized.current = true
         }
-    }, [picked, picker])
+    }, [profile.locked, talents, picked, picker])
 
     return (
         <ul className="talent-list">
