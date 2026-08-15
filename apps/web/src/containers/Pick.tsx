@@ -1,11 +1,10 @@
-// import { useEffect } from 'react'
 import { useTalentPuller, useTalentPicker } from '@remake/hooks'
 import { useTalentSubmit, useSubmitIsEnable } from '@remake/hooks'
 import { PullCount, dev } from '@/config'
-import TalentComponent from '@/components/Talent'
-import './TalentPick.css'
+import Talent from '@/components/Talent'
+import './Pick.css'
 
-export default function TalentPick() {
+export function Pick() {
     const [pulled, puller] = useTalentPuller()
     const [talents, picker] = useTalentPicker()
     const { enabled, min, max } = useSubmitIsEnable()
@@ -30,7 +29,7 @@ export default function TalentPick() {
             <ul className="talent-list">
                 {ps.map(id => (
                     <li key={id} onClick={() => picker(id)}>
-                        <TalentComponent id={id} selected={talents.has(id)} />
+                        <Talent id={id} selected={talents.has(id)} />
                     </li>
                 ))}
             </ul>
@@ -46,3 +45,4 @@ export default function TalentPick() {
         </div>
     )
 }
+export default Pick

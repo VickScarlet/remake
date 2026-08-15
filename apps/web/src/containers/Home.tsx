@@ -1,6 +1,6 @@
 import { useRemake, useFeatures, useGoAchv, useGoThanks } from '@remake/hooks'
 import { TextSvg } from '@/components/TextSvg'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import ThemeToggle from '@/components/ThemeToggle'
 import './Home.css'
 
 export default function Home() {

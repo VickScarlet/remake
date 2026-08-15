@@ -1,11 +1,11 @@
-import { type Talent, talents } from '@remake/data'
+import { type Talent as T, talents } from '@remake/data'
 import './Talent.css'
 
 export interface TalentProps {
-    id: Talent['id']
+    id: T['id']
     selected?: boolean
 }
-export function TalentComponent({ id, selected }: TalentProps) {
+export function Talent({ id, selected }: TalentProps) {
     const talent = talents.get(id)
     if (!talent) return null
     const grade = talent?.grade ?? 0
@@ -17,4 +17,4 @@ export function TalentComponent({ id, selected }: TalentProps) {
     )
 }
 
-export default TalentComponent
+export default Talent

@@ -1,11 +1,11 @@
 import { useCharaPuller, useCharaPicker, useCharaSubmit } from '@remake/hooks'
 import { useUnique, useUniqueGenerator, convertProps } from '@remake/hooks'
 import type { BaseChara } from '@remake/hooks'
-import { TalentComponent } from '@/components/Talent'
 import { judgeGradeByValue } from '@/config'
 import { characters } from '@remake/data'
 import { properties } from '@/display'
 import { keys } from '@remake/vitex'
+import Talent from '@/components/Talent'
 import './Chara.css'
 
 function Details({ detail }: { detail: BaseChara }) {
@@ -26,7 +26,7 @@ function Details({ detail }: { detail: BaseChara }) {
             <ul className="talent-list">
                 {detail.talent.map(id => (
                     <li key={id}>
-                        <TalentComponent id={id} />
+                        <Talent id={id} />
                     </li>
                 ))}
             </ul>

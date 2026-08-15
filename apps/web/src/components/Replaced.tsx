@@ -1,23 +1,23 @@
-import { type Talent, talents } from '@remake/data'
-import TalentComponent from './Talent'
+import { type Talent as T, talents } from '@remake/data'
+import Talent from './Talent'
 import './Replaced.css'
 
 export interface TalentProps {
-    id: Talent['id']
-    chains?: Talent['id'][]
+    id: T['id']
+    chains?: T['id'][]
 }
 export function Replaced({ id, chains }: TalentProps) {
     return (
         <ul className="replaced">
             <li>
-                <TalentComponent id={id} selected={true} />
+                <Talent id={id} selected={true} />
             </li>
             {chains?.map(id => {
                 const talent = talents.get(id)
                 if (!talent) return null
                 return (
                     <li key={id}>
-                        <TalentComponent id={id} selected={false} />
+                        <Talent id={id} selected={false} />
                     </li>
                 )
             })}
