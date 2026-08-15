@@ -34,7 +34,7 @@ export function Achv() {
     return (
         <div className="screen achv">
             <div className="controls">
-                <button className="info">排行榜</button>
+                <button className="secondary">排行榜</button>
                 <button className="primary" onClick={goHome}>
                     返回
                 </button>

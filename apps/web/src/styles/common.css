@@ -80,6 +80,7 @@ button {
     }
 
     &.primary { --style-color: var(--color-primary); }
+    &.secondary { --style-color: var(--color-secondary); }
     &.info { --style-color: var(--color-info); }
     &.error { --style-color: var(--color-error); }
     &.focus {

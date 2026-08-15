@@ -19,10 +19,10 @@ export default function Home() {
                     </button>
                 </div>
                 <div>
-                    <button className="info" onClick={goAchv}>
+                    <button className="secondary" onClick={goAchv}>
                         成就
                     </button>
-                    <button className="info" onClick={goAchv}>
+                    <button className="secondary" onClick={goAchv}>
                         感谢
                     </button>
                 </div>

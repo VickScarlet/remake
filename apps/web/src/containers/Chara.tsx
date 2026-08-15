@@ -109,7 +109,7 @@ export function Chara() {
                 ))}
             </ul>
             <div className="controls">
-                <button className="info" onClick={puller}>
+                <button className="secondary" onClick={puller}>
                     都不是
                 </button>
                 <button
