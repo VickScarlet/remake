@@ -3,7 +3,7 @@
     > .chara-list {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: calc(0.5rem * var(--ratio));
         > .character {
             display: flex;
             flex-direction: column;

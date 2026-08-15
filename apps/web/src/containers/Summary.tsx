@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { usePicked, useEnd, useProfile, useIsClassic } from '@remake/hooks'
 import { useEndJudge } from '@/hooks/judge'
 import { properties, judgeDisplay } from '@/display'
-import TalentComponent from '@/components/Talent'
+import Talent from '@/components/Talent'
 import './Summary.css'
 
 function Judges() {
@@ -44,7 +44,7 @@ function TalentList({ picked, picker }: TalentListProps) {
         <ul className="talent-list">
             {Array.from(talents, id => (
                 <li key={id} onClick={() => picker(id)}>
-                    <TalentComponent id={id} selected={picked.has(id)} />
+                    <Talent id={id} selected={picked.has(id)} />
                 </li>
             ))}
         </ul>
