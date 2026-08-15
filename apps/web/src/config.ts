@@ -8,7 +8,8 @@ if (import.meta.env.MODE === 'development') {
             dev[key] = value.split(',').map(v => Number(v))
         })
 }
-
+//
+export const Features = dev.features ?? 1
 // 自动模式自动点击间隔
 export const AutoInterval = dev.interval ?? 500
 // 可锁定的天赋数量
@@ -119,6 +120,7 @@ export const UniquePropWeight = wg(0, 10)
 export const UniqueTalentWeight = wg(1, 5)
 
 export const config: Config = {
+    features: Features,
     lock: LockLimit,
     mode: ModeLimit,
     max: PickMax,

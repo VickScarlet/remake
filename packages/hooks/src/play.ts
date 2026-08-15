@@ -15,6 +15,7 @@ export enum Step {
     Play = 'play',
     Summary = 'summary',
     Achv = 'achv',
+    Thanks = 'thanks',
 }
 
 export enum Mode {
@@ -191,4 +192,15 @@ export const useEnd = () => {
 export const useGoHome = () => {
     const setStep = useSetAtom(stepAtom)
     return useCallback(() => setStep(Step.Idle), [setStep])
+}
+
+export const useGoThanks = () => {
+    const setStep = useSetAtom(stepAtom)
+    return useCallback(() => setStep(Step.Thanks), [setStep])
+}
+
+export const useFeatures = () => {
+    const { features } = useConfig()
+    const [{ times }] = useProfile()
+    return times >= features
 }
