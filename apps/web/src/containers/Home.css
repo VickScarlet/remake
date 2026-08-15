@@ -7,19 +7,19 @@
         justify-content: center;
         .main { font-weight: bold; }
     }
-    .theme-toggle-btn {
+    > .actions {
         position: fixed;
         bottom: 1rem;
         right: 1rem;
+        width: auto;
         display: flex;
-        width: 2.5rem;
-        height: 2.5rem;
-        padding: 0.25rem;
-        cursor: pointer;
-        align-items: center;
-        justify-content: center;
-        -webkit-tap-highlight-color: transparent;
-        transition: background-color 0.3s;
+        gap: 1rem;
+        >.github-btn,
+        >.theme-toggle-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            padding: 0.25rem;
+        }
     }
     >.controls {
         flex-direction: column;

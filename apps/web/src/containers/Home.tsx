@@ -1,6 +1,7 @@
 import { useRemake, useFeatures, useGoAchv, useGoThanks } from '@remake/hooks'
 import { TextSvg } from '@/components/TextSvg'
 import ThemeToggle from '@/components/ThemeToggle'
+import Github from '@/components/Github'
 import './Home.css'
 
 export default function Home() {
@@ -31,7 +32,10 @@ export default function Home() {
                     </div>
                 )}
             </div>
-            <ThemeToggle />
+            <div className="actions">
+                {features && <Github />}
+                <ThemeToggle />
+            </div>
         </div>
     )
 }
