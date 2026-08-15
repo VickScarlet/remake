@@ -1,5 +1,4 @@
 .theme-svg {
-    --svg-color: oklch(from var(--text-color, var(--base-text-color)) calc(l + 0.2) c h);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: center;
     .sun-center, .sun-beams, .mask-cutter-group {
@@ -7,13 +6,26 @@
         transform-origin: center;
     }
     .mask-cutter-group { transform: translate(0.75rem, -0.75rem); }
-    .sun-center { 
+    .sun-center {
         transition: fill 0.2s ease-in-out;
-        fill: var(--svg-color); 
+        fill: var(--style-color);
     }
-    .sun-beams { 
+    .sun-beams {
         transition: stroke 0.2s ease-in-out;
-        stroke: var(--svg-color); 
+        stroke: var(--style-color);
+    }
+}
+button.theme-toggle-btn {
+    @media (hover: hover) {
+        &:hover .theme-svg{
+            .sun-center { fill: var(--style-background); }
+            .sun-beams { stroke: var(--style-background); }
+        }
+    }
+
+    &:active .theme-svg{
+        .sun-center { fill: var(--style-background); }
+        .sun-beams { stroke: var(--style-background); }
     }
 }
 
