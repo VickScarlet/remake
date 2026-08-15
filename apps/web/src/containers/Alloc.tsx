@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useAllocator, usePointRandomizer, useLeftPoints } from '@remake/hooks'
-import { usePicked, useReplaced, useStart } from '@remake/hooks'
+import { usePicked, useReplaced, useStart, useIsClassic } from '@remake/hooks'
 import type { AdditionalPoint } from '@remake/hooks'
 import { properties } from '@/display'
 import { keys } from '@remake/vitex'
-import { BasePoints, judgeGradeByValue } from '@/config'
+import { judgeGradeByValue } from '@/config'
 import { talents } from '@remake/data'
 import Replaced from '@/components/Replaced'
 import './Alloc.css'
@@ -30,15 +30,17 @@ function AllocInput(props: AllocInputProps) {
 }
 
 interface PointsDetailProps {
+    base: number
     source: AdditionalPoint[]
+    fixed?: boolean
 }
 
-function PointsDetail({ source }: PointsDetailProps) {
+function PointsDetail({ base, source, fixed }: PointsDetailProps) {
     return (
         <ul className="points-detail">
             <li>
-                <span>基础</span>
-                <span className="font-mono">{BasePoints}</span>
+                <span>{fixed ? '固定' : '基础'}</span>
+                <span className="font-mono">{base}</span>
             </li>
             {source.map(({ talent, points }) => (
                 <li key={talent}>
@@ -51,18 +53,19 @@ function PointsDetail({ source }: PointsDetailProps) {
 }
 
 export function Alloc() {
+    const isClassic = useIsClassic()
     const picked = usePicked()
     const {
         talents: { chains },
         additionalPoints: { source },
     } = useReplaced()
-    const left = useLeftPoints()
-    const [allocation, allocator] = useAllocator()
+    const { base, left } = useLeftPoints()
+    const [{ alloc, final, base: ba }, allocator] = useAllocator()
     const random = usePointRandomizer()
     const start = useStart()
     const [showDetail, setShowDetail] = useState(false)
     const handleNext = () => {
-        if (left) {
+        if (left != 0) {
             // TODO: Show a warning that there are still points left
             return
         }
@@ -79,25 +82,39 @@ export function Alloc() {
                     </li>
                 ))}
             </ul>
-            <ul className="alloc">
+            <ul className={`alloc ${isClassic ? 'classic' : 'modify'}`}>
                 <li className={`left left-${left}`}>
-                    <span>剩余点数</span>
+                    <span className="name">剩余点数</span>
                     <button
                         className="font-mono"
                         onClick={() => setShowDetail(!showDetail)}
                     >
                         {left}
                     </button>
-                    {showDetail && <PointsDetail source={source} />}
+                    {showDetail && (
+                        <PointsDetail
+                            base={base}
+                            source={source}
+                            fixed={!isClassic}
+                        />
+                    )}
                 </li>
-                {keys(allocation).map(key => (
+                {keys(alloc).map(key => (
                     <li
                         key={key}
-                        className={`property grade-${judgeGradeByValue(key, allocation[key])}`}
+                        className={`property grade-${judgeGradeByValue(key, final[key])}`}
                     >
-                        <span>{properties[key]}</span>
+                        <span className="name">
+                            {properties[key]}
+                            {!isClassic && (
+                                <span className="font-mono">[{ba[key]}]</span>
+                            )}
+                        </span>
+                        {!isClassic && (
+                            <span className="font-mono">{final[key]}</span>
+                        )}
                         <AllocInput
-                            point={allocation[key]}
+                            point={alloc[key]}
                             onChange={value => allocator(key, value)}
                         />
                     </li>

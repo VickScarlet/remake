@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { usePicked, useEnd, useProfile } from '@remake/hooks'
+import { usePicked, useEnd, useProfile, useIsClassic } from '@remake/hooks'
 import { useEndJudge } from '@/hooks/judge'
 import { properties, judgeDisplay } from '@/display'
 import TalentComponent from '@/components/Talent'
@@ -52,6 +52,7 @@ function TalentList({ picked, picker }: TalentListProps) {
 }
 
 export default function Summary() {
+    const isClassic = useIsClassic()
     const [locked, picker, end] = useEnd()
     const handleEnd = () => {
         const achievements = end()
@@ -62,7 +63,11 @@ export default function Summary() {
         <div className="screen summary">
             <Judges />
             <div className="section">
-                <div className="title">你可以锁定一个天赋，下辈子还能抽到</div>
+                <div className="title">
+                    {isClassic
+                        ? '你可以锁定一个天赋，下辈子还能抽到'
+                        : '名人天赋不可锁定'}
+                </div>
                 <TalentList picked={locked} picker={picker} />
             </div>
             <button className="primary" onClick={handleEnd}>

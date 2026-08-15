@@ -82,24 +82,17 @@ export function charaPropToBaseAlloc(props: CharacterProperty): BaseAlloc {
     }
 }
 
-function charaPropToAlloc(
-    props: CharacterProperty,
-    spirit: number,
-): Allocation {
-    return { ...charaPropToBaseAlloc(props), spirit }
-}
-
-function convert(chara: BaseChara, spirit: number) {
+function convert(chara: BaseChara) {
     return {
-        allocation: charaPropToAlloc(chara.property, spirit),
+        allocation: charaPropToBaseAlloc(chara.property),
         talents: chara.talent,
     }
 }
 
-export function startChara(id: Character['id'], spirit: number) {
-    return convert(characters.get(id)!, spirit)
+export function startChara(id: Character['id']) {
+    return convert(characters.get(id)!)
 }
 
-export function startUnique(chara: BaseChara, spirit: number) {
-    return convert(chara, spirit)
+export function startUnique(chara: BaseChara) {
+    return convert(chara)
 }

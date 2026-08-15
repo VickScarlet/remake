@@ -68,14 +68,12 @@ button {
     outline: none;
     @media (hover: hover) {
         &:hover {
-            border: var(--style-background) 0.0625rem solid;
             background: var(--style-color);
             color: var(--style-background);
         }
     }
 
     &:active {
-        border: var(--style-background) 0.0625rem solid;
         background: var(--style-color);
         color: var(--style-background);
         transition: none;
