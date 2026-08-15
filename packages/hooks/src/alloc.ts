@@ -42,12 +42,11 @@ export const usePoints = () => {
     const isClassic = useIsClassic()
     const { additionalPoints } = useReplaced()
     const additional = additionalPoints.points
-    if (!isClassic) {
-        const base = useAtomValue(baseAllocAtom)
-        return { base: alloced(base), total: additional, additional }
-    }
+    const ba = useAtomValue(baseAllocAtom)
     const { points } = useConfig()
-    return { base: points, total: points + additional, additional }
+    const base = isClassic ? points : alloced(ba)
+    const total = isClassic ? points + additional : additional
+    return { base, total, additional }
 }
 
 export const useLeftPoints = () => {
