@@ -1,0 +1,12 @@
+button.github-btn {
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: var(--style-color);
+        transition: fill 0.2s ease-in-out; 
+    }
+    @media (hover: hover) {
+        &:hover svg { fill: var(--style-background); }
+    }
+    &:active svg{ fill: var(--style-background); }
+}
