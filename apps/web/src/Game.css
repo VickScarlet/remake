@@ -17,7 +17,7 @@
         width: 100%;
         padding: 0;
         box-sizing: border-box;
-        .title {
+        > .title {
             display: flex;
             flex-direction: row;
             justify-content: center;

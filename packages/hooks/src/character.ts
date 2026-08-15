@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { pickedAtom, replacedAtom, baseAllocAtom } from '.'
-import { useConfig, useProfile, useSetStep, Step } from '.'
+import { useConfig, useSetStep, Step } from '.'
 import { uniqueGenerate, startUnique, startChara } from '@remake/core'
 import { pullChara, pick } from '@remake/core'
 import type { BaseChara, PullCharaTms } from '@remake/core'
@@ -72,7 +72,6 @@ export const useCharaPicker = () => {
 }
 
 export const useCharaSubmit = () => {
-    const [profile] = useProfile()
     const unique = useAtomValue(uniqueAtom)
     const setStep = useSetStep()
     const setPicked = useSetAtom(pickedAtom)
@@ -93,7 +92,7 @@ export const useCharaSubmit = () => {
             setBaseAlloc(result.allocation)
             setStep(Step.Alloc)
         },
-        [profile, unique, setPicked, setReplaced, setStep],
+        [unique, setPicked, setReplaced, setBaseAlloc, setStep],
     )
 }
 

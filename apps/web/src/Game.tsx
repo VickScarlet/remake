@@ -8,6 +8,7 @@ import Pick from '@/containers/TalentPick'
 import Alloc from '@/containers/Alloc'
 import Play from '@/containers/Play'
 import Summary from '@/containers/Summary'
+import Achv from '@/containers/Achv'
 import './Game.css'
 
 export function Container() {
@@ -20,6 +21,7 @@ export function Container() {
         case Step.Alloc: return <Alloc />
         case Step.Play: return <Play />
         case Step.Summary: return <Summary />
+        case Step.Achv: return <Achv />
         default: return null
     }
 }

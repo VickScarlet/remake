@@ -52,8 +52,8 @@ export const JudgeLineMap = {
     spirit: [0, 1, 2, 4, 7, 9, 11],
     intelligence: [0, 1, 2, 4, 7, 9, 11, 21, 131, 501],
     strength: [0, 1, 2, 4, 7, 9, 11, 21, 101, 401, 1001, 2001],
-    talent: [0, 0.3, 0.6, 0.9],
-    event: [0, 0.2, 0.4, 0.6],
+    talent: [0, 30, 60, 90],
+    event: [0, 20, 40, 60],
 }
 // 可评级属性
 export type Judges = keyof typeof JudgeLineMap

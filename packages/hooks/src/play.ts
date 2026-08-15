@@ -14,6 +14,7 @@ export enum Step {
     Alloc = 'alloc',
     Play = 'play',
     Summary = 'summary',
+    Achv = 'achv',
 }
 
 export enum Mode {
@@ -168,7 +169,7 @@ export const useEnd = () => {
                 return next
             })
         },
-        [lock, setLocked],
+        [lock, isClassic, setLocked],
     )
     const ender = useCallback(() => {
         if (!state)
@@ -183,6 +184,11 @@ export const useEnd = () => {
         setProfile(result.profile)
         reset()
         return result.achievements
-    }, [state, profile, locked, setStep, setProfile, reset])
+    }, [state, profile, locked, isClassic, setStep, setProfile, reset])
     return [locked, picker, ender] as const
+}
+
+export const useGoHome = () => {
+    const setStep = useSetAtom(stepAtom)
+    return useCallback(() => setStep(Step.Idle), [setStep])
 }
