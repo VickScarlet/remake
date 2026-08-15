@@ -1,5 +1,8 @@
 /** 特别鸣谢分组 */
-export type SpecialThanksGroup = 1 | 2
+export enum SpecialThanksGroup {
+    G1 = 1,
+    G2 = 2,
+}
 
 /** 特别鸣谢 */
 export type SpecialThanks = {

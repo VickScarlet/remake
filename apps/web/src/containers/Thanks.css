@@ -1,0 +1,94 @@
+.screen.thanks {
+    height: calc(100dvh - 2rem);
+    gap: 1rem;
+    .person {
+        --style-color: var(--custom-color, var(--base-text-color));
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        color: var(--style-color);
+        background: var(--base-background-color);
+        transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+        > .name {
+            display: flex;
+            text-wrap: wrap;
+            word-break: break-all;
+            min-height: 2.5rem;
+            width: 12rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            align-items: center;
+            text-shadow:
+                -0.0625rem -0.0625rem 0.0625rem var(--base-shadow),
+                 0.0625rem -0.0625rem 0.0625rem var(--base-shadow),
+                -0.0625rem  0.0625rem 0.0625rem var(--base-shadow),
+                 0.0625rem  0.0625rem 0.0625rem var(--base-shadow),
+                 0         -0.0625rem 0.0625rem var(--base-shadow),
+                 0          0.0625rem 0.0625rem var(--base-shadow),
+                -0.0625rem  0         0.0625rem var(--base-shadow),
+                 0.0625rem  0         0.0625rem var(--base-shadow);
+        }
+        > .comment {
+            word-break: break-all;
+            white-space: pre-wrap;
+            min-height: 2.5rem;
+            flex: 1 0;
+            display: flex;
+            align-items: center;
+            text-shadow:
+                -0.0625rem -0.0625rem 0.0625rem var(--base-shadow),
+                 0.0625rem -0.0625rem 0.0625rem var(--base-shadow),
+                -0.0625rem  0.0625rem 0.0625rem var(--base-shadow),
+                 0.0625rem  0.0625rem 0.0625rem var(--base-shadow),
+                 0         -0.0625rem 0.0625rem var(--base-shadow),
+                 0          0.0625rem 0.0625rem var(--base-shadow),
+                -0.0625rem  0         0.0625rem var(--base-shadow),
+                 0.0625rem  0         0.0625rem var(--base-shadow);
+        }
+    }
+    > .group { flex: 1 0; }
+    > .group-1 {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border: 0.0625rem solid var(--base-text-color);
+        box-sizing: border-box;
+        padding: 0.5rem 0;
+
+        > .person {
+            margin: 0 0.5rem;
+            padding: 0 0.5rem;
+            display: flex;
+            border: 0.0625rem solid var(--style-color);
+            box-sizing: border-box;
+            > .comment {
+                word-break: break-all;
+                white-space: pre-wrap;
+                min-height: 2.5rem;
+                flex: 1 0;
+                padding: 0 0.5rem;
+                display: flex;
+                align-items: center;
+            }
+
+        }
+    }
+    > .group-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+        gap: 0.5rem;
+        border: 0.0625rem solid var(--base-text-color);
+        > .person {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-wrap: wrap;
+            word-break: break-all;
+            text-align: center;
+            margin-right: 0.0625rem;
+            > .name { justify-content: center; }
+            > .comment {display: none;}
+        }
+    }
+}

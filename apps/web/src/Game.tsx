@@ -9,6 +9,7 @@ import Alloc from '@/containers/Alloc'
 import Play from '@/containers/Play'
 import Summary from '@/containers/Summary'
 import Achv from '@/containers/Achv'
+import Thanks from '@/containers/Thanks'
 import './Game.css'
 
 export function Container() {
@@ -22,6 +23,7 @@ export function Container() {
         case Step.Play: return <Play />
         case Step.Summary: return <Summary />
         case Step.Achv: return <Achv />
+        case Step.Thanks: return <Thanks />
         default: return null
     }
 }

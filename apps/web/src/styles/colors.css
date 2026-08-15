@@ -2,6 +2,7 @@
     color-scheme: light dark;
     --base-text-color: light-dark(#121314, #f9fafb);
     --base-background-color: light-dark(#f7f7f7, #121314);
+    --base-shadow: light-dark(#00000010, #23456710);
 
     --color-grade-0: light-dark(#4e5052, #f9fafb);
     --color-grade-1: light-dark(#4aa8da, #afe3ff);

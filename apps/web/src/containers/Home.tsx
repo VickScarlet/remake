@@ -1,11 +1,13 @@
-import { useRemake, useGoAchv } from '@remake/hooks'
+import { useRemake, useFeatures, useGoAchv, useGoThanks } from '@remake/hooks'
 import { TextSvg } from '@/components/TextSvg'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import './Home.css'
 
 export default function Home() {
     const remake = useRemake()
+    const features = useFeatures()
     const goAchv = useGoAchv()
+    const goThanks = useGoThanks()
     return (
         <div className="screen home">
             <div className="title">
@@ -18,14 +20,16 @@ export default function Home() {
                         立即重开
                     </button>
                 </div>
-                <div>
-                    <button className="secondary" onClick={goAchv}>
-                        成就
-                    </button>
-                    <button className="secondary" onClick={goAchv}>
-                        感谢
-                    </button>
-                </div>
+                {features && (
+                    <div>
+                        <button className="secondary" onClick={goAchv}>
+                            成就
+                        </button>
+                        <button className="secondary" onClick={goThanks}>
+                            感谢
+                        </button>
+                    </div>
+                )}
             </div>
             <ThemeToggle />
         </div>

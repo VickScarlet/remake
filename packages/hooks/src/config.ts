@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 import { atom, useSetAtom, useAtomValue } from 'jotai'
 import type { PullOptions, PullCharaOpt, UniqueGenCfg } from '@remake/core'
 export interface Config {
+    /** 功能锁 */
+    features: number
     /** 游戏锁定天赋数量 */
     lock: number
     /** 游戏可选天赋数量 */
