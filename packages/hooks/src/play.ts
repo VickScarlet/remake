@@ -52,6 +52,8 @@ export const useGameReset = () => {
     }, [resetTalent, resetAlloc, resetState, resetLogs])
 }
 
+export const useMode = () => useAtomValue(modeAtom)
+export const useIsClassic = () => useAtomValue(modeAtom) === Mode.Classic
 export const useStep = () => useAtomValue(stepAtom)
 export const useSetStep = () => useSetAtom(stepAtom)
 export const useGameState = () => useAtomValue(gameStateAtom)
@@ -82,7 +84,7 @@ export const useModeChoose = () => {
                 case Mode.Celebrity: return setStep(Step.Chara)
             }
         },
-        [setStep],
+        [setMode, setStep],
     )
     return [Mode, choose] as const
 }
@@ -92,7 +94,7 @@ export const useStart = () => {
     const [profile] = useProfile()
     const setStep = useSetAtom(stepAtom)
     const setState = useSetAtom(gameStateAtom)
-    const allocate = useAlloc()
+    const { final: allocate } = useAlloc()
     const { talents: tr } = useReplaced()
     return useCallback(() => {
         const alloc = { ...allocate, spirit }
@@ -148,10 +150,12 @@ export const useEnd = () => {
     const setStep = useSetAtom(stepAtom)
     const state = useAtomValue(gameStateAtom)
     const reset = useGameReset()
+    const isClassic = useIsClassic()
     const [locked, setLocked] = useState<Set<Talent['id']>>(new Set())
     const picker = useCallback(
         (talent: Talent['id']) => {
             setLocked(prev => {
+                if (!isClassic) return prev
                 if (prev.has(talent)) {
                     const next = new Set(prev)
                     next.delete(talent)
@@ -169,7 +173,11 @@ export const useEnd = () => {
     const ender = useCallback(() => {
         if (!state)
             throw new Error('Game state is not available or already ended.')
-        const l = locked.size > 0 ? Array.from(locked) : undefined
+        const l = isClassic
+            ? locked.size > 0
+                ? Array.from(locked)
+                : undefined
+            : profile.locked
         const result = end(state, profile, l)
         setStep(Step.Idle)
         setProfile(result.profile)

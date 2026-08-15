@@ -1,5 +1,5 @@
-import { useCharaPuller, useCharaPicker, convertProps } from '@remake/hooks'
-import { useUnique, useUniqueGenerator, useCharaStart } from '@remake/hooks'
+import { useCharaPuller, useCharaPicker, useCharaSubmit } from '@remake/hooks'
+import { useUnique, useUniqueGenerator, convertProps } from '@remake/hooks'
 import type { BaseChara } from '@remake/hooks'
 import { TalentComponent } from '@/components/Talent'
 import { judgeGradeByValue } from '@/config'
@@ -88,7 +88,7 @@ export function Chara() {
     const u = useUnique()
     const [{ unique, characters }, puller] = useCharaPuller()
     const [picked, picker] = useCharaPicker()
-    const start = useCharaStart()
+    const submit = useCharaSubmit()
     const ready = picked && (picked.type === 'unique' ? !!u : true)
     return (
         <div className="screen chara">
@@ -114,7 +114,7 @@ export function Chara() {
                 </button>
                 <button
                     className={ready ? 'primary' : 'error'}
-                    onClick={ready ? () => start(picked!) : undefined}
+                    onClick={ready ? () => submit(picked!) : undefined}
                 >
                     开始新人生
                 </button>

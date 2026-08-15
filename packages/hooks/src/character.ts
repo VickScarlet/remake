@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useConfig, useProfile, useSetStep, useSetGameState, Step } from '.'
+import { pickedAtom, replacedAtom, baseAllocAtom } from '.'
+import { useConfig, useProfile, useSetStep, Step } from '.'
 import { uniqueGenerate, startUnique, startChara } from '@remake/core'
-import { pullChara, start, pick } from '@remake/core'
+import { pullChara, pick } from '@remake/core'
 import type { BaseChara, PullCharaTms } from '@remake/core'
 import type { Character } from '@remake/data'
 import type { RNG } from '@remake/vitex'
@@ -70,34 +71,29 @@ export const useCharaPicker = () => {
     return [picked, { chara, unique: uni }] as const
 }
 
-export const useCharaStart = () => {
-    const { spirit } = useConfig()
+export const useCharaSubmit = () => {
     const [profile] = useProfile()
     const unique = useAtomValue(uniqueAtom)
     const setStep = useSetStep()
-    const setState = useSetGameState()
+    const setPicked = useSetAtom(pickedAtom)
+    const setReplaced = useSetAtom(replacedAtom)
+    const setBaseAlloc = useSetAtom(baseAllocAtom)
     return useCallback(
         (picked: CharaPick, rng?: RNG) => {
             let result
             if (picked.type === 'unique') {
                 if (!unique)
                     throw new Error('Unique character not generated yet')
-                result = startUnique(unique, spirit)
+                result = startUnique(unique)
             } else {
-                result = startChara(picked.id, spirit)
+                result = startChara(picked.id)
             }
-            const { talents, additionalPoints } = pick(result.talents, rng)
-            // TODO: additionalPoints
-            const { state, achievements } = start(
-                profile,
-                result.allocation,
-                talents.talents,
-            )
-            setState(state)
-            setStep(Step.Play)
-            return achievements
+            setPicked(new Set(result.talents))
+            setReplaced(pick(result.talents, rng))
+            setBaseAlloc(result.allocation)
+            setStep(Step.Alloc)
         },
-        [spirit, profile, unique, setStep, setState],
+        [profile, unique, setPicked, setReplaced, setStep],
     )
 }
 

@@ -1,6 +1,7 @@
 export type RNG = (max?: number, min?: number) => number
 export function random(max: number = 1, min: number = 0, rng?: RNG): number {
     if (rng) return rng(max, min)
+    if (max < min) [max, min] = [min, max]
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
 export function pick<T>(items: T[], rng?: RNG) {
@@ -57,4 +58,12 @@ export function format(str: string, getValueFn: GetValueFn): string {
             return String(value)
         },
     )
+}
+
+export function zoneFit(value: number, zone: [number, number]) {
+    const max = Math.max(zone[0], zone[1])
+    if (value > max) return max
+    const min = Math.min(zone[0], zone[1])
+    if (value < min) return min
+    return value
 }

@@ -80,8 +80,8 @@
             > span {
                 width: 100%;
                 height: calc(2rem * var(--ratio));
-                color: var(--base-background-color);
-                background: var(--grade-color);
+                color: var(--grade-color);
+                background: var(--base-background-color);
                 border: 0.0625rem solid var(--grade-color);
                 border-bottom: none;
                 display: flex;
@@ -90,6 +90,10 @@
                 box-sizing: border-box;
                 font-weight: bold;
                 transition: all 0.2s ease-in-out;
+            }
+            > span.name {
+                color: var(--base-background-color);
+                background: var(--grade-color);
             }
         }
         > li.left {
