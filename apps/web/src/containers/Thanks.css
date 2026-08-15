@@ -47,8 +47,8 @@
                  0.0625rem  0         0.0625rem var(--base-shadow);
         }
     }
-    > .group { flex: 1 0; }
     > .group-1 {
+        flex: 1 1;
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
@@ -75,8 +75,9 @@
         }
     }
     > .group-2 {
+        flex: 3 1;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
         gap: 0.5rem;
         border: 0.0625rem solid var(--base-text-color);
         > .person {
