@@ -18,7 +18,8 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 2rem;
+                font-size: calc(1rem * var(--ratio-font));
+                height: calc(2rem * var(--ratio));
             }
             &.selected {
                 border: 0.0625rem solid var(--color-primary);
