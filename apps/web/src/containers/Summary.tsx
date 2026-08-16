@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { usePicked, useEnd, useProfile, useIsClassic } from '@remake/hooks'
 import { useEndJudge } from '@/hooks/judge'
 import { properties, judgeDisplay } from '@/display'
+import { toastAchvs, toastMsg } from '@/toast'
 import Talent from '@/components/Talent'
 import './Summary.css'
 
@@ -54,9 +55,13 @@ function TalentList({ picked, picker }: TalentListProps) {
 export default function Summary() {
     const isClassic = useIsClassic()
     const [locked, picker, end] = useEnd()
+    const handlePicker = (id: number) => {
+        if (isClassic) picker(id)
+        else toastMsg('名人天赋不可锁定', 'summary-toast')
+    }
     const handleEnd = () => {
         const achievements = end()
-        // TODO: Show achievements
+        toastAchvs(achievements)
         console.log('Achievements', achievements)
     }
     return (
@@ -68,7 +73,7 @@ export default function Summary() {
                         ? '你可以锁定一个天赋，下辈子还能抽到'
                         : '名人天赋不可锁定'}
                 </div>
-                <TalentList picked={locked} picker={picker} />
+                <TalentList picked={locked} picker={handlePicker} />
             </div>
             <button className="primary" onClick={handleEnd}>
                 再次重开

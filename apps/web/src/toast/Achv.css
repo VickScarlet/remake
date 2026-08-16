@@ -1,0 +1,40 @@
+.achv-toast-container {
+    position: fixed;
+    width: min(calc(100dvw - 2rem), 48rem);
+    top: 6rem;
+    left: 1rem;
+    pointer-events: none;
+    user-select: none;
+    .toast-item {
+        display: flex;
+        position: absolute;
+        opacity: 1;
+        transition: all 0.2s ease-in-out;
+        &.visible {
+            animation: achv-fade-in 0.2s ease-out forwards;
+        }
+        &.hidden {
+            animation: achv-fade-out 0.2s ease-out forwards;
+        }
+    }
+}
+
+@keyframes achv-slide-in {
+    0% { opacity: 0; transform: translateX(-100%); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes achv-slide-out {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-100%); }
+}
+
+@keyframes achv-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes achv-fade-out {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}

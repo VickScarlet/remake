@@ -14,8 +14,7 @@
         width: auto;
         display: flex;
         gap: 1rem;
-        >.github-btn,
-        >.theme-toggle-btn {
+        >button {
             width: 2.5rem;
             height: 2.5rem;
             padding: 0.25rem;

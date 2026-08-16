@@ -6,6 +6,7 @@ import { properties } from '@/display'
 import { keys } from '@remake/vitex'
 import { judgeGradeByValue } from '@/config'
 import { talents } from '@remake/data'
+import { toastAchvs, toastMsg } from '@/toast'
 import Replaced from '@/components/Replaced'
 import './Alloc.css'
 
@@ -65,12 +66,9 @@ export function Alloc() {
     const start = useStart()
     const [showDetail, setShowDetail] = useState(false)
     const handleNext = () => {
-        if (left != 0) {
-            // TODO: Show a warning that there are still points left
-            return
-        }
+        if (left != 0) return toastMsg('还有剩余点数未分配', 'alloc-toast')
         const achievements = start()
-        // TODO: Show achievements
+        toastAchvs(achievements)
         console.log('Achievements', achievements)
     }
     return (

@@ -5,6 +5,7 @@ import { judgeGradeByValue } from '@/config'
 import { characters } from '@remake/data'
 import { properties } from '@/display'
 import { keys } from '@remake/vitex'
+import { toastMsg } from '@/toast'
 import Talent from '@/components/Talent'
 import './Chara.css'
 
@@ -89,6 +90,11 @@ export function Chara() {
     const [{ unique, characters }, puller] = useCharaPuller()
     const [picked, picker] = useCharaPicker()
     const submit = useCharaSubmit()
+    const handleSubmit = () => {
+        if (ready) return submit(picked)
+        if (!picked) toastMsg('请先选择角色', 'chara-toast-pick')
+        else toastMsg('请先生成唯一角色', 'chara-toast-unique')
+    }
     const ready = picked && (picked.type === 'unique' ? !!u : true)
     return (
         <div className="screen chara">
@@ -114,7 +120,7 @@ export function Chara() {
                 </button>
                 <button
                     className={ready ? 'primary' : 'error'}
-                    onClick={ready ? () => submit(picked!) : undefined}
+                    onClick={handleSubmit}
                 >
                     开始新人生
                 </button>
