@@ -115,6 +115,15 @@ input {
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 }
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0; /* 移除某些浏览器下的默认留白 */
+    }
+}
 
 @media (max-width: 32rem) { :root { font-size: 2.88vw; } }
 @media screen and (orientation: portrait) and (pointer: coarse) {

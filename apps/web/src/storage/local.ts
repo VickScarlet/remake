@@ -28,15 +28,12 @@ if (localStorage.getItem('version') !== '3.0.0') {
     }
     localStorage.setItem('version', '3.0.0')
 }
-export async function get<Key extends string>(keys: Key[]) {
-    return Object.fromEntries(keys.map(k => [k, localStorage.getItem(k)])) as {
-        [K in Key]: string | null
-    }
+
+export async function get(key: string) {
+    return localStorage.getItem(key)
 }
 
-export async function set<Key extends string>(data: Record<Key, string>) {
-    for (const key in data) {
-        localStorage.setItem(key, data[key])
-    }
+export async function set(key: string, value: string) {
+    localStorage.setItem(key, value)
     return true
 }

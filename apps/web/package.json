@@ -7,6 +7,7 @@
         "dev": "bunx --bun vite",
         "dev:prod": "bunx --bun vite --mode production",
         "build": "bunx --bun vite build",
+        "build:bili": "bunx --bun vite build --config vite.config.bili.ts",
         "preview": "bunx --bun vite preview",
         "lint": "bunx --bun eslint",
         "test": "bunx --bun vitest"
@@ -15,6 +16,7 @@
         "@remake/data": "workspace:*",
         "@remake/hooks": "workspace:*",
         "@remake/vitex": "workspace:*",
+        "@remake/thirdparty-bili-toy": "workspace:*",
         "jotai": "^2.20.2",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",

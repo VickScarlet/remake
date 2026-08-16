@@ -16,8 +16,10 @@ const dataSplitRule = {
 export default defineConfig({
     plugins: [react()],
     resolve: { tsconfigPaths: true },
+    define: { 'import.meta.env.VITE_CHANNEL': '"bili"' },
     base: './',
     build: {
+        outDir: 'dist/bili/remake',
         chunkSizeWarningLimit: 1500,
         rolldownOptions: {
             output: {

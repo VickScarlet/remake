@@ -44,6 +44,9 @@ importers:
       '@remake/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
+      '@remake/thirdparty-bili-toy':
+        specifier: workspace:*
+        version: link:../../thirdparty/bili-toy
       '@remake/vitex':
         specifier: workspace:*
         version: link:../../packages/vitex

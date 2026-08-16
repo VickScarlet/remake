@@ -59,9 +59,38 @@ declare namespace ToySDK {
     localPath: string
   }
 
-  interface ReportActionReq {
-    /** UP 主自定义的动作标识。 */
-    userEventId: string
+  // ---------------------------------------------------------------------------
+  // 分享与二维码
+  // ---------------------------------------------------------------------------
+
+  interface ShareReq {
+    /**
+     * 相对当前 Toy 页面根（`/toy/<slug>/`）的路径，可带 query，如 `result.html?score=100`。
+     *
+     * 完整分享链接由平台生成，Toy 不能自行指定完整 URL。路径只能落在当前 Toy 内：
+     * 传绝对 URL 或用 `../` 越界到其他 Toy / 外域会抛 `invalid_param`。
+     */
+    path: string
+  }
+
+  interface QrCodeReq {
+    /**
+     * 相对当前 Toy 页面根（`/toy/<slug>/`）的路径，可带 query。
+     * 不传（或传空串）时指向当前 Toy 首页 `index.html`。
+     *
+     * 传了则与 `ShareReq.path` 同一约定：二维码内容由平台生成，
+     * Toy 不能自行指定完整 URL；传绝对 URL 或用 `../` 越界到其他 Toy / 外域会抛 `invalid_param`。
+     */
+    path?: string
+    /** 二维码边长（像素），取值区间 `[80, 1024]` 的整数。不传默认 `320`，越界或非整数抛 `invalid_param`。 */
+    size?: number
+  }
+
+  interface QrCodeResp {
+    /** PNG 图片的完整 data URL（`data:image/png;base64,...`），可直接赋给 `img.src`。 */
+    base64: string
+    /** 二维码实际编码的完整链接，由平台生成。 */
+    url: string
   }
 
   // ---------------------------------------------------------------------------
@@ -73,6 +102,8 @@ declare namespace ToySDK {
     avatar: string
     /** 昵称。 */
     nickname: string
+    /** 当前登录用户在当前 Toy 内的稳定假名标识，不是鉴权凭证；功能未启用时可能不返回。 */
+    toyOpenId?: string
   }
 
   // ---------------------------------------------------------------------------
@@ -87,7 +118,7 @@ declare namespace ToySDK {
    * - `denied`: 用户拒绝了数据使用确认
    * - `unsupported`: 当前环境不支持（如外部手机浏览器，SDK 会引导打开 B站 App）
    * - `toy_context_unavailable`: 拿不到当前 toy 上下文
-   * - `author_mismatch`: 请求的资源不属于当前 Toy 作者
+   * - `author_mismatch`: 请求的资源不属于当前 Toy 作者（视频既非其投稿，也未以联合投稿身份参与创作）
    * - `video_not_found`: 视频不存在
    * - `video_invisible`: 视频对当前用户不可见
    * - `unavailable`: 依赖服务不可用
@@ -235,7 +266,7 @@ declare namespace ToySDK {
     /** 回显本次请求传入的引用，用于与请求项对应。 */
     ref: AuthorVideoRef
     status: ToyItemStatus
-    /** `status` 非 `ok` 时缺省（如非当前作者、视频不可见）。 */
+    /** `status` 非 `ok` 时缺省（如作者未参与该视频创作、视频不可见）。 */
     data?: AuthorVideo
   }
 
@@ -359,11 +390,17 @@ declare namespace ToySDK {
   }
 
   // ---------------------------------------------------------------------------
-  // 媒体能力
+  // 媒体能力（摄像头 / 麦克风）
   // ---------------------------------------------------------------------------
 
+  /**
+   * 申请摄像头的可选项，仅 `requestCamera` 使用。
+   *
+   * 只接受 `facingMode` 一个字段：传入其他字段、或传非普通对象（数组 / 字符串 / null 等）
+   * 时 SDK 本地抛错。`requestMicrophone` 不接受任何参数。
+   */
   interface MediaRelayOptions {
-    /** 摄像头朝向，不传默认使用前置摄像头。 */
+    /** 摄像头朝向：`'user'` 前置、`'environment'` 后置。不传默认前置。 */
     facingMode?: 'user' | 'environment'
   }
 
@@ -376,7 +413,8 @@ declare namespace ToySDK {
      * 判断当前环境是否支持指定能力。传能力名（如 `'saveImageToAlbum'`）即可，
      * 带不带 `toy.` 前缀都能匹配。
      *
-     * 端外 Web 不支持 `saveImageToAlbum` / `closeBrowser`，其余能力两端一致。
+     * 端外 Web 不支持 `saveImageToAlbum` / `share` / `closeBrowser`，其余能力两端一致
+     * （二维码 `getQrCode` 两端均可用）。
      */
     isSupport(ability: string): Promise<boolean>
 
@@ -384,7 +422,7 @@ declare namespace ToySDK {
      * 跳转到指定页面。
      *
      * 必须在用户手势事件（如 click）中调用：SDK 会检查 `navigator.userActivation`，
-     * 无有效用户激活时抛错。端内走 JSB 原生跳转，端外用 `window.open` 新开标签页。
+     * 无有效用户激活时抛错。端内为原生跳转，端外新开标签页。
      */
     navigate(req: NavigateReq): Promise<void>
 
@@ -395,19 +433,40 @@ declare namespace ToySDK {
      */
     saveImageToAlbum(req: SaveImageReq): Promise<SaveImageResp>
 
+    /**
+     * 拉起 B站 App 的分享面板。**仅 B站 App 内可用**，Web 端调用直接抛错。
+     *
+     * 只传相对当前 Toy 的 `path`，完整分享链接由平台生成，
+     * 避免分享链接被伪造指向其他 Toy 或外部站点。`path` 越界抛 `invalid_param`，
+     * 页面不在 `/toy/<slug>/` 路径下时抛 `unsupported`。
+     */
+    share(req: ShareReq): Promise<void>
+
+    /**
+     * 生成指向当前 Toy 内某个页面的二维码，返回可直接用作 `img.src` 的 PNG base64 图片。
+     * **App 端和 Web 端都可用**。
+     *
+     * 用途不限于分享：跨设备接力（PC 上扫码到手机继续玩）、结算页海报、线下展示都适用。
+     * 区别于 `share`，本方法不拉起分享面板，而是把链接编码成二维码交给 Toy 自行展示。
+     * 两个入参都可省略：`toy.getQrCode()` 即当前 Toy 首页的二维码。
+     *
+     * 只能编码当前 Toy 内的页面链接，不能编码任意文本：二维码内容同样由平台生成，
+     * Toy 不能自行指定完整 URL。如需为任意字符串生成二维码，请自行在 Toy 内
+     * 打包二维码库。`path` 越界或 `size` 非法抛 `invalid_param`，
+     * 页面不在 `/toy/<slug>/` 路径下时抛 `unsupported`。
+     */
+    getQrCode(req?: QrCodeReq): Promise<QrCodeResp>
+
     /** 关闭当前 WebView 容器。**仅 B站 App 内可用**，Web 端调用直接抛错。 */
     closeBrowser(): Promise<void>
 
     /**
-     * 获取当前登录用户的头像与昵称。
+     * 获取当前登录用户的头像、昵称与当前 Toy 内的稳定假名标识。
      *
-     * 首次调用需由用户手势触发，并由平台展示固定的用户数据确认弹窗（Toy 不能自定义弹窗内容）；
-     * 用户拒绝、未登录或在外部手机浏览器中调用时 Promise reject（外部浏览器会先引导打开 B站 App）。
+     * OpenID 模式启用后，已有未过期的 profile v1/v2 授权会直接复用，不重复弹窗；没有有效授权时，首次调用需由用户手势触发，并由平台展示“获取你的昵称、头像和当前 Toy 内用户标识”固定的用户数据确认弹窗（Toy 不能自定义弹窗内容），接受后写入 v2 授权。模式关闭时省略 toyOpenId。
+     * 用户拒绝、未登录或在外部手机浏览器中调用时 Promise reject（外部浏览器会先引导打开 B站 App）。用户资料确认统一使用正文“你的 B站昵称、头像和仅用于当前 Toy 的用户标识，将用于当前 Toy 内展示和关联数据；不会向 Toy 提供你的 UID，也不能用于跨 Toy 识别。”，不区分 v1/v2 文案配置。`toyOpenId` 仅用于当前 Toy 内关联用户，不得写入埋点或公开日志。
      */
     getUserProfile(): Promise<UserProfileResp>
-
-    /** 上报 UP 主自定义的用户动作。 */
-    reportAction(req: ReportActionReq): Promise<void>
 
     /**
      * 获取当前 Toy 作者的公开资料、账号统计、稿件数、充电聚合与粉丝勋章配置。
@@ -416,8 +475,8 @@ declare namespace ToySDK {
     getAuthorProfile(): Promise<AuthorProfileResp>
 
     /**
-     * 批量获取当前 Toy 作者的视频公开信息。
-     * 非当前作者或对当前用户不可见的视频，对应 item 只返回 `status`，不含 `data`。
+     * 批量获取当前 Toy 作者的视频公开信息，含作者以联合投稿（共同创作）身份参与的视频。
+     * 作者未参与创作、或对当前用户不可见的视频，对应 item 只返回 `status`，不含 `data`。
      */
     getAuthorVideos(req: AuthorVideosReq): Promise<AuthorVideosResp>
 
@@ -431,7 +490,7 @@ declare namespace ToySDK {
     getAuthorRelation(): Promise<AuthorRelationResp>
 
     /**
-     * 获取当前访问用户对当前作者视频的点赞、投币、收藏状态。
+     * 获取当前访问用户对当前作者视频（含作者以联合投稿身份参与的视频）的点赞、投币、收藏状态。
      *
      * 只校验登录态，不触发用户数据确认弹窗。外部手机浏览器返回
      * `status: 'unsupported'` 且 `items` 为空数组。
@@ -476,18 +535,53 @@ declare namespace ToySDK {
     getMyRank(req?: MyRankReq): Promise<MyRankResp>
 
     /**
-     * 申请摄像头业务授权和系统权限，并返回中继的媒体流。
-     * 必须在用户手势事件中调用。
+     * 申请摄像头，返回浏览器原生的实时 `MediaStream`（视频轨），可直接赋给
+     * `<video>` 的 `srcObject` 渲染，或交给 canvas / WebGL 逐帧处理。
+     *
+     * **必须由用户点击等手势事件直接触发**：SDK 会检查 `navigator.userActivation`，
+     * 无有效用户激活时抛错。首次申请由平台展示摄像头业务授权弹窗，同意后按
+     * 「登录用户 + Toy + 设备」记录，后续不重复展示；随后仍会由 App 或浏览器
+     * 展示系统权限框。
+     *
+     * `options` 只接受 `facingMode`，多传字段或传非普通对象会本地抛错。
+     * 用户拒绝业务授权、系统拒绝、设备缺失或被占用时 Promise reject，
+     * `error.name` 为 `BusinessDenied` / `NotAllowedError` / `NotFoundError` /
+     * `NotReadableError` / `AbortError` 等标准错误名。
+     *
+     * 使用结束后必须调用 `toy.stopMedia(stream)` 释放设备，否则摄像头保持占用。
      */
     requestCamera(options?: MediaRelayOptions): Promise<MediaStream>
 
     /**
-     * 申请麦克风业务授权和系统权限，并返回中继的媒体流。
-     * 不接受参数，且必须在用户手势事件中调用。
+     * 申请麦克风，返回浏览器原生的**实时** `MediaStream`（音频轨）。
+     *
+     * 注意返回值的性质：它是可持续读取的实时音频流，**不是录音文件**
+     * （没有 Blob / 本地路径），**也不是音量数值**。要得到录音文件或音量，
+     * 用浏览器原生 API 在这个流上自行处理，SDK 不提供这两项能力：
+     * - **录音**：用原生 `MediaRecorder` 接收本流并收集数据，自行编码成文件。
+     * - **获取声音大小**：用原生 `AudioContext` 创建 `AnalyserNode`，把本流接入后
+     *   读取频域 / 时域数据自行换算音量。
+     *
+     * **必须由用户点击等手势事件直接触发**：SDK 会检查 `navigator.userActivation`，
+     * 无有效用户激活时抛错。首次申请由平台展示麦克风业务授权弹窗（与摄像头分别
+     * 独立授权），同意后按「登录用户 + Toy + 设备」记录；随后仍会由 App 或浏览器
+     * 展示系统权限框。
+     *
+     * 不接受任何参数，传参会本地抛错。被拒 / 采集失败时的 `error.name` 同
+     * `requestCamera`。使用结束后必须调用 `toy.stopMedia(stream)` 释放设备。
      */
     requestMicrophone(): Promise<MediaStream>
 
-    /** 停止媒体中继并释放摄像头或麦克风设备。 */
+    /**
+     * 释放摄像头 / 麦克风：停止该流对应的会话，并关闭采集设备
+     * （摄像头指示灯熄灭）。
+     *
+     * 参数必须是 `requestCamera` / `requestMicrophone` 返回的那个 `MediaStream`
+     * 实例（SDK 以流对象为句柄定位会话），传入其他值本地抛错；传入已释放或非本
+     * SDK 产生的流不会报错，直接静默返回。
+     *
+     * 摄像头与麦克风各自的流需要分别调用释放。
+     */
     stopMedia(stream: MediaStream): Promise<void>
   }
 }

@@ -2,7 +2,7 @@ import { useEffect, useCallback, useTransition } from 'react'
 import { atom, useAtom } from 'jotai'
 import { useConfigInject, useProfileInject, useRawProfile } from '@remake/hooks'
 import { useUniqueInject, useUnique } from '@remake/hooks'
-import { get, set } from '@/storage'
+import { init, get, set } from '@/storage'
 import { config } from '@/config'
 
 const initedAtom = atom(false)
@@ -15,7 +15,8 @@ export const useInit = () => {
     const loader = useCallback(async () => {
         if (inited) return
         configInject(config)
-        const { profile, unique } = await get(['profile', 'unique'])
+        await init()
+        const profile = await get('profile')
         const parsed = profile ? JSON.parse(profile) || {} : {}
         profileInject({
             ...parsed,
@@ -24,6 +25,7 @@ export const useInit = () => {
             events: new Set(parsed.events || []),
             talents: new Set(parsed.talents || []),
         })
+        const unique = await get('unique')
         if (unique) uniqueInject(JSON.parse(unique))
         setInited(true)
     }, [inited, configInject, profileInject, uniqueInject, setInited])
@@ -46,14 +48,14 @@ export const useWatcher = () => {
             talents: Array.from(profile.talents),
         })
         saveProfile(async () => {
-            await set({ profile: str })
+            await set('profile', str)
         })
     }, [inited, profile, saveProfile])
     useEffect(() => {
         if (!inited || !unique) return
         const str = JSON.stringify(unique)
         saveUnique(async () => {
-            await set({ unique: str })
+            await set('unique', str)
         })
     }, [inited, unique, saveUnique])
 
