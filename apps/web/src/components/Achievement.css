@@ -2,9 +2,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
-    height: 2rem;
-    gap: 1rem;
+    padding: 0 calc(0.5rem * var(--ratio-font));
+    height: calc(2rem * var(--ratio));
+    gap: calc(1rem * var(--ratio-font));
+    font-size: calc(1rem * var(--ratio-font));
     color: var(--grade-color);
     background: var(--background, var(--base-background-color));
     cursor: pointer;
@@ -12,9 +13,16 @@
     border: 0.0625rem solid var(--grade-color);
     box-sizing: border-box;
     transition: all 0.2s ease-in-out;
+    svg {
+        fill: var(--grade-color);
+        transition: fill 0.2s ease-in-out;
+        stroke: none;
+        width: calc(1.2rem * var(--ratio-font));
+        height: calc(1.2rem * var(--ratio-font));
+    }
     .name { font-weight: bold; }
     .description {
-        font-size: 0.85rem;
+        font-size: calc(0.85rem * var(--ratio-font));
         user-select: none;
         &::before { content: '['; margin-right: 0.125rem; }
         &::after { content: ']'; margin-left: 0.125rem; }
