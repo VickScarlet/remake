@@ -1,10 +1,13 @@
+import { toastMsg } from '@/toast'
 import './Github.css'
+const repo = 'https://github.com/VickScarlet/remake'
 export function Github() {
+    const handleClick = () => {
+        if (import.meta.env.VITE_CHANNEL === 'bili') toastMsg(repo, 'github')
+        else window.open(repo)
+    }
     return (
-        <button
-            className="github-btn"
-            onClick={() => window.open('https://github.com/VickScarlet/remake')}
-        >
+        <button className="github-btn" onClick={handleClick}>
             <svg
                 fill="currentColor"
                 width="800px"

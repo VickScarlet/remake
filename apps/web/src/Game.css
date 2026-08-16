@@ -40,6 +40,13 @@
         width: 100%;
         > button { flex: 1 0; }
     }
+    &.loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        > * { width: auto; }
+        animation: pulse 1.8s ease-in-out infinite;
+    }
 }
 .saving {
     position: fixed;
@@ -47,9 +54,11 @@
     left: 0;
     opacity: 0;
     user-select: none;
-    transition: opacity 0.3s;
     &.active {
-        opacity: 1;
-        transition: opacity 0.1s;
+        animation: pulse 1.8s ease-in-out infinite;
     }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
