@@ -155,13 +155,11 @@ export function Play() {
         if (ended) return
         const achievements = next()
         toastAchvs(achievements)
-        console.debug('Achievements:', achievements)
     }, [ended, next])
     const handleGotoSummary = useCallback(() => {
         if (!ended) return
         const achievements = gotoSummary()
         toastAchvs(achievements)
-        console.debug('Achievements:', achievements)
     }, [ended, gotoSummary])
     useLayoutEffect(() => {
         requestAnimationFrame(() => {

@@ -16,7 +16,6 @@ export function ToastMsgContainer() {
                     reverseOrder: true,
                     gutter: 8,
                 })
-                console.log('toast offset', toast.id, offset)
                 return (
                     <div
                         className={`toast-item ${toast.visible ? 'visible' : 'hidden'}`}
@@ -24,7 +23,6 @@ export function ToastMsgContainer() {
                         ref={el => {
                             if (el && typeof toast.height !== 'number') {
                                 const height = el.getBoundingClientRect().height
-                                console.log('toast height', toast.id, height)
                                 updateHeight(toast.id, height)
                             }
                         }}
