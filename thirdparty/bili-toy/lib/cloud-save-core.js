@@ -2,7 +2,6 @@
   if (typeof module === 'object' && module.exports) {
     module.exports = factory();
   } else {
-    debugger
     root.ToyCloudSaveCore = factory();
   }
 }(typeof globalThis !== 'undefined' ? globalThis : this, function buildToyCloudSaveCore() {
