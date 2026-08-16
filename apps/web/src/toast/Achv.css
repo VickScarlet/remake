@@ -11,7 +11,7 @@
         opacity: 1;
         transition: all 0.2s ease-in-out;
         &.visible {
-            animation: achv-fade-in 0.2s ease-out forwards;
+            animation: achv-slide-in 0.2s ease-out forwards;
         }
         &.hidden {
             animation: achv-fade-out 0.2s ease-out forwards;

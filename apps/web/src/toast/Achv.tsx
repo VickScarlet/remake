@@ -3,7 +3,7 @@ import Achievement from '@/components/Achievement'
 import './Achv.css'
 
 export function ToastAchvContainer() {
-    const { toasts, handlers } = useToaster({ duration: 1500 }, 'achv-toast')
+    const { toasts, handlers } = useToaster({ duration: 4000 }, 'achv-toast')
     const { startPause, endPause, calculateOffset, updateHeight } = handlers
     return (
         <div
