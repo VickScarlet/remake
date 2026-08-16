@@ -20,7 +20,7 @@ export async function init() {
         window.ToyCloudSaveCore =
             coreModule.ToyCloudSaveCore || coreModule.default || coreModule
     } catch (error) {
-        console.error('Failed to load Bili Toy SDK:', error)
+        throw new Error('Failed to load Bili Toy SDK', { cause: error })
     }
 }
 

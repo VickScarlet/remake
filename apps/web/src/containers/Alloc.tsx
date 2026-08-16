@@ -69,7 +69,6 @@ export function Alloc() {
         if (left != 0) return toastMsg('还有剩余点数未分配', 'alloc-toast')
         const achievements = start()
         toastAchvs(achievements)
-        console.log('Achievements', achievements)
     }
     return (
         <div className="screen point-allocation">
