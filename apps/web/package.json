@@ -17,7 +17,8 @@
         "@remake/vitex": "workspace:*",
         "jotai": "^2.20.2",
         "react": "^19.2.8",
-        "react-dom": "^19.2.8"
+        "react-dom": "^19.2.8",
+        "react-hot-toast": "^2.6.0"
     },
     "devDependencies": {
         "@types/react": "^19.2.18",

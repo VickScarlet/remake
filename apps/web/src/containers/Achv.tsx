@@ -2,6 +2,7 @@ import { useAchv, useGoHome } from '@remake/hooks'
 import { judge, judgeGrade, judgeGradeByValue } from '@/config'
 import { rates } from '@/display'
 import { achievements, type Achievement } from '@remake/data'
+import { toastMsg } from '@/toast'
 import './Achv.css'
 
 interface AchievementProps {
@@ -22,6 +23,7 @@ export function AchievementItem({ id, colled }: AchievementProps) {
 
 export function Achv() {
     const goHome = useGoHome()
+    const showRank = () => toastMsg('别卷了，没有排行榜', 'achv-rank')
     const [stats, sorted] = useAchv()
     const jtimes = judge('times', stats.times)
     const gtimes = judgeGrade('times', jtimes)
@@ -34,7 +36,9 @@ export function Achv() {
     return (
         <div className="screen achv">
             <div className="controls">
-                <button className="secondary">排行榜</button>
+                <button className="secondary" onClick={showRank}>
+                    排行榜
+                </button>
                 <button className="primary" onClick={goHome}>
                     返回
                 </button>

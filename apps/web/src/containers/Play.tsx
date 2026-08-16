@@ -6,6 +6,7 @@ import { achievements, events, talents } from '@remake/data'
 import { properties } from '@/display'
 import { AutoInterval } from '@/config'
 import { format } from '@remake/vitex'
+import { toastAchvs } from '@/toast/Achv'
 import './Play.css'
 
 function LogTalent({ id }: { id: number }) {
@@ -153,13 +154,13 @@ export function Play() {
     const handleNext = useCallback(() => {
         if (ended) return
         const achievements = next()
-        // TODO: Show achievements
+        toastAchvs(achievements)
         console.debug('Achievements:', achievements)
     }, [ended, next])
     const handleGotoSummary = useCallback(() => {
         if (!ended) return
         const achievements = gotoSummary()
-        // TODO: Show achievements
+        toastAchvs(achievements)
         console.debug('Achievements:', achievements)
     }, [ended, gotoSummary])
     useLayoutEffect(() => {

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useInit, useWatcher } from '@/hooks/storage'
 import { useStep, Step } from '@remake/hooks'
+import ToastContainer from '@/toast'
 import Home from '@/containers/Home'
 import Mode from '@/containers/Mode'
 import Chara from '@/containers/Chara'
@@ -40,6 +41,6 @@ export function Game() {
     const saving = useWatcher()
     useEffect(() => { if (!inited) init() }, [inited, init])
     if (!inited) return <Loading />
-    return <><Container /><Saving active={saving} /></>
+    return <><Container /><ToastContainer /><Saving active={saving} /></>
 }
 export default Game

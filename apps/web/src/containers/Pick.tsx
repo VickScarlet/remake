@@ -1,6 +1,7 @@
 import { useTalentPuller, useTalentPicker } from '@remake/hooks'
 import { useTalentSubmit, useSubmitIsEnable } from '@remake/hooks'
 import { PullCount, dev } from '@/config'
+import { toastMsg } from '@/toast'
 import Talent from '@/components/Talent'
 import './Pick.css'
 
@@ -9,7 +10,13 @@ export function Pick() {
     const [talents, picker] = useTalentPicker()
     const { enabled, min, max } = useSubmitIsEnable()
     const submit = useTalentSubmit()
-    // useEffect(puller, [])
+    const msg = enabled
+        ? '下一步'
+        : `请选取 ${min == max ? min : `${min}~${max}`} 个天赋`
+    const handleSubmit = () => {
+        if (enabled) return submit()
+        toastMsg(msg, 'pick-toast')
+    }
     if (!pulled)
         return (
             <div className="screen talent-pick">
@@ -33,15 +40,12 @@ export function Pick() {
                     </li>
                 ))}
             </ul>
-            {enabled ? (
-                <button className="primary" onClick={() => submit()}>
-                    下一步
-                </button>
-            ) : (
-                <button className="error">
-                    请选取 {min == max ? min : `${min}~${max}`} 个天赋
-                </button>
-            )}
+            <button
+                className={enabled ? 'primary' : 'error'}
+                onClick={handleSubmit}
+            >
+                {msg}
+            </button>
         </div>
     )
 }
