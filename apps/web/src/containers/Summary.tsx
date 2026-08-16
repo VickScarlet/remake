@@ -62,7 +62,6 @@ export default function Summary() {
     const handleEnd = () => {
         const achievements = end()
         toastAchvs(achievements)
-        console.log('Achievements', achievements)
     }
     return (
         <div className="screen summary">
