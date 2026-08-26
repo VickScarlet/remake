@@ -12,7 +12,7 @@
         "@remake/condition": "workspace:*",
         "@remake/data": "workspace:*",
         "@remake/vitex": "workspace:*",
-        "immer": "^11.1.15"
+        "immer": "^11.1.18"
     },
     "exports": {
         ".": {
