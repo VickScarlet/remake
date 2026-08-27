@@ -11,9 +11,28 @@ export function pick<T>(items: T[], rng?: RNG) {
 export type WeightItem<T> = readonly [T, number]
 export function pickWeight<T>(items: WeightItem<T>[], rng?: RNG) {
     if (items.length === 0) return null
-    const totalWeight = items.reduce((sum, [, weight]) => sum + weight, 0)
+    // Find minimum positive weight to determine scaling factor
+    let minWeight = Infinity
+    for (const [, w] of items) {
+        if (w > 0 && w < minWeight) minWeight = w
+    }
+    // If all weights are integers or no positive weights, use original logic
+    if (minWeight === Infinity || Number.isInteger(minWeight)) {
+        const totalWeight = items.reduce((sum, [, weight]) => sum + weight, 0)
+        let mark = random(totalWeight - 1, 0, rng)
+        for (const [item, weight] of items) {
+            if (mark < weight) return item
+            mark -= weight
+        }
+        return null
+    }
+    // Scale weights to integers based on decimal places of minWeight
+    const decimals = Math.max(0, -Math.floor(Math.log10(minWeight))) + 1
+    const scale = 10 ** decimals
+    const scaledItems: WeightItem<T>[] = items.map(([item, weight]) => [item, Math.round(weight * scale)])
+    const totalWeight = scaledItems.reduce((sum, [, weight]) => sum + weight, 0)
     let mark = random(totalWeight - 1, 0, rng)
-    for (const [item, weight] of items) {
+    for (const [item, weight] of scaledItems) {
         if (mark < weight) return item
         mark -= weight
     }
