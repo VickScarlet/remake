@@ -33,7 +33,7 @@
     "test:hooks": "pnpm --filter @remake/hooks test"
   },
   "devDependencies": {
-    "@types/bun": "1.3.14",
+    "@types/bun": "1.4.0",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
     "@typescript-eslint/parser": "^8.68.0",
     "@typescript/native": "npm:typescript@^7.0.2",
