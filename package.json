@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/bun": "^1.4.0",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.68.0",
+    "@typescript-eslint/parser": "^8.69.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.9.1",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
