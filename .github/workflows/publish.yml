@@ -47,4 +47,4 @@ jobs:
       - name: 🚀 Publish
         run: |
           cd apps/console
-          npm publish --provenance --access public
+          npm publish --access public
