@@ -11,7 +11,7 @@
     }, 
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/VickScarlet/remake.git",
+        "url": "git+https://github.com/VickScarlet/remake.git"
     },
     "scripts": {
         "dev": "bun --watch --watch-dir=src run src/index.tsx",
