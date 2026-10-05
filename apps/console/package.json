@@ -1,7 +1,7 @@
 {
     "name": "@syaroio/remake",
     "type": "module",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "author": "Vick Scarlet <vick@syaro.io>",
     "bin": {
         "remake": "dist/index.js"
