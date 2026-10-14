@@ -1,7 +1,7 @@
 {
     "name": "@remake/core",
     "type": "module",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "author": "Vick Scarlet <vick@syaro.io>",
     "main": "src/index.ts",
     "scripts": {

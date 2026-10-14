@@ -29,6 +29,7 @@ export function trigger(
         if (!effect) return
         if (effect.LIF) draft.life += effect.LIF
         const pe: Partial<Properties> = {}
+        if (effect.AGE) pe.age = effect.AGE
         if (effect.CHR) pe.charm = effect.CHR
         if (effect.INT) pe.intelligence = effect.INT
         if (effect.STR) pe.strength = effect.STR
