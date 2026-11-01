@@ -64,6 +64,7 @@ export function next(
         const filtered = level.filter(([e]) => ec(e, tr.state, profile))
         if (filtered.length < 1) continue
         event = pickWeight(filtered, rng)
+        break
     }
     if (event === null)
         throw new Error('No event could be picked for age ' + age)
