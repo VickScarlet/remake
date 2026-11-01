@@ -36,11 +36,11 @@
     "test:hooks": "pnpm --filter @remake/hooks test"
   },
   "devDependencies": {
-    "@types/bun": "^1.4.2",
-    "@typescript-eslint/eslint-plugin": "^8.71.0",
-    "@typescript-eslint/parser": "^8.71.0",
+    "@types/bun": "^1.4.4",
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
     "@typescript/native": "npm:typescript@^7.0.2",
-    "eslint": "^10.12.0",
+    "eslint": "^10.14.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
   },
   "workspaces": [
